@@ -1,0 +1,132 @@
+name: Set up the Octomod engine
+description: >-
+  System prerequisites, uv, the locked environment, and the AMICI compile cache.
+  Both workflows use this so a PR and the nightly cannot silently run against
+  different environments — which for this repo is not a hypothetical worry, see
+  the AMICI_TRY_ENABLE_HDF5 note below.
+
+inputs:
+  amici-cache:
+    description: >-
+      Whether to restore/save .amici_cache. "true" for batteries that
+      compile models; "false" for the style job, which does not.
+    required: false
+    default: "true"
+  cache-group:
+    description: >-
+      The battery group this job runs (tests/run_all.py GROUPS). Each group
+      keeps its own cache entry, since it compiles its own models; a group
+      with none yet starts from any entry of the same toolchain.
+    required: false
+    default: "all"
+
+runs:
+  using: composite
+  steps:
+    # ---------------------------------------------------------------- system
+    # AMICI is built from source and its generated model modules are compiled
+    # at RUN time too, so the toolchain is needed by the tests, not just by the
+    # install.
+    #
+    # libhdf5-dev is NOT optional-but-nice here. AMICI's CMakeLists does
+    # `find_package(HDF5 ...)` with no REQUIRED and builds WITHOUT HDF5 when
+    # the headers are absent, saying nothing. Installing it is what makes the
+    # CI build match a developer's, rather than differing in a feature no log
+    # would mention.
+    # graphviz is a real prerequisite of the BATTERY, not of the engine: the
+    # report renderer degrades to a note when `dot` is absent
+    # (sbml_view._render_dot returns None), so the engine still runs — but the
+    # suites that assert on a rendered figure fail with an opaque
+    # AssertionError about a missing string, naming neither graphviz nor the
+    # figure. Keep it installed for that reason alone; it is NOT what made
+    # `lb3` fail in CI (that was an empty `runs/` — see pr.yml), so removing
+    # graphviz would trade one obscure failure for another.
+    - name: Install system prerequisites
+      shell: bash
+      run: |
+        sudo apt-get update -qq
+        sudo apt-get install -y --no-install-recommends \
+          build-essential libhdf5-dev graphviz
+        echo "cc:  $(c++ --version | head -1)"
+        echo "dot: $(dot -V 2>&1)"
+
+    - name: Install uv
+      uses: astral-sh/setup-uv@v5
+      with:
+        enable-cache: true
+        cache-dependency-glob: uv.lock
+
+    # Make uv bring its OWN CPython rather than the runner's. Two reasons:
+    #   1. python-build-standalone ships Python.h, so no python3-dev is needed;
+    #      against a system interpreter the AMICI build dies at the end of
+    #      several minutes on "Could NOT find Python3 (missing:
+    #      Python3_INCLUDE_DIRS)", which does not read as a packaging problem.
+    #   2. it pins the interpreter to .python-version instead of whatever the
+    #      runner image happens to ship, so CI and a laptop agree.
+    - name: Build the locked environment
+      shell: bash
+      env:
+        UV_MANAGED_PYTHON: "1"
+      run: |
+        uv sync
+        echo "python:  $(uv run python -c 'import sys; print(sys.version.split()[0])')"
+        echo "amici:   $(uv run python -m amici 2>&1 | tail -1)"
+
+    # The AMICI model cache (config.AMICI_CACHE_DIR, gitignored), so a job
+    # does not recompile every model (~10-40 s each on a runner, and the
+    # batteries cover many). Restored here, SAVED by ../save-amici-cache after
+    # the battery — also when the battery failed, so a red run's compiles are
+    # not thrown away.
+    #
+    # The engine keys each entry on the model and the toolchain, so a stale
+    # entry is never served. The cache key therefore names only the toolchain
+    # (the engine's own `_toolchain()` plus the swig version, which the engine
+    # records by path only): any other uv.lock change keeps every compiled
+    # model. Only `amici_*/m_*` is kept — the importable module a cache hit
+    # loads; the rest of each entry is CMake build scratch, ~4/5 of the bytes.
+    # A cache problem never blocks the battery: without a key there is no
+    # restore and no save, and every model compiles.
+    - name: Name the AMICI toolchain
+      if: inputs.amici-cache == 'true'
+      id: amici-toolchain
+      continue-on-error: true
+      shell: bash
+      run: |
+        tc=$(uv run python -c '
+        import subprocess
+        from octomod.config import SWIG_BIN
+        from octomod.workflow_modules.estimation.problem import _toolchain
+        swig = subprocess.run([str(SWIG_BIN), "-version"], capture_output=True, text=True)
+        print(_toolchain(), swig.stdout.split())')
+        echo "toolchain: $tc"
+        base="amici-${{ runner.os }}-$(echo "$tc" | sha256sum | cut -c1-16)-"
+        echo "base=$base" >> "$GITHUB_OUTPUT"
+        echo "prefix=$base${{ inputs.cache-group }}-" >> "$GITHUB_OUTPUT"
+
+    - name: Restore the AMICI compile cache
+      if: inputs.amici-cache == 'true' && steps.amici-toolchain.outputs.prefix != ''
+      id: amici-restore
+      continue-on-error: true
+      uses: actions/cache/restore@v4
+      with:
+        path: |
+          .amici_cache/amici_*/m_*
+          .amici_cache/.lock_*
+        # never an exact hit: the newest entry of this group, else of this
+        # toolchain, is restored
+        key: ${{ steps.amici-toolchain.outputs.prefix }}restore
+        restore-keys: |
+          ${{ steps.amici-toolchain.outputs.prefix }}
+          ${{ steps.amici-toolchain.outputs.base }}
+
+    # The stamp dates the restore: a lock newer than it is a model this job
+    # compiled or loaded, and a job that touched none has nothing to save.
+    - name: Hand the cache key to the save step
+      if: inputs.amici-cache == 'true' && steps.amici-toolchain.outputs.prefix != ''
+      shell: bash
+      run: |
+        touch "$RUNNER_TEMP/amici-cache-restored"
+        {
+          echo "AMICI_CACHE_PREFIX=${{ steps.amici-toolchain.outputs.prefix }}"
+          echo "AMICI_CACHE_MATCHED=${{ steps.amici-restore.outputs.cache-matched-key }}"
+        } >> "$GITHUB_ENV"

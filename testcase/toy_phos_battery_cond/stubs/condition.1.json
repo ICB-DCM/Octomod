@@ -1,0 +1,31 @@
+{
+  "conditions": [
+    {
+      "condition_id": "dose_0p3",
+      "maps_to_label": "dose=0.3",
+      "overrides": {
+        "Stim": 0.3
+      },
+      "preequilibration": false,
+      "rationale": "FIXTURE: Stim is not a model entity; reaches the battery as assembly_conditions_resolve"
+    },
+    {
+      "condition_id": "dose_1",
+      "maps_to_label": "dose=1",
+      "overrides": {
+        "S": 1
+      },
+      "preequilibration": false,
+      "rationale": "Reference dose; S=1 is the standard working stock against which the other two are expressed."
+    },
+    {
+      "condition_id": "dose_3",
+      "maps_to_label": "dose=3",
+      "overrides": {
+        "S": 3
+      },
+      "preequilibration": false,
+      "rationale": "Highest dose. Held out for prediction per testcase.yaml \u2014 encoded here so the simulation is defined, but its measurements are excluded from the fit."
+    }
+  ]
+}

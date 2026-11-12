@@ -1,0 +1,5 @@
+Receptor module phosphorylation kinetics — a note (fixture document, 2024).
+
+Ligand-driven phosphorylation of R to Rp is reversed by a constitutive phosphatase; the
+steady-state fraction phosphorylated rises with dose and saturates. Nothing here names a
+rate constant value.

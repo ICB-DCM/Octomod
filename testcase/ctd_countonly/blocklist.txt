@@ -1,0 +1,21 @@
+# Sources the research agent must never use for these cases, engine-enforced.
+#
+# THIS CASE DELIBERATELY DOES NOT BLOCK THE 2026 PAPER, and sets
+# research.max_publication_year: 2026 in its testcase.yaml so the year rule does
+# not block it either. The brief for this case was: "find our paper
+# and all other research on CTD phosphorylation mechanisms and THEN make a
+# subsequent analysis with new positional data". Building on the published
+# result is the case, not a leak:
+#
+#   * the paper's conclusion is local cooperativity with direction DECLARED
+#     UNDETERMINED, so it cannot hand over the quantity this case tests;
+#   * this case's data are SYNTHETIC, and none of its generating parameter
+#     values appears anywhere in the paper;
+#   * the negative control `ctd_countonly` has identical research access, so the
+#     comparison between the two is not confounded by what either could read.
+#
+# To turn this case into the harder "discover the axis unaided" variant instead,
+# add the four Callenbach lines back (see testcase/ctd_blind/blocklist.txt) and
+# drop max_publication_year from testcase.yaml. That is a two-line reversal.
+#
+# Nothing is blocked for this case.

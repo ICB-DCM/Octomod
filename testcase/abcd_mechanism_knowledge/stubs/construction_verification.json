@@ -1,0 +1,6 @@
+{
+  "verdicts": [
+    {"aspect": "candidate set", "ok": true, "note": "each candidate differs from the base only in its declared feature, and the reference chain M1 is present"}
+  ],
+  "overall": "pass"
+}

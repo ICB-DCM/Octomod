@@ -1,0 +1,42 @@
+# Frozen S0 intent for abcd_prediction. Written at staging time and never edited
+# by an agent — the success criteria in particular are what the agent is judged
+# against, so it may not choose them (spec.py rule 1, applied to the intent).
+#
+# Blind-modelling benchmark: the ground truth in truth/ is invented and known,
+# and is never staged into agent context. The agent sees description.md and
+# data/synmod4_ms.csv only.
+
+question: >-
+  Can a calibrated model of SynMod-4 predict ProD under the untested condition
+  u=4 with BX-11?
+
+system: SynMod-4 engineered module, S. cerevisiae (synthetic benchmark)
+
+required_entities:
+  - KinA_p
+  - RegB_p
+  - ProD
+
+required_predictions:
+  - ProD_uM time course at u=4 with BX-11
+
+perturbations:
+  - inducer dose u in {0.25,1,4}
+  - BX-11 RegB-activation inhibitor
+
+timescale: minutes, horizon 120 min
+
+scope_exclusions:
+  - gene expression changes
+  - growth dilution beyond first-order loss
+  - spatial effects
+
+success_criteria:
+  - held-out (u=4, BX-11) ProD nRMSE < 0.25
+  - predictive band covers >= 80% of held-out points
+
+inference_target: prediction
+
+domain_packs:
+  - general-dynamics
+  - measurement-tech

@@ -1,0 +1,52 @@
+name: toy_oscillator_multimodal
+
+# 80 min: long enough for ~24 oscillations at the true frequency, which is what
+# makes the objective multimodal, and short enough that light damping still
+# leaves signal at the end.
+t_end: 80
+
+# Empty on purpose, for the same reason as toy_decay_params: there is exactly
+# one experimental condition, so nothing can be held out without deleting the
+# dataset. This case therefore produces NO held-out predictive check, and the
+# report must say so rather than quietly scoring one. That is correct here —
+# the question under test is whether the optimiser finds the global optimum,
+# and a predictive split would not measure it.
+holdout:
+  condition_labels: []
+
+supplied:
+  petab: supplied/petab
+
+notes: >-
+  An OPTIMISER fixture. Everything else in testcase/ is easy to fit on purpose;
+  this one is deliberately multimodal, so that the choice of optimisation method
+  changes the answer rather than only the runtime.
+
+  Measured, not asserted (see make_data.py for the two designs that failed):
+  a profile scan over omega in [0.5, 6.0] — nuisance parameters optimised at
+  each point, not held at truth — finds 5 local minima, and the deepest is the
+  truth at omega = 1.9. Both halves matter: the minima are what a local method
+  falls into, and the truth being global is what makes the case gradeable.
+
+  Baseline measured on this fixture, 20 starts, seed 20260914, identical starts
+  across methods. Every method finds the same best objective (-76.556), so the
+  BEST-VALUE metric does not separate them at this start count; the per-start
+  SUCCESS RATE does, and it is the metric the Grein & Penas 2026 benchmark
+  uses:
+
+    fides            10/19 starts reach the true basin
+    scipy L-BFGS-B    5/19
+    scipy Powell     17/20
+    scipy DE (global) 20/20
+
+  The regime that matters is the one with FEWER starts, where a 26% success
+  rate and a 100% success rate are the difference between an answer and a
+  confident wrong answer. A run that reports omega near 2.5 here has not
+  crashed and will not trip the waterfall or gradient gates; it has converged
+  into the wrong basin.
+
+# A token-free fixture: it runs without the knowledge module, on its
+# canned replies.
+grounding:
+  skip: true
+  why: fixture

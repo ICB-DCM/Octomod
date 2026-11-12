@@ -1,0 +1,20 @@
+{
+  "_copy_computed": true,
+  "diagnosis": "STUB: the candidates were fitted to all five conditions and compared by AIC; the computed table in report_core is the arbiter of which wins and by how much. The KinA route answers the ProD rise under BX-11, which no structure whose only conversion runs through RegB_p can make; the sequestration of active RegB, where it is in the set, bends RegB_p late. The stub claims nothing beyond the computed lists.",
+  "misfit_hypotheses": [],
+  "cannot_distinguish": [],
+  "nonetheless_determined": [],
+  "answers_intent": [
+    {
+      "criterion": "winning mechanism carries Akaike weight >= 0.7",
+      "verdict": "partial",
+      "evidence": "STUB: the computed weights decide; this canned reply does not read them."
+    },
+    {
+      "criterion": "indistinguishable set reported honestly if not",
+      "verdict": "pass",
+      "evidence": "STUB: the indistinguishable set is the engine's computed one, copied."
+    }
+  ],
+  "recommendation": "accept"
+}

@@ -1,0 +1,55 @@
+name: abcd_mechanism
+
+# Simulation horizon for the S1 gate ladder; matches the last sampled time.
+t_end: 120
+
+# Empty on purpose, and the consequence must be stated rather than papered over.
+# All five conditions train. Discrimination here is by information criteria over
+# the candidate set, not by a held-out prediction: with only five conditions,
+# holding one out would remove the very evidence that separates the mechanisms —
+# the BX-11 arm is what reveals a RegB-independent conversion route, and the top
+# untreated dose is what reveals the product feedback. There is therefore NO
+# held-out predictive check in this case, the T2' gate has nothing to run on, and
+# the report must say that the selected mechanism is supported by in-sample fit
+# and AIC weights alone. A pipeline that quietly reports a predictive score here
+# is overclaiming. abcd_prediction is the case that carries the held-out test.
+holdout:
+  condition_labels: []
+
+# No externally supplied model or network. Note that supplying a single model
+# here is a contradiction the engine rejects outright: mechanism discrimination
+# needs the agent to propose the candidate set.
+supplied: {}
+
+notes: >-
+  Blind-modelling benchmark on a fictional module with an invented, known ground
+  truth. Shares data/, description.md, make_data.py and truth/ with
+  abcd_prediction — same generated dataset, same lab note, different question.
+  truth/ holds the answer key and MUST NEVER be staged into agent context: the
+  pipeline stages description.md and data/ only, and a run whose agent I/O
+  contains anything from truth/ is void.
+
+  The hypothesis space is exactly what the description's open questions leave
+  open: whether anything besides RegB catalyses the PreC conversion, and whether
+  the anecdotal product feedback is real. The truth is that both are, so the
+  ladder chain -> chain + direct KinA route -> chain + route + feedback should
+  show a decisive information-criterion preference for the last. If it does not,
+  the discrimination machinery is what is being caught, not the biology.
+
+  What each candidate can and cannot do, which is why the comparison is
+  informative rather than a parameter-count contest: a RegB-only chain cannot
+  make ProD rise under BX-11 at any parameter setting, and no structure without
+  feedback can produce a non-monotone RegB_p at constant inducer dose. Both are
+  qualitative impossibilities, not tight fits — so the AIC differences should be
+  large, and a narrow, ambiguous result is itself a finding worth chasing.
+
+  The shipped stubs propose three candidates and assert the feedback model wins.
+  That assertion is the stub's, not the engine's: the AIC table in the report is
+  computed, and the S7 consistency gate is what holds the canned interpretation
+  to it.
+
+# A token-free fixture: it runs without the knowledge module, on its
+# canned replies.
+grounding:
+  skip: true
+  why: fixture

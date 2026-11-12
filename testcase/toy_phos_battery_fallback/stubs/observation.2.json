@@ -1,0 +1,23 @@
+{
+  "observables": [
+    {
+      "observable_id": "obs_pR",
+      "maps_to_label": "pR_au",
+      "formula": "Rp",
+      "transformation": "lin",
+      "noise": {
+        "distribution": "normal",
+        "formula": "s1 + s2 * Rp + s3 * R + s4",
+        "estimate_sigma": true
+      },
+      "scaling": {
+        "mode": "factor",
+        "scale_parameter": "sc_obs_pR",
+        "offset_parameter": null,
+        "shared_across_conditions": true
+      },
+      "rationale": "FIXTURE: four non-model sigma symbols, over the declared cap \u2014 refused at the seam (C31), three times"
+    }
+  ],
+  "_fixture_note": "regenerated 2026-09-07 from the former observable_model / noise_model / scaling_offset stubs: one role, one observation function"
+}

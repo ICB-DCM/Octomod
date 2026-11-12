@@ -1,0 +1,96 @@
+{
+  "candidates": [
+    {
+      "id": "M1_chain",
+      "label": "linear chain: inducer -> KinA -> RegB -> ProD",
+      "rationale": "The module as designed and as the description narrates it: RegB is the only catalyst of the PreC conversion and nothing feeds back. This is the null against which the other two are scored — if the extra terms buy nothing, the information criteria should say so, and the honest answer is the simplest wiring. It is also the candidate the BX-11 conditions bear on most directly: with RegB activation blocked by more than 90%, this structure can only make ProD through the residual leak."
+    },
+    {
+      "id": "M2_feedforward",
+      "label": "chain plus a direct KinA-catalysed conversion of PreC (coherent feedforward)",
+      "rationale": "Adds one parameter to M1: KinA converts PreC directly, in parallel with RegB. This is the description's first open question stated as a model — whether anything besides RegB catalyses the conversion. It is separable from M1 by the BX-11 conditions specifically, because that is where the RegB route is off and the direct route is not, and the extra route is dose-graded through Aa rather than constant, which distinguishes it from a basal leak.",
+      "on_antimony_patch": [
+        {
+          "append": [
+            "J7: -> D; k_cat2 * Aa * (Ctot - D);"
+          ]
+        }
+      ],
+      "adds_parameters": [
+        {
+          "id": "k_cat2",
+          "nominal_value": 0.01,
+          "unit": "1/(min*uM)",
+          "evidence_tier": "to_be_estimated",
+          "source": "as in M2_feedforward",
+          "estimate": true,
+          "lb": 0.0001,
+          "ub": 1.0
+        }
+      ]
+    },
+    {
+      "id": "M4_sequestration",
+      "label": "chain plus sequestration of active RegB by the product",
+      "rationale": "Adds one parameter to M1: the product holds active RegB in an inactive complex BD, so RegB_p falls late where ProD is highest. prior_reactions describes the conversion only in a review (rx_7), below the variants' floor, so it is named in `missing` for the round's search.",
+      "on_antimony_patch": [
+        {
+          "append": [
+            "species BD in cell = 0;",
+            "J8: Ba + D -> BD; k_seq * Ba * D;"
+          ]
+        }
+      ],
+      "adds_parameters": [
+        {
+          "id": "k_seq",
+          "nominal_value": 0.001,
+          "unit": "1/(min*uM)",
+          "evidence_tier": "to_be_estimated",
+          "source": "size unknown; the fit decides",
+          "estimate": true,
+          "lb": 1e-06,
+          "ub": 0.1
+        }
+      ],
+      "entity_glossary": {
+        "species": [
+          {
+            "id": "BD",
+            "denotes": "active RegB held by the product in an inactive complex; not measured",
+            "unit_convention": "uM-equivalents of RegB, on the RegB fraction scale",
+            "lump_membership": "BD is the one complex; its dissociation is not modelled"
+          }
+        ],
+        "parameters": []
+      }
+    }
+  ],
+  "missing": [
+    {
+      "equation": "Ba + D -> BD",
+      "why": "M4_sequestration adds it; prior_reactions describes it only in a review (rx_7), graded below the variants' floor"
+    }
+  ],
+  "build_report": {
+    "decisions": [
+      {
+        "decision": "Three candidates as differences from the tested chain: the base, + the direct KinA route, + the sequestration of active RegB by the product.",
+        "rationale": "The description leaves open whether a second route converts PreC and whether the product acts back on the module; each candidate adds one answer to the base.",
+        "alternatives_considered": "both additions together (not needed to separate them)",
+        "evidence": [
+          {
+            "source": "lab_note",
+            "locator": "open questions",
+            "supports": "whether a RegB-independent route exists and whether the product acts back on the module",
+            "origin": "user-provided"
+          }
+        ],
+        "evidence_tier": "direct",
+        "confidence": "high",
+        "user_decision_required": false,
+        "question": ""
+      }
+    ]
+  }
+}

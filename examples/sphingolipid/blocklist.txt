@@ -1,0 +1,8 @@
+# Sources the research agent must never use for this case, engine-enforced.
+# The user's own thesis, which built the supplied model and holds its fits.
+Autophagy-Linked Sphingolipid Metabolism
+Autophagy-Linked Sphingolipid Metabolism: A Systems Approach
+Moore Dillems
+# NOT blocked, deliberately: the alkyne-tracer and click-MS method papers
+# (Thiele et al. 2012, 2019; Gaebler et al. 2013). They describe the assay, not
+# this dataset or this model.

@@ -1,0 +1,675 @@
+{
+  "kind": "survey",
+  "mode": "online",
+  "system": {
+    "summary": "SynMod-4 is an engineered four-protein module: the inducer activates KinA, active KinA activates RegB, and active RegB converts the precursor PreC into ProD, which is lost slowly. The lab's own construction notes characterise each step in the module's strain.",
+    "scope": "the module's own strain, as its construction notes document it, and a review of related engineered modules",
+    "unknowns": [
+      "whether anything besides RegB converts PreC",
+      "whether the product acts back on the module"
+    ]
+  },
+  "species": [
+    {
+      "id": "Aa",
+      "name": "active KinA",
+      "represents": "KinA_p",
+      "identifiers": {}
+    },
+    {
+      "id": "Ba",
+      "name": "active RegB",
+      "represents": "RegB_p",
+      "identifiers": {}
+    },
+    {
+      "id": "D",
+      "name": "the product ProD",
+      "represents": "ProD",
+      "identifiers": {}
+    },
+    {
+      "id": "BD",
+      "name": "active RegB held by the product",
+      "represents": "",
+      "identifiers": {}
+    }
+  ],
+  "reactions": [
+    {
+      "id": "rx_1",
+      "equation": "-> Aa",
+      "parsed": {
+        "reactants": {},
+        "products": {
+          "Aa": 1.0
+        },
+        "reversible": false
+      },
+      "modifiers": [],
+      "type": "phosphorylation",
+      "description": "inducer-driven activation of KinA; the inactive pool is the remainder of the normalised total",
+      "required": false,
+      "essential": true,
+      "origin": "knowledge",
+      "identifiers": {},
+      "evidence": [
+        {
+          "source": "SynMod-4 construction and characterisation notes \u2014 the lab's own notes (fixture, 2024)",
+          "title": "SynMod-4 construction and characterisation notes",
+          "year": 2024,
+          "locator": "paragraph 2",
+          "supports": "the inducer drives KinA to its active form within minutes",
+          "quote": "the inducer drives KinA to its active form KinA_p within minutes",
+          "url": "file:./sources/construction_notes.txt",
+          "evidence_kind": "direct_experimental",
+          "context_match": "same_system",
+          "context_note": "the module's own strain, characterised by the lab that built it",
+          "stance": "supports",
+          "origin": "knowledge",
+          "source_key": "synmod-4 construction and characterisation notes \u2014 the lab's own notes (fixture, 2024)",
+          "id": "rx_1.e1",
+          "fetch_status": "cached",
+          "cached_file": "a2ed5db70387778e.txt",
+          "sha256": "a2ed5db70387778e",
+          "content_type": "text/plain",
+          "bytes": 586,
+          "resolution": "not-checkable",
+          "resolution_class": "not_checkable",
+          "quote_found": true,
+          "second_kind": "direct_experimental",
+          "second_context": "same_system",
+          "second_stance": "supports",
+          "second_note": "the construction notes show the step in the module's own strain",
+          "counts": true,
+          "graded_as": {
+            "evidence_kind": "direct_experimental",
+            "context_match": "same_system"
+          }
+        }
+      ],
+      "evidence_dropped": [],
+      "grade": "high",
+      "because": [
+        {
+          "id": "rx_1.e1",
+          "source": "SynMod-4 construction and characterisation notes \u2014 the lab's own notes (fixture, 2024)",
+          "evidence_kind": "direct_experimental",
+          "context_match": "same_system",
+          "rule": "a direct_experimental source in same_system"
+        }
+      ],
+      "flags": [],
+      "counting": [
+        "rx_1.e1"
+      ],
+      "n_sources": 1
+    },
+    {
+      "id": "rx_2",
+      "equation": "Aa ->",
+      "parsed": {
+        "reactants": {
+          "Aa": 1.0
+        },
+        "products": {},
+        "reversible": false
+      },
+      "modifiers": [],
+      "type": "dephosphorylation",
+      "description": "first-order deactivation of KinA",
+      "required": false,
+      "essential": true,
+      "origin": "knowledge",
+      "identifiers": {},
+      "evidence": [
+        {
+          "source": "SynMod-4 construction and characterisation notes \u2014 the lab's own notes (fixture, 2024)",
+          "title": "SynMod-4 construction and characterisation notes",
+          "year": 2024,
+          "locator": "paragraph 2",
+          "supports": "active KinA returns to the inactive form by first-order dephosphorylation",
+          "quote": "Active KinA returns to the inactive form by first-order dephosphorylation",
+          "url": "file:./sources/construction_notes.txt",
+          "evidence_kind": "direct_experimental",
+          "context_match": "same_system",
+          "context_note": "the module's own strain, characterised by the lab that built it",
+          "stance": "supports",
+          "origin": "knowledge",
+          "source_key": "synmod-4 construction and characterisation notes \u2014 the lab's own notes (fixture, 2024)",
+          "id": "rx_2.e1",
+          "fetch_status": "cached",
+          "cached_file": "a2ed5db70387778e.txt",
+          "sha256": "a2ed5db70387778e",
+          "content_type": "text/plain",
+          "bytes": 586,
+          "resolution": "not-checkable",
+          "resolution_class": "not_checkable",
+          "quote_found": true,
+          "second_kind": "direct_experimental",
+          "second_context": "same_system",
+          "second_stance": "supports",
+          "second_note": "the construction notes show the step in the module's own strain",
+          "counts": true,
+          "graded_as": {
+            "evidence_kind": "direct_experimental",
+            "context_match": "same_system"
+          }
+        }
+      ],
+      "evidence_dropped": [],
+      "grade": "high",
+      "because": [
+        {
+          "id": "rx_2.e1",
+          "source": "SynMod-4 construction and characterisation notes \u2014 the lab's own notes (fixture, 2024)",
+          "evidence_kind": "direct_experimental",
+          "context_match": "same_system",
+          "rule": "a direct_experimental source in same_system"
+        }
+      ],
+      "flags": [],
+      "counting": [
+        "rx_2.e1"
+      ],
+      "n_sources": 1
+    },
+    {
+      "id": "rx_3",
+      "equation": "-> Ba",
+      "parsed": {
+        "reactants": {},
+        "products": {
+          "Ba": 1.0
+        },
+        "reversible": false
+      },
+      "modifiers": [
+        "Aa"
+      ],
+      "type": "phosphorylation",
+      "description": "KinA-catalysed activation of RegB",
+      "required": false,
+      "essential": true,
+      "origin": "knowledge",
+      "identifiers": {},
+      "evidence": [
+        {
+          "source": "SynMod-4 construction and characterisation notes \u2014 the lab's own notes (fixture, 2024)",
+          "title": "SynMod-4 construction and characterisation notes",
+          "year": 2024,
+          "locator": "paragraph 2",
+          "supports": "active KinA drives RegB to its active form",
+          "quote": "KinA_p drives RegB to its active form RegB_p",
+          "url": "file:./sources/construction_notes.txt",
+          "evidence_kind": "direct_experimental",
+          "context_match": "same_system",
+          "context_note": "the module's own strain, characterised by the lab that built it",
+          "stance": "supports",
+          "origin": "knowledge",
+          "source_key": "synmod-4 construction and characterisation notes \u2014 the lab's own notes (fixture, 2024)",
+          "id": "rx_3.e1",
+          "fetch_status": "cached",
+          "cached_file": "a2ed5db70387778e.txt",
+          "sha256": "a2ed5db70387778e",
+          "content_type": "text/plain",
+          "bytes": 586,
+          "resolution": "not-checkable",
+          "resolution_class": "not_checkable",
+          "quote_found": true,
+          "second_kind": "direct_experimental",
+          "second_context": "same_system",
+          "second_stance": "supports",
+          "second_note": "the construction notes show the step in the module's own strain",
+          "counts": true,
+          "graded_as": {
+            "evidence_kind": "direct_experimental",
+            "context_match": "same_system"
+          }
+        }
+      ],
+      "evidence_dropped": [],
+      "grade": "high",
+      "because": [
+        {
+          "id": "rx_3.e1",
+          "source": "SynMod-4 construction and characterisation notes \u2014 the lab's own notes (fixture, 2024)",
+          "evidence_kind": "direct_experimental",
+          "context_match": "same_system",
+          "rule": "a direct_experimental source in same_system"
+        }
+      ],
+      "flags": [],
+      "counting": [
+        "rx_3.e1"
+      ],
+      "n_sources": 1
+    },
+    {
+      "id": "rx_4",
+      "equation": "Ba ->",
+      "parsed": {
+        "reactants": {
+          "Ba": 1.0
+        },
+        "products": {},
+        "reversible": false
+      },
+      "modifiers": [],
+      "type": "dephosphorylation",
+      "description": "first-order deactivation of RegB",
+      "required": false,
+      "essential": true,
+      "origin": "knowledge",
+      "identifiers": {},
+      "evidence": [
+        {
+          "source": "SynMod-4 construction and characterisation notes \u2014 the lab's own notes (fixture, 2024)",
+          "title": "SynMod-4 construction and characterisation notes",
+          "year": 2024,
+          "locator": "paragraph 2",
+          "supports": "RegB_p is deactivated first order",
+          "quote": "RegB_p is deactivated first order",
+          "url": "file:./sources/construction_notes.txt",
+          "evidence_kind": "direct_experimental",
+          "context_match": "same_system",
+          "context_note": "the module's own strain, characterised by the lab that built it",
+          "stance": "supports",
+          "origin": "knowledge",
+          "source_key": "synmod-4 construction and characterisation notes \u2014 the lab's own notes (fixture, 2024)",
+          "id": "rx_4.e1",
+          "fetch_status": "cached",
+          "cached_file": "a2ed5db70387778e.txt",
+          "sha256": "a2ed5db70387778e",
+          "content_type": "text/plain",
+          "bytes": 586,
+          "resolution": "not-checkable",
+          "resolution_class": "not_checkable",
+          "quote_found": true,
+          "second_kind": "direct_experimental",
+          "second_context": "same_system",
+          "second_stance": "supports",
+          "second_note": "the construction notes show the step in the module's own strain",
+          "counts": true,
+          "graded_as": {
+            "evidence_kind": "direct_experimental",
+            "context_match": "same_system"
+          }
+        }
+      ],
+      "evidence_dropped": [],
+      "grade": "high",
+      "because": [
+        {
+          "id": "rx_4.e1",
+          "source": "SynMod-4 construction and characterisation notes \u2014 the lab's own notes (fixture, 2024)",
+          "evidence_kind": "direct_experimental",
+          "context_match": "same_system",
+          "rule": "a direct_experimental source in same_system"
+        }
+      ],
+      "flags": [],
+      "counting": [
+        "rx_4.e1"
+      ],
+      "n_sources": 1
+    },
+    {
+      "id": "rx_5",
+      "equation": "-> D",
+      "parsed": {
+        "reactants": {},
+        "products": {
+          "D": 1.0
+        },
+        "reversible": false
+      },
+      "modifiers": [
+        "Ba"
+      ],
+      "type": "conversion",
+      "description": "RegB-catalysed conversion of the precursor pool into ProD",
+      "required": false,
+      "essential": true,
+      "origin": "knowledge",
+      "identifiers": {},
+      "evidence": [
+        {
+          "source": "SynMod-4 construction and characterisation notes \u2014 the lab's own notes (fixture, 2024)",
+          "title": "SynMod-4 construction and characterisation notes",
+          "year": 2024,
+          "locator": "paragraph 2",
+          "supports": "active RegB converts the precursor PreC into ProD in the module's own strain",
+          "quote": "Active RegB converts the precursor PreC into the product ProD",
+          "url": "file:./sources/construction_notes.txt",
+          "evidence_kind": "direct_experimental",
+          "context_match": "same_system",
+          "context_note": "the module's own strain, characterised by the lab that built it",
+          "stance": "supports",
+          "origin": "knowledge",
+          "source_key": "synmod-4 construction and characterisation notes \u2014 the lab's own notes (fixture, 2024)",
+          "id": "rx_5.e1",
+          "fetch_status": "cached",
+          "cached_file": "a2ed5db70387778e.txt",
+          "sha256": "a2ed5db70387778e",
+          "content_type": "text/plain",
+          "bytes": 586,
+          "resolution": "not-checkable",
+          "resolution_class": "not_checkable",
+          "quote_found": true,
+          "second_kind": "direct_experimental",
+          "second_context": "same_system",
+          "second_stance": "supports",
+          "second_note": "the construction notes show the step in the module's own strain",
+          "counts": true,
+          "graded_as": {
+            "evidence_kind": "direct_experimental",
+            "context_match": "same_system"
+          }
+        }
+      ],
+      "evidence_dropped": [],
+      "grade": "high",
+      "because": [
+        {
+          "id": "rx_5.e1",
+          "source": "SynMod-4 construction and characterisation notes \u2014 the lab's own notes (fixture, 2024)",
+          "evidence_kind": "direct_experimental",
+          "context_match": "same_system",
+          "rule": "a direct_experimental source in same_system"
+        }
+      ],
+      "flags": [],
+      "counting": [
+        "rx_5.e1"
+      ],
+      "n_sources": 1
+    },
+    {
+      "id": "rx_6",
+      "equation": "D ->",
+      "parsed": {
+        "reactants": {
+          "D": 1.0
+        },
+        "products": {},
+        "reversible": false
+      },
+      "modifiers": [],
+      "type": "degradation",
+      "description": "slow loss of ProD by turnover and dilution",
+      "required": false,
+      "essential": true,
+      "origin": "knowledge",
+      "identifiers": {},
+      "evidence": [
+        {
+          "source": "SynMod-4 construction and characterisation notes \u2014 the lab's own notes (fixture, 2024)",
+          "title": "SynMod-4 construction and characterisation notes",
+          "year": 2024,
+          "locator": "paragraph 2",
+          "supports": "ProD is lost slowly by turnover and dilution",
+          "quote": "ProD is lost slowly by turnover and dilution",
+          "url": "file:./sources/construction_notes.txt",
+          "evidence_kind": "direct_experimental",
+          "context_match": "same_system",
+          "context_note": "the module's own strain, characterised by the lab that built it",
+          "stance": "supports",
+          "origin": "knowledge",
+          "source_key": "synmod-4 construction and characterisation notes \u2014 the lab's own notes (fixture, 2024)",
+          "id": "rx_6.e1",
+          "fetch_status": "cached",
+          "cached_file": "a2ed5db70387778e.txt",
+          "sha256": "a2ed5db70387778e",
+          "content_type": "text/plain",
+          "bytes": 586,
+          "resolution": "not-checkable",
+          "resolution_class": "not_checkable",
+          "quote_found": true,
+          "second_kind": "direct_experimental",
+          "second_context": "same_system",
+          "second_stance": "supports",
+          "second_note": "the construction notes show the step in the module's own strain",
+          "counts": true,
+          "graded_as": {
+            "evidence_kind": "direct_experimental",
+            "context_match": "same_system"
+          }
+        }
+      ],
+      "evidence_dropped": [],
+      "grade": "high",
+      "because": [
+        {
+          "id": "rx_6.e1",
+          "source": "SynMod-4 construction and characterisation notes \u2014 the lab's own notes (fixture, 2024)",
+          "evidence_kind": "direct_experimental",
+          "context_match": "same_system",
+          "rule": "a direct_experimental source in same_system"
+        }
+      ],
+      "flags": [],
+      "counting": [
+        "rx_6.e1"
+      ],
+      "n_sources": 1
+    },
+    {
+      "id": "rx_7",
+      "equation": "Ba + D -> BD",
+      "parsed": {
+        "reactants": {
+          "Ba": 1.0,
+          "D": 1.0
+        },
+        "products": {
+          "BD": 1.0
+        },
+        "reversible": false
+      },
+      "modifiers": [],
+      "type": "binding",
+      "description": "active RegB held by the product in an inactive complex",
+      "required": false,
+      "essential": false,
+      "origin": "knowledge",
+      "identifiers": {},
+      "evidence": [
+        {
+          "source": "Regulator sequestration by pathway products \u2014 a review of engineered modules (fixture, 2021)",
+          "title": "Regulator sequestration by pathway products",
+          "year": 2021,
+          "locator": "paragraph 2",
+          "supports": "a review notes that a pathway product may hold the active regulator in an inactive complex",
+          "quote": "a pathway product may bind the active regulator and hold it in an inactive complex",
+          "url": "file:./sources/sequestration_review.txt",
+          "evidence_kind": "review",
+          "context_match": "related_system",
+          "context_note": "a review across engineered modules, no experiment in SynMod-4",
+          "stance": "supports",
+          "origin": "knowledge",
+          "source_key": "regulator sequestration by pathway products \u2014 a review of engineered modules (fixture, 2021)",
+          "id": "rx_7.e1",
+          "fetch_status": "cached",
+          "cached_file": "8d377926ca43cd1b.txt",
+          "sha256": "8d377926ca43cd1b",
+          "content_type": "text/plain",
+          "bytes": 358,
+          "resolution": "not-checkable",
+          "resolution_class": "not_checkable",
+          "quote_found": true,
+          "second_kind": "review",
+          "second_context": "related_system",
+          "second_stance": "supports",
+          "second_note": "a review; no experiment in any one module",
+          "counts": true,
+          "graded_as": {
+            "evidence_kind": "review",
+            "context_match": "related_system"
+          }
+        }
+      ],
+      "evidence_dropped": [],
+      "grade": "low",
+      "because": [
+        {
+          "id": "rx_7.e1",
+          "source": "Regulator sequestration by pathway products \u2014 a review of engineered modules (fixture, 2021)",
+          "evidence_kind": "review",
+          "context_match": "related_system",
+          "rule": "a review source in same_system or related_system"
+        }
+      ],
+      "flags": [],
+      "counting": [
+        "rx_7.e1"
+      ],
+      "n_sources": 1
+    }
+  ],
+  "facts": [
+    {
+      "id": "fact_1",
+      "kind": "stoichiometry",
+      "statement": "the PreC + ProD pool is about 5 uM in total and does not change appreciably over two hours",
+      "value": 5,
+      "unit": "uM",
+      "applies_to": [
+        "D"
+      ],
+      "for": [
+        "construction"
+      ],
+      "origin": "knowledge",
+      "evidence_declared": true,
+      "evidence": [],
+      "evidence_dropped": [],
+      "grade": "none",
+      "because": [],
+      "flags": [],
+      "counting": [],
+      "n_sources": 0
+    }
+  ],
+  "queries_run": [
+    "SynMod-4 construction notes KinA RegB PreC ProD (fixture)",
+    "pathway product sequesters active regulator engineered modules (fixture)"
+  ],
+  "notes": "FIXTURE: the six conversions of the designed module have a direct source in the module's own notes; the sequestration of active RegB by the product is named in one review of related modules; the pool fact is the lab note's and has no source of its own.",
+  "horizon": 2025,
+  "forbidden_sources": [],
+  "dropped": [],
+  "reply_lacks": [],
+  "n_documents": 2,
+  "n_documents_cached": 2,
+  "n_sources_checked": 2,
+  "verification": {
+    "n_items": 7,
+    "n_classified": 7,
+    "n_disagree": 0,
+    "unknown_ids": []
+  },
+  "grading": {
+    "rules": {
+      "high": [
+        {
+          "kind": "direct_experimental",
+          "context": "same_system"
+        },
+        {
+          "kind": "curated_database",
+          "context": [
+            "same_system",
+            "related_system"
+          ]
+        },
+        {
+          "at_least": 2,
+          "earning": "medium"
+        }
+      ],
+      "medium": [
+        {
+          "kind": "direct_experimental",
+          "context": "related_system"
+        },
+        {
+          "kind": "mechanistic_model",
+          "context": [
+            "same_system",
+            "related_system"
+          ]
+        },
+        {
+          "at_least": 2,
+          "kind": "review",
+          "context": [
+            "same_system",
+            "related_system"
+          ]
+        }
+      ],
+      "low": [
+        {
+          "kind": "review",
+          "context": [
+            "same_system",
+            "related_system"
+          ]
+        },
+        {
+          "kind": "direct_experimental",
+          "context": "different_system"
+        },
+        {
+          "kind": "mechanistic_model",
+          "context": "different_system"
+        },
+        {
+          "at_least": 2,
+          "kind": "indirect"
+        }
+      ],
+      "weak": [
+        {
+          "any": true
+        }
+      ]
+    },
+    "contested_caps_at": "medium"
+  },
+  "suggestion": {
+    "band": "high",
+    "why": "rx_1 (-> Aa) is the lowest-graded supported essential reaction: high \u2014 SynMod-4 construction and characterisation notes \u2014 the lab's own notes (fixture, 2024) (direct_experimental, same_system)",
+    "unsupported": [],
+    "leaves_at": {}
+  },
+  "calls": [
+    {
+      "name": "knowledge.1",
+      "role": "knowledge",
+      "mode": "survey",
+      "search": "online",
+      "backend": "stub",
+      "model": "stub",
+      "effort": null,
+      "cost_usd": null,
+      "sha": "b588fc1b8c240b43",
+      "at": "2026-09-28T21:57:25"
+    },
+    {
+      "name": "knowledge_verification.1",
+      "role": "knowledge_verification",
+      "mode": "",
+      "search": "offline",
+      "backend": "stub",
+      "model": "stub",
+      "effort": null,
+      "cost_usd": null,
+      "sha": "92b91e45a4873f3c",
+      "at": "2026-09-28T21:57:25"
+    }
+  ],
+  "cost_usd": null,
+  "written_at": "2026-09-28T21:57:25"
+}

@@ -1,0 +1,147 @@
+name: Nightly
+
+# The same battery as pr.yml, every suite once by group, re-run on main every
+# night: a PR already runs all of it, so this is the net for what changes
+# without a commit — the runner image, the toolchain it installs, anything a
+# suite reads from outside the repo. A dispatch may name suites to run just
+# those.
+
+on:
+  schedule:
+    # 03:17 UTC. Off the hour on purpose — the top of the hour is when every
+    # scheduled job on the platform queues at once, and GitHub drops runs it
+    # cannot start. The minute is arbitrary; the point is that it is not :00.
+    - cron: "17 3 * * *"
+  workflow_dispatch:
+    inputs:
+      suites:
+        description: >-
+          Space-separated suite names to run instead of all of them
+          (e.g. "golden search expansion"). Leave empty for the whole battery.
+        required: false
+        default: ""
+
+concurrency:
+  # a dispatch while the scheduled run is in flight waits for it rather
+  # than doubling the matrix
+  group: nightly
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  # Split by group as in pr.yml; a dispatch that names suites runs just those,
+  # as one job.
+  plan:
+    name: battery (plan)
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      groups: ${{ steps.plan.outputs.groups }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: plan
+        env:
+          SUITES: ${{ inputs.suites }}
+        run: |
+          if [ -n "$SUITES" ]; then
+            groups='["selected"]'
+          else
+            groups=$(python3 tests/run_all.py --list-groups \
+              --exclude lb3 --exclude curves)
+          fi
+          echo "groups: $groups"
+          echo "groups=$groups" >> "$GITHUB_OUTPUT"
+
+  battery:
+    name: battery (${{ matrix.group }})
+    needs: plan
+    runs-on: ubuntu-latest
+    # The slowest group is one or two end-to-end smokes (~15-20 min on the
+    # 2-core default). The ceiling is generous so a slow runner reports real
+    # failures rather than a timeout that says nothing.
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      matrix:
+        group: ${{ fromJSON(needs.plan.outputs.groups) }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-engine
+        with:
+          cache-group: ${{ matrix.group }}
+
+      # Same two exclusions as pr.yml, same reason: each reads artifacts
+      # of PREVIOUS runs out of the gitignored `runs/`, so neither can pass on
+      # a fresh checkout (pr.yml).
+      # Nightly inherits the limitation rather than pretending the battery is
+      # complete — the summary step states it on every run so it cannot
+      # quietly become invisible.
+      #
+      # The full-effort suites do NOT add to this list: they each write their
+      # own run and read it back, rather than depending on one already there.
+      - name: Run the battery (${{ matrix.group }})
+        id: battery
+        env:
+          SUITES: ${{ inputs.suites }}
+          GROUP: ${{ matrix.group }}
+        run: |
+          set -o pipefail
+          if [ "$GROUP" = selected ]; then which=$SUITES; else which="--group $GROUP"; fi
+          # shellcheck disable=SC2086  # word splitting of the suite list is intended
+          uv run python tests/run_all.py $which \
+            --jobs "$(nproc)" \
+            --exclude lb3 --exclude curves \
+            2>&1 | tee battery.log
+
+      # also after a failed battery: its compiles are as good as a green one's
+      # (a cancelled job may stop mid-compile, so it saves nothing)
+      - name: Save the AMICI compile cache
+        if: success() || failure()
+        uses: ./.github/actions/save-amici-cache
+
+      # A nightly nobody reads is a nightly that fails silently. Put the
+      # outcome where GitHub shows it without opening the log.
+      - name: Summarise
+        if: always()
+        run: |
+          {
+            echo "## Battery — ${{ matrix.group }}"
+            echo
+            if [ "${{ steps.battery.outcome }}" = "success" ]; then
+              echo "Result: **passed**"
+            else
+              echo "Result: **FAILED**"
+            fi
+            echo
+            echo '```'
+            tail -n 25 battery.log 2>/dev/null || echo "no battery.log"
+            echo '```'
+            echo
+            echo "_Excluded: lb3, curves — each reads artifacts of previous runs from"
+            echo "the gitignored \`runs/\`, so neither can pass on a fresh checkout."
+            echo "scaleshapes and batteryfeedback report SKIP._"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      # The per-suite timings and the failing suites' output are the thing you
+      # actually want the morning after.
+      - name: Upload the battery log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: battery-log-${{ matrix.group }}
+          path: battery.log
+          retention-days: 14
+
+  result:
+    name: battery
+    needs: battery
+    # not always(): a superseded run is cancelled, not red
+    if: ${{ !cancelled() }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - run: |
+          echo "groups: ${{ needs.battery.result }}"
+          test "${{ needs.battery.result }}" = success

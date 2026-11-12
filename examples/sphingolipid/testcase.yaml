@@ -1,0 +1,54 @@
+name: sphingolipid_metabolism
+
+# Clean restart, staged with the user 2026-09-28. Base model: the user's SBML
+# (supplied/petab_original/model.xml), translated one to one into
+# supplied/network.json by curation/build_network.py, so that construction runs
+# and can declare structural alternatives. Data: data/, built from
+# supplied/data_all.csv by curation/process_data.py (curation/DATA_PROCESSING.md).
+# Nothing from the earlier runs sphingo_phase1b / sphingo_phase2 is carried over.
+
+t_end: 180
+
+# One experimental condition (basal pulse-chase), so no condition can be held
+# out. Structures are compared by in-sample fit and information criterion only.
+# Agreed with the user 2026-09-28.
+holdout:
+  condition_labels: []
+
+# Literature search before construction and before each expansion round. The
+# user's thesis (which built the base model) is on blocklist.txt.
+research:
+  enabled: true
+  max_publication_year: 2026
+  at_expansion: true
+
+# No `s1: {base_gate: true}`: that gate exists only for mechanism_discrimination
+# (model.py, staged discrimination) and would be ignored here. The user checks
+# the translated base at the scope gate instead, before anything is fitted
+# (`show … rounds/round_0/model/antimony`; `redraft:` sends it back).
+
+notes: >-
+  The user's aim is an improved, biologically plausible model: reactions may be
+  removed, collapsed or added; which fitted pools to keep is decided by the user
+  between runs (a new staging copy per data selection, compared only on shared
+  pools). Kept outside the run: notes/ (the user's bachelor thesis, source of the
+  methods and the per-reaction reasons in network.json; not staged on purpose)
+  and curation/ (processing scripts and trace files). supplied/data_all.csv and
+  supplied/petab_original/ are archived with the run as provenance; the engine
+  does not read them.
+
+# Knowledge module / grounding. Advisory by the user's choice (2026-09-29): the
+# literature dossier is prior knowledge, not a fence; the base keeps the user's
+# reactions and what the dossier does not back is flagged for review. The
+# support-floor decision below is the user's, after reading the floor card
+# (2026-09-29, curation/answer_to_lr.md). With a supplied network.json the floor
+# and keep/drop lists do not act on the model; its reactions are only annotated
+# against the dossier.
+grounding:
+  mode: advisory
+  support_floor: low
+  floor_step: 1
+  decided_by: rule
+  note: "low (the rule's suggestion), step 1. Base supplied by the user as network.json; the floor only flags."
+  dropped: []
+  kept: [rx_28]   # Pal -> PC, no counting source; in the model as provisional (user)

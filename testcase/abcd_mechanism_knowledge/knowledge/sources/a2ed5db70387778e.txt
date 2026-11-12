@@ -1,0 +1,3 @@
+SynMod-4 construction and characterisation notes — the lab's own notes (fixture document, 2024).
+
+In the module's own strain, the inducer activates the kinase: the inducer drives KinA to its active form KinA_p within minutes. Active KinA returns to the inactive form by first-order dephosphorylation. Active KinA is required to activate the regulator: KinA_p drives RegB to its active form RegB_p. RegB_p is deactivated first order. Active RegB converts the precursor PreC into the product ProD. ProD is lost slowly by turnover and dilution. Nothing here names a rate constant value.

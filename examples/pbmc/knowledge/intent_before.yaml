@@ -1,0 +1,64 @@
+question: >-
+  What kind of communication between the cell populations in a well do these
+  data require, and what kind can they exclude? Specifically: what reaches the
+  T, B and NK cells under LPS and under the colony-stimulating factors, when
+  does it appear, which populations produce it, and is the same communication
+  already running at a low level in the unstimulated wells?
+
+system: >-
+  Peripheral blood mononuclear cells from one healthy human donor; five staged
+  populations (CD4 T cells, CD4-negative T cells, B cells, NK cells, CD14+
+  monocytes) sharing one medium per well. Pathway read out: cytokine receptor
+  -> receptor-associated JAK kinases -> tyrosine phosphorylation of STAT1
+  (Y701), STAT3 (Y705), STAT5 (Y694), by mass cytometry (Bodenmiller et al.,
+  Nat Biotechnol 30:858, 2012; Cytobank 15711).
+
+# the 15 measured quantities: each phospho-site in each population
+required_entities:
+  - pSTAT1 in Tcell_CD4
+  - pSTAT3 in Tcell_CD4
+  - pSTAT5 in Tcell_CD4
+  - pSTAT1 in Tcell_CD4neg
+  - pSTAT3 in Tcell_CD4neg
+  - pSTAT5 in Tcell_CD4neg
+  - pSTAT1 in Bcell
+  - pSTAT3 in Bcell
+  - pSTAT5 in Bcell
+  - pSTAT1 in NKcell
+  - pSTAT3 in NKcell
+  - pSTAT5 in NKcell
+  - pSTAT1 in Monocyte
+  - pSTAT3 in Monocyte
+  - pSTAT5 in Monocyte
+
+required_predictions:
+  - pSTAT1/3/5 time courses 0-240 min for all five populations under all seven conditions, the populations of a well simulated together
+  - for any communication between populations a model contains - when it appears, how long it lasts, which population produces it, and its effect on each population's STATs
+  - whether the rise of the Reference wells is that communication at a low level or an unrelated drift
+
+perturbations:
+  - "IFN-a, IFN-g, LPS, GM-CSF, G-CSF, IL-3, each 30 ng/ml, added at t=0 and left in the medium (no washout, nothing added later)"
+  - "Reference: no stimulus"
+  - "before t=0: rest without stimulus, drift or secretion (pre-equilibration, decision 8)"
+
+timescale: >-
+  0-240 min after stimulus addition; fixed at 0, 1, 5, 15, 30, 60, 120, 240 min.
+
+scope_exclusions:
+  - cells outside the five gates (dendritic cells, CD14- monocytes, CD123+ cells, CD7- T cells)
+  - the unstaged plate columns (orthovanadate, IL-2, IL-12, BCR/FcR-XL, PMA/ionomycin)
+  - the non-STAT phospho-channels, total protein, phospho-JAK and medium cytokines (not in the data)
+  - cell-to-cell heterogeneity within a population (the data are per-well medians)
+  - absolute amounts of any secreted factor, and its molecular identity beyond its STAT signature and receptor distribution
+
+success_criteria:
+  - for each communication tested - the note's five candidate explanations and any a model proposes - a verdict of required, permitted or excluded, holding within the tested model family and the study team's decisions 1-11; "all tested models inadequate" is a valid result
+  - every communication between populations that a model adds is a mechanism, not a fitted function - a producing population, a secreted species (declared unmeasured, decision 11), its production driven by reactions in the producing cells, and its action through a receptor on the responding cells; no time function, delay or input shape may stand in for it. The drift term of decisions 1 and 8 is the one declared exception, an observation quantity, and the alternative a mechanistic basal secretion must beat
+  - the report separates the reactions the literature supports from those the data added, so the new biology is visible as such
+  - models are compared by data fit and information criteria on all 840 rows with the fixed sigma column; no condition held out
+  - parameters and combinations the data do not determine are reported from the Fisher information at each optimum, not repaired; profile likelihoods for the final selected model only
+  - the report names which lymphocyte responses no tested model explains
+
+inference_target: mechanism_discrimination
+
+domain_packs: [general-dynamics, measurement-tech, signalling-phospho]

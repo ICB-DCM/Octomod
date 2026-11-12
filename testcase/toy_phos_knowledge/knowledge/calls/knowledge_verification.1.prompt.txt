@@ -1,0 +1,129 @@
+# Knowledge audit: re-classify each source from its own text
+
+Fresh context, documents only: the knowledge module classified the sources it cites, and you read each one again
+from the document's own text around the quote it gave. Your reading is advisory: where the two disagree, the
+engine keeps the lower grade and shows the person both.
+
+## What you receive
+`items` — each evidence item the grade would count: its `id`, `source`, `locator`, `supports`, `quote`, and the
+first classification (`evidence_kind`, `context_match`, `context_note`, `stance`) — and `excerpts`, keyed by item
+id: the cached document's text around the quote, bounded. No intent, no lab note and no data: you judge what the
+document shows, not the problem it is cited for.
+
+Where one exists for your role, a curated worked example (good and bad practice, labelled) follows this brief.
+
+## What you return
+`classifications` (required): one entry per item, `{id, evidence_kind, context_match, stance, note}`, in the
+knowledge role's vocabulary.
+
+## Rules that get your reply refused
+- Every item gets exactly one entry, by its `id`; every value is from the declared vocabulary.
+- The `note` names what in the excerpt decides the classification, or says the excerpt cannot.
+
+## How to judge
+- `evidence_kind`: does the excerpt show an experiment that demonstrates this conversion or measures this quantity
+  (`direct_experimental`), a model that contains it (`mechanistic_model`), a database entry (`curated_database`), a
+  review's statement (`review`), or only a correlation or a mention (`indirect`)? A sentence that mentions the
+  conversion in passing is `indirect`, whatever the paper as a whole is.
+- `context_match`: read the organism, cell type and conditions off the excerpt and compare them with the first
+  classification's `context_note`; where the excerpt names a different system, say so.
+- `stance`: does the excerpt support the claim in `supports`, or contradict it?
+- An item with no excerpt (a document that is not text, or a quote the engine did not find): classify from what
+  the item states, and say in the note that there was no excerpt.
+- You can be wrong in both directions: prefer the classification the text bears out to either agreeing or
+  disagreeing by habit.
+
+## Mistakes we have seen
+- Copying the first classification back without reading the excerpt.
+- Downgrading every item to look strict: a direct experiment stays a direct experiment.
+- Judging the source by the journal or the year instead of by what the excerpt shows.
+
+
+# Your tools
+TOOLS: none. No shell, no file system, no web, no code execution, and no way to inspect data beyond what this prompt contains — the inputs below are everything this role is given, by design. A command, a tool call, or 'let me look at …' written into the reply cannot run and fails the contract. Reply with the JSON object only.
+
+# Inputs
+
+## items
+```json
+[
+  {
+    "id": "req_1.e1",
+    "source": "Receptor module phosphorylation kinetics \u2014 a note (fixture, 2024)",
+    "locator": "paragraph 2",
+    "supports": "ligand addition drives phosphorylation of R to Rp within minutes, in cells expressing the module",
+    "quote": "ligand addition drives phosphorylation of R to Rp within minutes",
+    "evidence_kind": "direct_experimental",
+    "context_match": "same_system",
+    "context_note": "the same receptor module in the same cells",
+    "stance": "supports"
+  },
+  {
+    "id": "rx_1.e1",
+    "source": "Receptor module phosphorylation kinetics \u2014 a note (fixture, 2024)",
+    "locator": "paragraph 2",
+    "supports": "a constitutive phosphatase returns Rp to R",
+    "quote": "a constitutive phosphatase returns Rp to R",
+    "evidence_kind": "direct_experimental",
+    "context_match": "same_system",
+    "context_note": "the same receptor module in the same cells",
+    "stance": "supports"
+  },
+  {
+    "id": "rx_1.e2",
+    "source": "A two-state model of receptor phosphorylation \u2014 a note (fixture, 2021)",
+    "locator": "paragraph 2",
+    "supports": "a published model of a related receptor writes the dephosphorylation of Rp as first order in Rp",
+    "quote": "writes the dephosphorylation of Rp as first order in Rp",
+    "evidence_kind": "mechanistic_model",
+    "context_match": "related_system",
+    "context_note": "a related receptor, in another cell line",
+    "stance": "supports"
+  },
+  {
+    "id": "rx_2.e1",
+    "source": "Receptor turnover in a related receptor family \u2014 a note (fixture, 2018)",
+    "locator": "paragraph 2",
+    "supports": "phosphorylated receptors of a related family are internalised and degraded over several hours",
+    "evidence_kind": "indirect",
+    "context_match": "related_system",
+    "context_note": "a related receptor family, over hours rather than the first hour",
+    "stance": "supports"
+  },
+  {
+    "id": "fact_1.e1",
+    "source": "Receptor module phosphorylation kinetics \u2014 a note (fixture, 2024)",
+    "locator": "paragraph 2",
+    "supports": "total receptor stays near 10 normalised units over the first hour",
+    "quote": "Total receptor stays near 10 normalised units over the first hour",
+    "evidence_kind": "direct_experimental",
+    "context_match": "same_system",
+    "context_note": "the same receptor module in the same cells",
+    "stance": "supports"
+  }
+]
+```
+## excerpts
+```json
+{
+  "req_1.e1": "Receptor module phosphorylation kinetics \u2014 a note (fixture document, 2024). In cells expressing the receptor module, ligand addition drives phosphorylation of R to Rp within minutes; a constitutive phosphatase returns Rp to R, and the steady-state fraction phosphorylated rises with dose and saturates. Total receptor stays near 10 normalised units over the first hour. Nothing here names a rate constant value.",
+  "rx_1.e1": "Receptor module phosphorylation kinetics \u2014 a note (fixture document, 2024). In cells expressing the receptor module, ligand addition drives phosphorylation of R to Rp within minutes; a constitutive phosphatase returns Rp to R, and the steady-state fraction phosphorylated rises with dose and saturates. Total receptor stays near 10 normalised units over the first hour. Nothing here names a rate constant value.",
+  "rx_1.e2": "A two-state model of receptor phosphorylation \u2014 a note (fixture document, 2021). A published two-state model of a related receptor, in another cell line, writes the dephosphorylation of Rp as first order in Rp, catalysed by a constitutive phosphatase. Nothing here names a rate constant value.",
+  "fact_1.e1": "Receptor module phosphorylation kinetics \u2014 a note (fixture document, 2024). In cells expressing the receptor module, ligand addition drives phosphorylation of R to Rp within minutes; a constitutive phosphatase returns Rp to R, and the steady-state fraction phosphorylated rises with dose and saturates. Total receptor stays near 10 normalised units over the first hour. Nothing here names a rate constant value."
+}
+```
+
+# Output contract
+{"classifications": [{"id": "rx_1.e1",
+                      "evidence_kind": "direct_experimental|mechanistic_model|curated_database|review|indirect",
+                      "context_match": "same_system|related_system|different_system",
+                      "stance": "supports|contradicts",
+                      "note": "one line: what in the excerpt decides it, or why the excerpt cannot"}]}
+NOTE: one entry per item in `items`, by its `id`. Classify from the document's
+text in `excerpts` (keyed by item id), not from the item's own claims: the
+vocabulary is the knowledge role's (`direct_experimental` = the excerpt shows an
+experiment demonstrating this conversion or measuring this quantity, and so on).
+An item with no excerpt is classified from what it states, and its note says
+there was no excerpt. Where the excerpt does not bear the claim out, say so in
+the note; the engine keeps the lower of the two readings.
+Respond with ONLY a single JSON object matching the contract. No prose, no markdown fences.

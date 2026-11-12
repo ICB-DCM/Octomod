@@ -1,0 +1,648 @@
+{
+  "source": "the user's own SBML model (testcase/sphingolipid_metabolism/supplied/petab/model.xml), translated one to one; this is the BASE model of phase 2",
+  "units": "all amounts are fractions of the total measured label at t = 0 (dimensionless); time in minutes",
+  "species": [
+    {
+      "id": "Pal",
+      "name": "labelled free fatty acid pool (mostly palmitate; measured as all labelled FFA)",
+      "compartment": "cell",
+      "initial_value": 0.0627768,
+      "initial_value_estimate": false,
+      "measured": true
+    },
+    {
+      "id": "Ser",
+      "name": "serine (constant, boundary)",
+      "compartment": "cell",
+      "initial_value": 0.01647,
+      "initial_value_estimate": false,
+      "boundary": true,
+      "constant": true,
+      "measured": false
+    },
+    {
+      "id": "Sph",
+      "name": "sphinganine (the supplied alkyne tracer, plus any made from Pal)",
+      "compartment": "cell",
+      "initial_value": 0.186038,
+      "initial_value_estimate": false,
+      "measured": true
+    },
+    {
+      "id": "DhCer",
+      "name": "dihydroceramide",
+      "compartment": "cell",
+      "initial_value": 0.0164271,
+      "initial_value_estimate": false,
+      "measured": true
+    },
+    {
+      "id": "Cer",
+      "name": "ceramide",
+      "compartment": "cell",
+      "initial_value": 0.0708907,
+      "initial_value_estimate": false,
+      "measured": true
+    },
+    {
+      "id": "SM",
+      "name": "sphingomyelin",
+      "compartment": "cell",
+      "initial_value": 0.0156936,
+      "initial_value_estimate": false,
+      "measured": true
+    },
+    {
+      "id": "S1P",
+      "name": "sphingosine-1-phosphate (not measured)",
+      "compartment": "cell",
+      "initial_value": 0.000823566,
+      "initial_value_estimate": false,
+      "measured": false
+    },
+    {
+      "id": "Hexdece",
+      "name": "hexadecenal",
+      "compartment": "cell",
+      "initial_value": 0.00148214,
+      "initial_value_estimate": false,
+      "measured": true
+    },
+    {
+      "id": "SA1P",
+      "name": "sphinganine-1-phosphate (not measured)",
+      "compartment": "cell",
+      "initial_value": 0.000823566,
+      "initial_value_estimate": false,
+      "measured": false
+    },
+    {
+      "id": "Hexdeca",
+      "name": "hexadecanal",
+      "compartment": "cell",
+      "initial_value": 0.000554491,
+      "initial_value_estimate": false,
+      "measured": true
+    },
+    {
+      "id": "CE",
+      "name": "cholesteryl ester",
+      "compartment": "cell",
+      "initial_value": 0.11259,
+      "initial_value_estimate": false,
+      "measured": true
+    },
+    {
+      "id": "HexCer",
+      "name": "hexosylceramide",
+      "compartment": "cell",
+      "initial_value": 0.00533165,
+      "initial_value_estimate": false,
+      "measured": true
+    },
+    {
+      "id": "DG",
+      "name": "diacylglycerol",
+      "compartment": "cell",
+      "initial_value": 0.17896,
+      "initial_value_estimate": false,
+      "measured": true
+    },
+    {
+      "id": "PC",
+      "name": "phosphatidylcholine",
+      "compartment": "cell",
+      "initial_value": 0.28724,
+      "initial_value_estimate": false,
+      "measured": true
+    }
+  ],
+  "interactions": [
+    {
+      "id": "Pal_to_Sph",
+      "type": "conversion",
+      "participants": [
+        {
+          "species": "Pal",
+          "role": "substrate",
+          "stoichiometry": 1
+        },
+        {
+          "species": "Ser",
+          "role": "substrate",
+          "stoichiometry": 1
+        },
+        {
+          "species": "Sph",
+          "role": "product",
+          "stoichiometry": 1
+        }
+      ],
+      "rate_law": "mass action: k_Pal_Sph * Pal * Ser",
+      "parameter": {
+        "id": "k_Pal_Sph",
+        "scale": "log10",
+        "lb": 1e-12,
+        "ub": 100000000.0,
+        "estimate": true
+      },
+      "evidence_tier": "user-supplied",
+      "note": ""
+    },
+    {
+      "id": "Sph_to_DhCer",
+      "type": "conversion",
+      "participants": [
+        {
+          "species": "Sph",
+          "role": "substrate",
+          "stoichiometry": 1
+        },
+        {
+          "species": "Pal",
+          "role": "substrate",
+          "stoichiometry": 1
+        },
+        {
+          "species": "DhCer",
+          "role": "product",
+          "stoichiometry": 1
+        }
+      ],
+      "rate_law": "mass action: k_Sph_DhCer * Sph * Pal",
+      "parameter": {
+        "id": "k_Sph_DhCer",
+        "scale": "log10",
+        "lb": 1e-12,
+        "ub": 100000000.0,
+        "estimate": true
+      },
+      "evidence_tier": "user-supplied",
+      "note": ""
+    },
+    {
+      "id": "DhCer_to_Cer",
+      "type": "conversion",
+      "participants": [
+        {
+          "species": "DhCer",
+          "role": "substrate",
+          "stoichiometry": 1
+        },
+        {
+          "species": "Cer",
+          "role": "product",
+          "stoichiometry": 1
+        }
+      ],
+      "rate_law": "mass action: k_DhCer_Cer * DhCer",
+      "parameter": {
+        "id": "k_DhCer_Cer",
+        "scale": "log10",
+        "lb": 1e-12,
+        "ub": 100000000.0,
+        "estimate": true
+      },
+      "evidence_tier": "user-supplied",
+      "note": ""
+    },
+    {
+      "id": "Cer_to_SM",
+      "type": "conversion",
+      "participants": [
+        {
+          "species": "Cer",
+          "role": "substrate",
+          "stoichiometry": 1
+        },
+        {
+          "species": "SM",
+          "role": "product",
+          "stoichiometry": 1
+        }
+      ],
+      "rate_law": "mass action: k_Cer_SM * Cer",
+      "parameter": {
+        "id": "k_Cer_SM",
+        "scale": "log10",
+        "lb": 1e-12,
+        "ub": 100000000.0,
+        "estimate": true
+      },
+      "evidence_tier": "user-supplied",
+      "note": ""
+    },
+    {
+      "id": "Cer_to_HexCer",
+      "type": "conversion",
+      "participants": [
+        {
+          "species": "Cer",
+          "role": "substrate",
+          "stoichiometry": 1
+        },
+        {
+          "species": "HexCer",
+          "role": "product",
+          "stoichiometry": 1
+        }
+      ],
+      "rate_law": "mass action: k_Cer_HexCer * Cer",
+      "parameter": {
+        "id": "k_Cer_HexCer",
+        "scale": "log10",
+        "lb": 1e-12,
+        "ub": 100000000.0,
+        "estimate": true
+      },
+      "evidence_tier": "user-supplied",
+      "note": ""
+    },
+    {
+      "id": "Sph_to_SA1P",
+      "type": "conversion",
+      "participants": [
+        {
+          "species": "Sph",
+          "role": "substrate",
+          "stoichiometry": 1
+        },
+        {
+          "species": "SA1P",
+          "role": "product",
+          "stoichiometry": 1
+        }
+      ],
+      "rate_law": "mass action: k_Sph_SA1P * Sph",
+      "parameter": {
+        "id": "k_Sph_SA1P",
+        "scale": "log10",
+        "lb": 1e-12,
+        "ub": 100000000.0,
+        "estimate": true
+      },
+      "evidence_tier": "user-supplied",
+      "note": ""
+    },
+    {
+      "id": "Cer_to_S1P",
+      "type": "conversion",
+      "participants": [
+        {
+          "species": "Cer",
+          "role": "substrate",
+          "stoichiometry": 1
+        },
+        {
+          "species": "S1P",
+          "role": "product",
+          "stoichiometry": 1
+        }
+      ],
+      "rate_law": "mass action: k_Cer_S1P * Cer",
+      "parameter": {
+        "id": "k_Cer_S1P",
+        "scale": "log10",
+        "lb": 1e-12,
+        "ub": 100000000.0,
+        "estimate": true
+      },
+      "evidence_tier": "user-supplied",
+      "note": ""
+    },
+    {
+      "id": "SA1P_to_Hexdeca",
+      "type": "conversion",
+      "participants": [
+        {
+          "species": "SA1P",
+          "role": "substrate",
+          "stoichiometry": 1
+        },
+        {
+          "species": "Hexdeca",
+          "role": "product",
+          "stoichiometry": 1
+        }
+      ],
+      "rate_law": "mass action: k_SA1P_Hexdeca * SA1P",
+      "parameter": {
+        "id": "k_SA1P_Hexdeca",
+        "scale": "log10",
+        "lb": 1e-12,
+        "ub": 100000000.0,
+        "estimate": true
+      },
+      "evidence_tier": "user-supplied",
+      "note": ""
+    },
+    {
+      "id": "S1P_to_Hexdece",
+      "type": "conversion",
+      "participants": [
+        {
+          "species": "S1P",
+          "role": "substrate",
+          "stoichiometry": 1
+        },
+        {
+          "species": "Hexdece",
+          "role": "product",
+          "stoichiometry": 1
+        }
+      ],
+      "rate_law": "mass action: k_S1P_Hexdece * S1P",
+      "parameter": {
+        "id": "k_S1P_Hexdece",
+        "scale": "log10",
+        "lb": 1e-12,
+        "ub": 100000000.0,
+        "estimate": true
+      },
+      "evidence_tier": "user-supplied",
+      "note": ""
+    },
+    {
+      "id": "Hexdece_to_Hexdeca",
+      "type": "conversion",
+      "participants": [
+        {
+          "species": "Hexdece",
+          "role": "substrate",
+          "stoichiometry": 1
+        },
+        {
+          "species": "Hexdeca",
+          "role": "product",
+          "stoichiometry": 1
+        }
+      ],
+      "rate_law": "mass action: k_Hexdece_Hexdeca * Hexdece",
+      "parameter": {
+        "id": "k_Hexdece_Hexdeca",
+        "scale": "log10",
+        "lb": 1e-12,
+        "ub": 100000000.0,
+        "estimate": true
+      },
+      "evidence_tier": "user-supplied",
+      "note": ""
+    },
+    {
+      "id": "Hexdeca_to_Pal",
+      "type": "conversion",
+      "participants": [
+        {
+          "species": "Hexdeca",
+          "role": "substrate",
+          "stoichiometry": 1
+        },
+        {
+          "species": "Pal",
+          "role": "product",
+          "stoichiometry": 1
+        }
+      ],
+      "rate_law": "mass action: k_Hexdeca_Pal * Hexdeca",
+      "parameter": {
+        "id": "k_Hexdeca_Pal",
+        "scale": "log10",
+        "lb": 1e-12,
+        "ub": 100000000.0,
+        "estimate": true
+      },
+      "evidence_tier": "user-supplied",
+      "note": ""
+    },
+    {
+      "id": "Pal_sink",
+      "type": "degradation",
+      "participants": [
+        {
+          "species": "Pal",
+          "role": "substrate",
+          "stoichiometry": 1
+        }
+      ],
+      "rate_law": "mass action: k_Pal_sink * Pal",
+      "parameter": {
+        "id": "k_Pal_sink",
+        "scale": "log10",
+        "lb": 1e-12,
+        "ub": 100000000.0,
+        "estimate": true
+      },
+      "evidence_tier": "user-supplied",
+      "note": ""
+    },
+    {
+      "id": "Pal_to_CE",
+      "type": "conversion",
+      "participants": [
+        {
+          "species": "Pal",
+          "role": "substrate",
+          "stoichiometry": 1
+        },
+        {
+          "species": "CE",
+          "role": "product",
+          "stoichiometry": 1
+        }
+      ],
+      "rate_law": "mass action: k_Pal_CE * Pal",
+      "parameter": {
+        "id": "k_Pal_CE",
+        "scale": "log10",
+        "lb": 1e-12,
+        "ub": 100000000.0,
+        "estimate": true
+      },
+      "evidence_tier": "user-supplied",
+      "note": ""
+    },
+    {
+      "id": "HexCer_out",
+      "type": "degradation",
+      "participants": [
+        {
+          "species": "HexCer",
+          "role": "substrate",
+          "stoichiometry": 1
+        }
+      ],
+      "rate_law": "mass action: k_HexCer_out * HexCer",
+      "parameter": {
+        "id": "k_HexCer_out",
+        "scale": "log10",
+        "lb": 1e-12,
+        "ub": 100000000.0,
+        "estimate": true
+      },
+      "evidence_tier": "user-supplied",
+      "note": ""
+    },
+    {
+      "id": "CE_out",
+      "type": "degradation",
+      "participants": [
+        {
+          "species": "CE",
+          "role": "substrate",
+          "stoichiometry": 1
+        }
+      ],
+      "rate_law": "mass action: k_CE_out * CE",
+      "parameter": {
+        "id": "k_CE_out",
+        "scale": "log10",
+        "lb": 1e-12,
+        "ub": 100000000.0,
+        "estimate": true
+      },
+      "evidence_tier": "user-supplied",
+      "note": ""
+    },
+    {
+      "id": "Pal_to_DG",
+      "type": "conversion",
+      "participants": [
+        {
+          "species": "Pal",
+          "role": "substrate",
+          "stoichiometry": 1
+        },
+        {
+          "species": "DG",
+          "role": "product",
+          "stoichiometry": 1
+        }
+      ],
+      "rate_law": "mass action: k_Pal_DG * Pal",
+      "parameter": {
+        "id": "k_Pal_DG",
+        "scale": "log10",
+        "lb": 1e-12,
+        "ub": 100000000.0,
+        "estimate": true
+      },
+      "evidence_tier": "user-supplied",
+      "note": ""
+    },
+    {
+      "id": "Pal_to_PC",
+      "type": "conversion",
+      "participants": [
+        {
+          "species": "Pal",
+          "role": "substrate",
+          "stoichiometry": 1
+        },
+        {
+          "species": "PC",
+          "role": "product",
+          "stoichiometry": 1
+        }
+      ],
+      "rate_law": "mass action: k_Pal_PC * Pal",
+      "parameter": {
+        "id": "k_Pal_PC",
+        "scale": "log10",
+        "lb": 1e-12,
+        "ub": 100000000.0,
+        "estimate": true
+      },
+      "evidence_tier": "user-supplied",
+      "note": ""
+    },
+    {
+      "id": "SM_to_Cer",
+      "type": "conversion",
+      "participants": [
+        {
+          "species": "SM",
+          "role": "substrate",
+          "stoichiometry": 1
+        },
+        {
+          "species": "Cer",
+          "role": "product",
+          "stoichiometry": 1
+        }
+      ],
+      "rate_law": "mass action: k_SM_Cer * SM",
+      "parameter": {
+        "id": "k_SM_Cer",
+        "scale": "log10",
+        "lb": 1e-12,
+        "ub": 100000000.0,
+        "estimate": true
+      },
+      "evidence_tier": "user-supplied",
+      "note": ""
+    },
+    {
+      "id": "PC_out",
+      "type": "degradation",
+      "participants": [
+        {
+          "species": "PC",
+          "role": "substrate",
+          "stoichiometry": 1
+        }
+      ],
+      "rate_law": "mass action: k_PC_out * PC",
+      "parameter": {
+        "id": "k_PC_out",
+        "scale": "log10",
+        "lb": 1e-12,
+        "ub": 100000000.0,
+        "estimate": true
+      },
+      "evidence_tier": "user-supplied",
+      "note": ""
+    },
+    {
+      "id": "DG_out",
+      "type": "degradation",
+      "participants": [
+        {
+          "species": "DG",
+          "role": "substrate",
+          "stoichiometry": 1
+        }
+      ],
+      "rate_law": "mass action: k_DG_out * DG",
+      "parameter": {
+        "id": "k_DG_out",
+        "scale": "log10",
+        "lb": 1e-12,
+        "ub": 100000000.0,
+        "estimate": true
+      },
+      "evidence_tier": "user-supplied",
+      "note": ""
+    },
+    {
+      "id": "Sink_Pal",
+      "type": "synthesis",
+      "participants": [
+        {
+          "species": "Pal",
+          "role": "product",
+          "stoichiometry": 1
+        }
+      ],
+      "rate_law": "mass action, constant flux: k_Sink_Pal",
+      "parameter": {
+        "id": "k_Sink_Pal",
+        "scale": "log10",
+        "lb": 1e-12,
+        "ub": 100000000.0,
+        "estimate": true
+      },
+      "evidence_tier": "user-supplied",
+      "note": ""
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "diagnosis": "STUB call 4 (round 1): the KinA_p late drift remains; the product-driven inactivation of active KinA is proposed again.",
+  "axes": [
+    {
+      "id": "product_inactivates_kina",
+      "question": "Does ProD inactivate active KinA directly, without being consumed?",
+      "origin": "residual",
+      "default": "off",
+      "priority": 2,
+      "priority_reason": "the KinA_p residuals at the top dose run negative late, where ProD is highest",
+      "on_antimony_patch": {
+        "append": [
+          "J8: Aa + D -> D; k_pk * Aa * D;"
+        ]
+      },
+      "adds_parameters": [
+        {
+          "id": "k_pk",
+          "nominal_value": 0.01,
+          "unit": "1/(uM*min)",
+          "lb": 1e-06,
+          "ub": 1.0,
+          "evidence_tier": "to_be_estimated",
+          "source": "size unknown; the fit decides",
+          "estimate": true,
+          "neutral_value": 0.0,
+          "denotes": "rate of the product-driven inactivation of active KinA"
+        }
+      ],
+      "rationale": "A late negative drift of KinA_p where ProD accumulates; nothing in prior_reactions describes the step, and the search asked for found one correlational remark.",
+      "discriminating_evidence": "obs_KinA_p at u=4 without BX-11, after 50 min"
+    }
+  ],
+  "stop_instead": false
+}

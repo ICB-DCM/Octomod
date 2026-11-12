@@ -1,0 +1,67 @@
+# Frozen S0 intent for ctd_positional. Written at staging time; never edited by an
+# agent.
+#
+# THE EXPERIMENTAL-DESIGN CASE. Synthetic data from a truth authored 2026-09-11,
+# on the same system as ctd_blind. Its purpose is to answer a question the real
+# data provably cannot: whether P-TEFb has a DIRECTIONAL preference along the CTD.
+#
+# The published analysis of the real data could not settle directionality — not
+# because the fit was poor but because the observable is blind to it. That is a
+# structural fact and it is verified numerically in truth/true_model.md: swapping
+# the two directional rate factors leaves the count-data trajectories identical to
+# one part in 1e15. This case supplies a readout that breaks that symmetry, and
+# asks whether the pipeline uses it.
+#
+# `ctd_countonly` is the NEGATIVE CONTROL: the same truth, the same seed, the same
+# question, observed only as counts. It must FAIL to resolve direction. A claim
+# that the positional data revealed the mechanism is unsupported without it.
+#
+# RESEARCH IS ENABLED for this case (testcase.yaml research.enabled). The engine's
+# year cutoff is 2025 and the target paper is 2026, so it is excluded by the rule
+# rather than by our discretion; blocklist.txt names it anyway. Czudnochowski et
+# al. (2012), the source of the real measurements, is deliberately NOT blocked —
+# finding it is what a modeller would do.
+
+question: >-
+  Determine what governs the rate at which each individual CTD repeat is
+  phosphorylated by P-TEFb, using the positionally resolved measurements together
+  with the intact-molecule signal. State what the positional readout establishes
+  that the intact-molecule readout alone could not, and what remains undecided.
+
+system: >-
+  RNA polymerase II CTD (8 heptarepeats, in vitro), phosphorylated by P-TEFb;
+  positionally resolved time course with three replicates
+
+required_entities:
+  - the CTD substrate, resolved both by phosphorylation count and by which repeat is modified
+  - the kinase P-TEFb
+  - ATP
+
+required_predictions:
+  - the mechanism governing the per-repeat phosphorylation rate, identified and defended
+  - a statement of what the positional readout resolves that the count readout cannot
+
+perturbations:
+  - none — a single in vitro condition, sampled over time, three replicates per point
+
+timescale: minutes, horizon 960 min (16 h)
+
+scope_exclusions:
+  - transcription, DNA and the polymerase itself — purified in vitro assay
+  - the distinction between Ser2 and Ser5 within a repeat (mutually exclusive here;
+    each repeat is one bit)
+
+success_criteria:
+  - the selected mechanism is reported with its information criterion, its Akaike
+    weight and the indistinguishable set, honestly, whatever they turn out to be
+  - any claim that depends on which repeat is which — where it sits in the chain, or
+    what has happened around it — is supported by the positionally resolved
+    measurements and not by the intact-molecule measurements alone
+  - the observation model is stated explicitly, including how the intact-molecule
+    signal is mapped onto predicted amounts at each time point
+
+inference_target: mechanism_discrimination
+
+domain_packs:
+  - general-dynamics
+  - measurement-tech

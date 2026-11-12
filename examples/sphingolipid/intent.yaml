@@ -1,0 +1,108 @@
+# S0 intent for sphingolipid_metabolism (clean restart). Drafted with the user
+# 2026-09-28; the success criteria are the user's. Revised with the user on
+# 2026-09-29 after the knowledge module (curation/answer_to_lr.md): round-1
+# model + hypotheses, per-hypothesis verdicts, literature tie-break.
+#
+# inference_target is parameter_values on purpose: under this target the engine
+# compares structural alternatives (open axes) on the base model, one at a time,
+# and can expand the model space after a selection round. Under
+# mechanism_discrimination it accepts only whole candidate models.
+
+question: >-
+  We have a model of sphingolipid metabolism that was constructed by hand. This
+  model can be improved upon: some reactions might be too detailed, some included
+  pools might not really serve sphingolipid metabolism itself, or reactions might
+  be missing. The main goal is a biologically plausible mechanistic model of
+  sphingolipid metabolism on which further research can be built. Starting from
+  the user's round-1 model (their hand-built model restructured after a
+  literature survey), which of the user's structural hypotheses do the
+  two-tracer pulse-chase data support, discard or leave undecided, which
+  alternative of each competing group do they prefer, and what are the rate
+  constants of the structure that results?
+
+system: >-
+  Sphingolipid metabolism in human neuroblastoma SH-SY5Y cells under basal
+  conditions, followed by click-MS lipidomics after a 60 min pulse with 1 uM
+  alkyne sphinganine and 50 uM 13C6-alkyne palmitate and a 180 min chase;
+  round-1 model of 12 species and 16 irreversible mass-action reactions
+  (7 core, 9 provisional), with 7 structural hypotheses on it, both tracers
+  summed as one label
+
+required_entities:
+  - Sph
+  - DhCer
+  - Cer
+  - SM
+  - HexCer
+  - FFA
+
+# The user's structural hypotheses (reactions in supplied/network.json,
+# `hypotheses`). Free-form: construction reads it; the engine does not act on it.
+hypotheses:
+  round_1:
+    - "H1: Cer -> S1P + Pal replaces Cer -> S1P (fatty acid released on ceramide degradation)"
+    - "H2a: + S1P -> Hexdece -> Hexdeca -> Pal (the user's original aldehyde route)"
+    - "H2b: + S1P -> Hexdece -> Pal (the literature's aldehyde route); competes with H2a"
+    - "H3a: + Sph -> SA1P -> Hexdeca -> Pal"
+    - "H3b: + Sph -> Hexdeca -> Pal (SA1P collapsed); competes with H3a"
+    - "H5: + Pal + Ser -> Sph beside the sphinganine import (both)"
+    - "H5': Pal + Ser -> Sph replaces the sphinganine import (synthesis only); competes with H5 and the import alone"
+  declared_not_tested_in_round_1:
+    - "removal of each of the 9 provisional reactions (Pal -> CE, Pal -> DG, Pal -> PC, HexCer ->, -> Pal, CE ->, PC ->, DG ->, -> Sph), to be tested from the first expansion on"
+
+required_predictions:
+  - for each hypothesis tested, a verdict against the model it was added to, with
+    the AIC difference behind it - supported (better beyond the engine's margin),
+    discarded (worse beyond the margin, on these data), or not decided by these
+    data (within the margin) - and for each group of competing hypotheses (H2a vs
+    H2b, H3a vs H3b, import vs synthesis vs both), which one the data prefer and by
+    how much, or that they cannot tell them apart
+  - the set of structures the data cannot tell apart, stated explicitly
+  - point estimates with confidence intervals for the rate constants of the
+    selected structure
+  - the fitted time courses of all eleven fitted lipid pools over the 180 min chase
+  - for each fitted pool outside the sphingolipid pathway (FFA, PC, DG, CE), whether
+    it constrains the sphingolipid part of the selected model, as the basis for the
+    user's decision between runs on which pools to keep
+
+perturbations:
+  - none; a single basal pulse-chase condition, t = 0 is the end of the 60 min pulse
+
+timescale: minutes, horizon 180 min
+
+scope_exclusions:
+  - interactions between hypotheses in round 1 (each is tested alone on the
+    round-1 model; combinations only from the expansion step)
+  - separating the two tracers, deferred to a later stage
+  - the measured classes TG, PA, PE, PI and MG, left out of the model by the user
+  - removing a fitted pool from the data, which the user decides between runs
+
+success_criteria:
+  - the result is reported per hypothesis and per competing group first; a single
+    final model is reported only after that, and the tie-break by literature
+    applies only to that final model, never to a verdict on a hypothesis
+  - where the data cannot tell two alternatives apart (within the engine's
+    indistinguishability margin), the model reported as final uses the better
+    literature-supported alternative, and the report says the choice was made on
+    literature, not on the data
+  - a hypothesis called discarded is reported as worse on these data, not as
+    shown to be absent in the cell
+  - every reaction in the final model is either required by the data (removing it
+    clearly worsens the criterion) or backed by a cited source, and every reaction
+    removed from the user's base model is named with the reason for removing it
+  - where several reaction steps known from the literature are collapsed into a
+    single reaction for the sake of identifiability, this is stated for that
+    reaction
+  - the final model fits every sphingolipid pool (Sph, DhCer, Cer, SM, HexCer)
+    without systematic misfit, or the pool it misses is named
+  - every rate constant of the final model is reported with an interval, and any
+    the data do not bound is named as such
+  - structures the data cannot tell apart are listed, not forced into a single
+    winner
+  - convergence of the multistart is evidenced for every model compared
+
+inference_target: parameter_values
+
+domain_packs:
+  - general-dynamics
+  - measurement-tech

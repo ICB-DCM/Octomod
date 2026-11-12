@@ -1,0 +1,48 @@
+# Frozen S0 intent for abcd_expansion_knowledge: the SynMod-4 prediction
+# question, with the one conversion the person knows the model must contain
+# written down in the model's own species ids. Written at staging time and never
+# edited by an agent.
+
+question: >-
+  Can a calibrated model of SynMod-4 predict ProD under the untested condition
+  u=4 with BX-11?
+
+system: SynMod-4 engineered module, S. cerevisiae (synthetic benchmark)
+
+required_entities:
+  - KinA_p
+  - RegB_p
+  - ProD
+
+# The reactions the model must contain. The knowledge module keeps each one,
+# required, whatever the literature says; no axis may take one out of the model.
+required_reactions:
+  - equation: "-> D"
+    modifiers: [Ba]
+    note: >-
+      the designed conversion of the precursor pool into ProD (D), catalysed by
+      active RegB (Ba); PreC is the conserved remainder of the pool, not a state
+
+required_predictions:
+  - ProD_uM time course at u=4 with BX-11
+
+perturbations:
+  - inducer dose u in {0.25,1,4}
+  - BX-11 RegB-activation inhibitor
+
+timescale: minutes, horizon 120 min
+
+scope_exclusions:
+  - gene expression changes
+  - growth dilution beyond first-order loss
+  - spatial effects
+
+success_criteria:
+  - held-out (u=4, BX-11) ProD nRMSE < 0.25
+  - predictive band covers >= 80% of held-out points
+
+inference_target: prediction
+
+domain_packs:
+  - general-dynamics
+  - measurement-tech

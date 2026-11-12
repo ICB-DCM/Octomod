@@ -1,0 +1,3 @@
+A remark on kinase activity and pathway products in engineered modules (fixture document, 2019).
+
+Across several engineered signalling modules, the active kinase level was lower in strains that accumulated more of the pathway product; the observation is correlational, from end-point measurements, and no experiment tested whether the product acts on the kinase. Nothing here names a rate constant value.

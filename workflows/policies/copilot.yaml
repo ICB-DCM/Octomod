@@ -1,0 +1,22 @@
+# copilot (default) — cost-shaped gates are answered by policy under the caps;
+# judgment-shaped gates (intent, scope/axes, expansion, stop-vs-revise, verdict)
+# pause for the human. The overnight unit: run to the next judgment gate.
+profile: copilot
+caps:
+  usd_cap: 20.0          # measured agent cost above this hands every gate back
+  max_expansions: 1      # expansion purchases policy may make per run
+  redraft_grants: 1      # extra redraft attempts policy may grant per run
+  n_starts: null         # null = the spec's proposed start count
+answers:
+  assembly_cost_boundary: {answer: y}
+  cost_boundary_estimation: {answer: y}
+  evaluation_profiling_gate: {answer: y}
+  model_redraft_budget: {answer: y}
+  model_expansion_redraft_budget: {answer: y}   # cost-shaped, like the other budget gates
+  data_redraft_budget: {answer: y}
+  # the S3 gate at the failure point. `y` grants one more attempt to the
+  # attributed agent, exactly as at s1/s2 — never a fallback: a fallback
+  # changes what the run builds, so pre-answering one unattended is a decision
+  # this profile leaves to a person.
+  assembly_redraft_budget: {answer: y}
+uncovered: pause

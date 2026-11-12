@@ -1,0 +1,53 @@
+{
+  "classifications": [
+    {
+      "id": "rx_1.e1",
+      "evidence_kind": "direct_experimental",
+      "context_match": "same_system",
+      "stance": "supports",
+      "note": "the construction notes show the step in the module's own strain"
+    },
+    {
+      "id": "rx_2.e1",
+      "evidence_kind": "direct_experimental",
+      "context_match": "same_system",
+      "stance": "supports",
+      "note": "the construction notes show the step in the module's own strain"
+    },
+    {
+      "id": "rx_3.e1",
+      "evidence_kind": "direct_experimental",
+      "context_match": "same_system",
+      "stance": "supports",
+      "note": "the construction notes show the step in the module's own strain"
+    },
+    {
+      "id": "rx_4.e1",
+      "evidence_kind": "direct_experimental",
+      "context_match": "same_system",
+      "stance": "supports",
+      "note": "the construction notes show the step in the module's own strain"
+    },
+    {
+      "id": "rx_5.e1",
+      "evidence_kind": "direct_experimental",
+      "context_match": "same_system",
+      "stance": "supports",
+      "note": "the construction notes show the step in the module's own strain"
+    },
+    {
+      "id": "rx_6.e1",
+      "evidence_kind": "direct_experimental",
+      "context_match": "same_system",
+      "stance": "supports",
+      "note": "the construction notes show the step in the module's own strain"
+    },
+    {
+      "id": "rx_7.e1",
+      "evidence_kind": "review",
+      "context_match": "related_system",
+      "stance": "supports",
+      "note": "a review; no experiment in any one module"
+    }
+  ]
+}

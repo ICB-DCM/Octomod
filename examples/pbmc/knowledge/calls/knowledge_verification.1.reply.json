@@ -1,0 +1,865 @@
+{
+  "classifications": [
+    {
+      "id": "rx_1.e1",
+      "evidence_kind": "direct_experimental",
+      "context_match": "same_system",
+      "stance": "supports",
+      "note": "No excerpt supplied (excerpts object empty); the item's own quote reports a flow-cytometric IFNAR2 staining result across fresh human blood subsets, which is a measurement, not a mention."
+    },
+    {
+      "id": "rx_2.e1",
+      "evidence_kind": "direct_experimental",
+      "context_match": "same_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; classified from the item, which cites figure panels of IFNAR2 staining and phospho-STAT measurement in primary human CD8+ T cells."
+    },
+    {
+      "id": "rx_3.e1",
+      "evidence_kind": "direct_experimental",
+      "context_match": "same_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; the item cites measured PY-STAT1 fractions in primary human blood B cells versus monocytes, i.e. an experiment, not a review statement."
+    },
+    {
+      "id": "rx_4.e1",
+      "evidence_kind": "curated_database",
+      "context_match": "related_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; source is a Reactome pathway identifier, so curated_database stands by construction, and the item itself states it is not NK-specific."
+    },
+    {
+      "id": "rx_5.e1",
+      "evidence_kind": "direct_experimental",
+      "context_match": "same_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; item cites measured PY-STAT1/PY-STAT3 positive fractions in primary human blood monocytes."
+    },
+    {
+      "id": "rx_6.e1",
+      "evidence_kind": "direct_experimental",
+      "context_match": "different_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; the item's own quote states HOS activities were required for IFN-alpha-stimulated IFNAR1 ubiquitination and endocytosis, a perturbation experiment, in cell lines rather than primary leukocytes."
+    },
+    {
+      "id": "rx_7.e1",
+      "evidence_kind": "direct_experimental",
+      "context_match": "different_system",
+      "stance": "supports",
+      "note": "No excerpt supplied and no quote on this item; classified from its statement of internalisation/degradation measured in human cell lines."
+    },
+    {
+      "id": "rx_8.e1",
+      "evidence_kind": "direct_experimental",
+      "context_match": "different_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; classified from the item's statement, which reuses the same cell-line receptor down-regulation experiment as rx_6.e1."
+    },
+    {
+      "id": "rx_9.e1",
+      "evidence_kind": "direct_experimental",
+      "context_match": "different_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; identical in source, locator and claim to rx_8.e1, so it carries the same cell-line receptor down-regulation experiment."
+    },
+    {
+      "id": "rx_10.e1",
+      "evidence_kind": "direct_experimental",
+      "context_match": "different_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; the item states an effect on extent and duration of STAT phosphorylation measured in cell lines, which the abstract quote on sibling items partly covers."
+    },
+    {
+      "id": "rx_11.e1",
+      "evidence_kind": "direct_experimental",
+      "context_match": "same_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; item cites measured PY-STAT1 in primary human CD4+ T cells with a monocyte comparison."
+    },
+    {
+      "id": "rx_11.e2",
+      "evidence_kind": "direct_experimental",
+      "context_match": "same_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; the item's quote reports measured slow STAT-1 activation and IRF-1 levels at low receptor expression in primary human T cells. Ligand is IFN-gamma."
+    },
+    {
+      "id": "rx_11.e3",
+      "evidence_kind": "direct_experimental",
+      "context_match": "same_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; the quote reports measured pSTAT1/pSTAT3 single-positive frequencies in primary human naive and memory CD4+ T cells. Stimulus is IL-6, not type I IFN."
+    },
+    {
+      "id": "rx_12.e1",
+      "evidence_kind": "direct_experimental",
+      "context_match": "same_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; the quote gives a measured 45 min peak of STAT3/STAT5 across blood subsets under IFN-beta, a different type I IFN from the intent's IFN-alpha."
+    },
+    {
+      "id": "rx_12.e2",
+      "evidence_kind": "direct_experimental",
+      "context_match": "same_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; the quote is a methods sentence specifying IL-6 doses and a 10 min fixation, which anchors a measured dose-response in primary human PBMC subsets."
+    },
+    {
+      "id": "rx_13.e1",
+      "evidence_kind": "direct_experimental",
+      "context_match": "same_system",
+      "stance": "supports",
+      "note": "No excerpt supplied and no quote; classified from the item's statement of measured STAT5 activation in primary human CD4+ T cells."
+    },
+    {
+      "id": "rx_14.e1",
+      "evidence_kind": "direct_experimental",
+      "context_match": "same_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; the item's quote names an optimal 45 min STAT1 activation measured in CD8+ T cells and monocytes."
+    },
+    {
+      "id": "rx_15.e1",
+      "evidence_kind": "direct_experimental",
+      "context_match": "same_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; classified from the item's statement of measured STAT3 activation across blood subsets including CD8+ T cells."
+    },
+    {
+      "id": "rx_15.e2",
+      "evidence_kind": "direct_experimental",
+      "context_match": "same_system",
+      "stance": "supports",
+      "note": "No excerpt supplied and no quote; classified from the item's statement of measured pSTAT3 frequencies in primary human CD8+ and CD4+ subsets under IL-6."
+    },
+    {
+      "id": "rx_16.e1",
+      "evidence_kind": "direct_experimental",
+      "context_match": "same_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; classified from the item's statement of measured STAT5 activation in blood subsets, of which CD8+ T cells are one."
+    },
+    {
+      "id": "rx_17.e1",
+      "evidence_kind": "direct_experimental",
+      "context_match": "same_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; the item states both a measured B-cell versus monocyte pSTAT1 difference and measured IFNAR2/STAT1/SOCS1 levels that fail to explain it."
+    },
+    {
+      "id": "rx_17.e2",
+      "evidence_kind": "direct_experimental",
+      "context_match": "same_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; classified from the item's statement of measured intermediate IFN-gammaR2 on primary human B cells. Ligand is IFN-gamma, not type I IFN."
+    },
+    {
+      "id": "rx_18.e1",
+      "evidence_kind": "direct_experimental",
+      "context_match": "same_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; classified from the item's statement of measured STAT3 activation in primary human blood B cells."
+    },
+    {
+      "id": "rx_19.e1",
+      "evidence_kind": "direct_experimental",
+      "context_match": "same_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; classified from the item's statement of measured STAT5 activation in B cells relative to CD4+ T cells."
+    },
+    {
+      "id": "rx_20.e1",
+      "evidence_kind": "curated_database",
+      "context_match": "related_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; a Reactome pathway identifier is a database entry, and the item itself records that it is not NK-specific."
+    },
+    {
+      "id": "rx_21.e1",
+      "evidence_kind": "curated_database",
+      "context_match": "related_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; Reactome pathway identifier, curated annotation rather than a measurement, and not NK-specific per the item."
+    },
+    {
+      "id": "rx_22.e1",
+      "evidence_kind": "direct_experimental",
+      "context_match": "related_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; the item states STAT5 was measured in monocytes, B, CD4 and CD8 T cells but explicitly not in NK cells, so related rather than same system."
+    },
+    {
+      "id": "rx_23.e1",
+      "evidence_kind": "direct_experimental",
+      "context_match": "same_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; classified from the item's statement of measured monocyte PY-STAT1 fractions and a 45 min optimum."
+    },
+    {
+      "id": "rx_23.e2",
+      "evidence_kind": "direct_experimental",
+      "context_match": "same_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; the quote reports measured rapid STAT-1 activation and IRF-1 induction at high IFN-gammaR2 in primary myeloid cells. Ligand is IFN-gamma."
+    },
+    {
+      "id": "rx_24.e1",
+      "evidence_kind": "direct_experimental",
+      "context_match": "same_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; classified from the item's statement of a measured highest PY-STAT3 fraction in primary human monocytes."
+    },
+    {
+      "id": "rx_24.e2",
+      "evidence_kind": "curated_database",
+      "context_match": "related_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; Reactome pathway identifier, so a curated entry; the pathway is IFN-gamma and not monocyte-specific."
+    },
+    {
+      "id": "rx_24.e3",
+      "evidence_kind": "curated_database",
+      "context_match": "related_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; Reactome CSF3R pathway identifier, a curated entry covering a different ligand from the one in the claim."
+    },
+    {
+      "id": "rx_24.e4",
+      "evidence_kind": "direct_experimental",
+      "context_match": "related_system",
+      "stance": "supports",
+      "note": "No excerpt supplied and no quote; classified from the item's statement of measured IL-6-driven STAT3 activation in monocyte-derived macrophages, not fresh monocytes."
+    },
+    {
+      "id": "rx_25.e1",
+      "evidence_kind": "direct_experimental",
+      "context_match": "same_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; classified from the item's statement of measured STAT5 activation across blood subsets including monocytes."
+    },
+    {
+      "id": "rx_25.e2",
+      "evidence_kind": "curated_database",
+      "context_match": "related_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; Reactome IFN-gamma pathway identifier, a curated annotation rather than a measurement of STAT5."
+    },
+    {
+      "id": "rx_25.e3",
+      "evidence_kind": "curated_database",
+      "context_match": "related_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; Reactome GM-CSF receptor pathway identifier, curated annotation for a different ligand from the claim's."
+    },
+    {
+      "id": "rx_25.e5",
+      "evidence_kind": "curated_database",
+      "context_match": "related_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; Reactome CSF3R pathway identifier, curated annotation of JAK-STAT1/3/5 phosphorylation for a different ligand."
+    },
+    {
+      "id": "rx_26.e1",
+      "evidence_kind": "direct_experimental",
+      "context_match": "different_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; the quote describes a staurosporine perturbation and a measured 60 min disappearance of activated Stat1, in cell lines under IFN-gamma."
+    },
+    {
+      "id": "rx_27.e1",
+      "evidence_kind": "mechanistic_model",
+      "context_match": "different_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; the item cites a model description containing cytoplasmic and nuclear phosphatase steps, i.e. a model that contains the conversion rather than a measurement of it."
+    },
+    {
+      "id": "rx_28.e1",
+      "evidence_kind": "mechanistic_model",
+      "context_match": "different_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; the item cites model structure of a calibrated STAT5 model, and names murine erythroid progenitors with Epo as the system."
+    },
+    {
+      "id": "rx_29.e1",
+      "evidence_kind": "direct_experimental",
+      "context_match": "different_system",
+      "stance": "supports",
+      "note": "No excerpt supplied and no quote; classified from the item's statement of measured phosphatase-dependent STAT1 clearance in cell lines."
+    },
+    {
+      "id": "rx_30.e1",
+      "evidence_kind": "mechanistic_model",
+      "context_match": "different_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; the item cites a model description, which is a model containing the step rather than an experiment measuring it."
+    },
+    {
+      "id": "rx_31.e1",
+      "evidence_kind": "mechanistic_model",
+      "context_match": "different_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; item cites model structure of a murine erythroid-progenitor STAT5 model."
+    },
+    {
+      "id": "rx_32.e1",
+      "evidence_kind": "direct_experimental",
+      "context_match": "different_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; classified from the item's statement of a measured ~60 min phosphatase-dependent clearance in cell lines."
+    },
+    {
+      "id": "rx_33.e1",
+      "evidence_kind": "mechanistic_model",
+      "context_match": "different_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; item cites a generic JAK/STAT model description containing the dephosphorylation step."
+    },
+    {
+      "id": "rx_34.e1",
+      "evidence_kind": "mechanistic_model",
+      "context_match": "different_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; item cites model structure only, in murine erythroid progenitors."
+    },
+    {
+      "id": "rx_35.e1",
+      "evidence_kind": "direct_experimental",
+      "context_match": "different_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; classified from the item's statement of measured phosphatase-dependent STAT1 clearance in cell lines."
+    },
+    {
+      "id": "rx_36.e1",
+      "evidence_kind": "mechanistic_model",
+      "context_match": "different_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; item cites a generic simulation model containing STAT dephosphorylation."
+    },
+    {
+      "id": "rx_37.e1",
+      "evidence_kind": "mechanistic_model",
+      "context_match": "different_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; item cites model structure only, in murine erythroid progenitors."
+    },
+    {
+      "id": "rx_38.e1",
+      "evidence_kind": "direct_experimental",
+      "context_match": "different_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; the quote gives measured nuclear pY-STAT1 timing (20-30 min peak, gone by 4 h) in cell lines under IFN-gamma, not primary leukocytes."
+    },
+    {
+      "id": "rx_39.e1",
+      "evidence_kind": "mechanistic_model",
+      "context_match": "different_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; item cites a generic JAK/STAT model description, not a measurement."
+    },
+    {
+      "id": "rx_40.e1",
+      "evidence_kind": "mechanistic_model",
+      "context_match": "different_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; item cites model structure and feedback analysis in a murine Epo/STAT5 model."
+    },
+    {
+      "id": "rx_41.e1",
+      "evidence_kind": "direct_experimental",
+      "context_match": "same_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; the quote reports measured binding site numbers (3,000-7,000/cell) and affinity constants on primary cells, a direct quantity measurement."
+    },
+    {
+      "id": "rx_42.e1",
+      "evidence_kind": "direct_experimental",
+      "context_match": "same_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; the quote reports measured surface IFN-gammaR2 ranked across primary human myeloid, B and T cells."
+    },
+    {
+      "id": "rx_43.e1",
+      "evidence_kind": "direct_experimental",
+      "context_match": "same_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; the quote reports measured low surface and high cytoplasmic IFN-gammaR2 in resting and PHA-activated primary human T lymphocytes."
+    },
+    {
+      "id": "rx_44.e1",
+      "evidence_kind": "direct_experimental",
+      "context_match": "same_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; the quote gives a measured degradation rate of ~5,000 molecules/cell per h at 37 C on primary human monocytes."
+    },
+    {
+      "id": "rx_45.e1",
+      "evidence_kind": "curated_database",
+      "context_match": "related_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; Reactome IFN-gamma pathway identifier, a curated annotation, and the item notes it is not B-cell specific."
+    },
+    {
+      "id": "rx_46.e1",
+      "evidence_kind": "direct_experimental",
+      "context_match": "same_system",
+      "stance": "supports",
+      "note": "No excerpt supplied and no quote on this item; classified from its statement of constitutive receptor internalisation measured in primary human T lymphocytes."
+    },
+    {
+      "id": "rx_47.e1",
+      "evidence_kind": "direct_experimental",
+      "context_match": "same_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; the quote reports measured TLR2/4/5 expression restricted to myelomonocytic cells among purified primary human leukocyte populations."
+    },
+    {
+      "id": "rx_48.e1",
+      "evidence_kind": "curated_database",
+      "context_match": "related_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; Reactome TLR4/TRIF pathway identifier, a curated annotation rather than a measurement of receptor consumption."
+    },
+    {
+      "id": "rx_49.e1",
+      "evidence_kind": "direct_experimental",
+      "context_match": "related_system",
+      "stance": "supports",
+      "note": "No excerpt supplied and no quote; classified from the item's statement of measured radioligand binding (100-500 sites/cell) on monocytes plus cell lines."
+    },
+    {
+      "id": "rx_50.e1",
+      "evidence_kind": "curated_database",
+      "context_match": "related_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; Reactome beta-common receptor pathway identifier, a curated annotation."
+    },
+    {
+      "id": "rx_51.e1",
+      "evidence_kind": "direct_experimental",
+      "context_match": "same_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; the item states a measured cytokine-gene response of purified human monocytes to IL-3, from which receptor function is inferred rather than measured directly."
+    },
+    {
+      "id": "rx_52.e1",
+      "evidence_kind": "curated_database",
+      "context_match": "related_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; Reactome pathway identifier covering signal termination, a curated annotation."
+    },
+    {
+      "id": "rx_53.e1",
+      "evidence_kind": "direct_experimental",
+      "context_match": "same_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; the quote reports G-CSF receptor detection by RT-PCR and flow cytometry across primary human neutrophils, monocytes and lymphocytes."
+    },
+    {
+      "id": "rx_54.e1",
+      "evidence_kind": "curated_database",
+      "context_match": "related_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; Reactome CSF3R pathway identifier, a curated annotation of negative regulation."
+    },
+    {
+      "id": "rx_55.e1",
+      "evidence_kind": "direct_experimental",
+      "context_match": "same_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; the quote reports microarray and real-time PCR measurement of IFN-beta induction in LPS-treated primary human monocytes versus neutrophils."
+    },
+    {
+      "id": "rx_55.e2",
+      "evidence_kind": "direct_experimental",
+      "context_match": "same_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; the quote reports an inhibitor experiment measuring IFN-beta transcription/secretion, STAT1 phosphorylation and ISGs in primary human PBMC under LPS."
+    },
+    {
+      "id": "rx_55.e3",
+      "evidence_kind": "direct_experimental",
+      "context_match": "related_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; the quote describes an IFNAR2-neutralising blocking experiment, in human monocyte-derived dendritic cells rather than the intent's gated populations."
+    },
+    {
+      "id": "rx_56.e1",
+      "evidence_kind": "direct_experimental",
+      "context_match": "related_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; the quote states an established competition between diffusion and consumption, i.e. a measured/derived result, but in mouse and in vitro systems rather than a suspension well."
+    },
+    {
+      "id": "rx_57.e1",
+      "evidence_kind": "direct_experimental",
+      "context_match": "same_system",
+      "stance": "supports",
+      "note": "No excerpt supplied and no quote; classified from the item's statement of measured IFN-beta-driven STAT1/3/5 phosphorylation in primary human CD4 T cells."
+    },
+    {
+      "id": "rx_57.e2",
+      "evidence_kind": "direct_experimental",
+      "context_match": "different_system",
+      "stance": "contradicts",
+      "note": "No excerpt supplied; the quote reports measured rate and affinity constants differing by orders of magnitude, on purified ectodomains and 2fTGH cells - it bears out the item's caveat against transferring the IFN-alpha calibration, so contradicts is kept relative to the cited claim."
+    },
+    {
+      "id": "rx_58.e1",
+      "evidence_kind": "direct_experimental",
+      "context_match": "same_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; classified from the item's statement of measured IFNAR2 staining and STAT1/3/5 phosphorylation in primary human CD8+ T cells."
+    },
+    {
+      "id": "rx_59.e1",
+      "evidence_kind": "direct_experimental",
+      "context_match": "same_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; classified from the item's statement of measured B-cell versus monocyte pSTAT1 fractions in primary human blood."
+    },
+    {
+      "id": "rx_60.e1",
+      "evidence_kind": "curated_database",
+      "context_match": "related_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; Reactome type I IFN pathway identifier, a curated annotation, and the item notes it is not NK-specific."
+    },
+    {
+      "id": "rx_61.e1",
+      "evidence_kind": "direct_experimental",
+      "context_match": "related_system",
+      "stance": "supports",
+      "note": "No excerpt supplied and no quote on this item; classified from its statement of an IFNAR2-blocking experiment in human monocyte-derived dendritic cells, not monocytes."
+    },
+    {
+      "id": "rx_62.e1",
+      "evidence_kind": "direct_experimental",
+      "context_match": "related_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; the quote gives measured mRNA (2-4 h) and protein (4-6 h) peaks for TNF and IL-6 in ex vivo human whole blood, not PBMC."
+    },
+    {
+      "id": "rx_62.e2",
+      "evidence_kind": "direct_experimental",
+      "context_match": "same_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; the quote reports measured secretion kinetics (high levels at 4-8 h) from LPS-activated purified primary human monocytes."
+    },
+    {
+      "id": "rx_62.e3",
+      "evidence_kind": "direct_experimental",
+      "context_match": "same_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; the quote reports measured induction of IL-6 and other cytokine genes by IL-3 and GM-CSF in elutriated primary human monocytes."
+    },
+    {
+      "id": "rx_62.e5",
+      "evidence_kind": "direct_experimental",
+      "context_match": "same_system",
+      "stance": "contradicts",
+      "note": "No excerpt supplied; the quote reports measured attenuation of TNF-alpha release from purified monocytes by G-CSF, which runs against a G-CSF-driven increase, so contradicts is kept."
+    },
+    {
+      "id": "rx_62.e6",
+      "evidence_kind": "direct_experimental",
+      "context_match": "related_system",
+      "stance": "contradicts",
+      "note": "No excerpt supplied; the quote shows adherence-induced mRNA without secretion absent a second LPS signal, in adherent monocytes rather than the intent's suspension, and it counters basal secretion."
+    },
+    {
+      "id": "rx_63.e1",
+      "evidence_kind": "direct_experimental",
+      "context_match": "related_system",
+      "stance": "supports",
+      "note": "No excerpt supplied and no quote; classified from the item's statement of consumption quantified as a density-scaling sink in mouse/in vitro systems."
+    },
+    {
+      "id": "rx_64.e1",
+      "evidence_kind": "direct_experimental",
+      "context_match": "same_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; the quote reports measured IL-6R surface staining ranked across unstimulated primary human CD4, CD8 and B lymphocytes; NK cells are absent."
+    },
+    {
+      "id": "rx_65.e1",
+      "evidence_kind": "direct_experimental",
+      "context_match": "same_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; the quote reports a measured higher frequency of mbIL-6R+ cells in CD4+ than CD8+ T-cell subsets."
+    },
+    {
+      "id": "rx_66.e1",
+      "evidence_kind": "direct_experimental",
+      "context_match": "same_system",
+      "stance": "supports",
+      "note": "No excerpt supplied and no quote; classified from the item's statement of measured surface IL-6R and STAT phosphorylation in primary human PBMC monocytes."
+    },
+    {
+      "id": "rx_67.e1",
+      "evidence_kind": "curated_database",
+      "context_match": "related_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; Reactome IL-6 pathway identifier, a curated annotation including SOCS3 recruitment."
+    },
+    {
+      "id": "rx_68.e1",
+      "evidence_kind": "curated_database",
+      "context_match": "related_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; Reactome IL-6 pathway identifier, a curated annotation of gp130 signal termination."
+    },
+    {
+      "id": "rx_69.e1",
+      "evidence_kind": "curated_database",
+      "context_match": "related_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; Reactome IL-6 pathway identifier, a curated annotation of gp130 signal termination."
+    },
+    {
+      "id": "rx_69.e2",
+      "evidence_kind": "direct_experimental",
+      "context_match": "related_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; the quote reports a pretreatment experiment measuring loss of IL-6-induced STAT3 activation, in monocyte-derived macrophages rather than fresh monocytes."
+    },
+    {
+      "id": "rx_70.e1",
+      "evidence_kind": "direct_experimental",
+      "context_match": "same_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; the quote states a conclusion drawn from measurements in human whole blood and isolated leukocytes attributing lymphocyte IFN-gamma to monocyte IL-12/TNF-alpha."
+    },
+    {
+      "id": "rx_71.e1",
+      "evidence_kind": "direct_experimental",
+      "context_match": "same_system",
+      "stance": "contradicts",
+      "note": "No excerpt supplied; the quote states very low TLR4 on healthy-donor human B cells, which counters a direct LPS route in resting B cells, so contradicts is kept."
+    },
+    {
+      "id": "rx_71.e2",
+      "evidence_kind": "direct_experimental",
+      "context_match": "different_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; the quote states a suggested TLR4-RP105 module from mouse B cell and Ba/F3 transfectant experiments, a different system with a non-STAT readout."
+    },
+    {
+      "id": "rx_72.e1",
+      "evidence_kind": "direct_experimental",
+      "context_match": "same_system",
+      "stance": "contradicts",
+      "note": "No excerpt supplied; the quote gives measured IL-10 first detectable at 7 h with a 24-48 h maximum in purified human monocytes, placing it outside a 4 h window, so contradicts is kept."
+    },
+    {
+      "id": "rx_73.e1",
+      "evidence_kind": "curated_database",
+      "context_match": "related_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; Reactome reaction identifier for IL-27-driven STAT1/STAT3 phosphorylation, a curated annotation with no release time course attached."
+    },
+    {
+      "id": "fact_1.e1",
+      "evidence_kind": "direct_experimental",
+      "context_match": "same_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; the quote is the study's own classification drawn from its measured expression patterns across purified primary human leukocyte populations."
+    },
+    {
+      "id": "fact_2.e1",
+      "evidence_kind": "direct_experimental",
+      "context_match": "same_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; the quote reports two independent measurements (RT-PCR and flow cytometry) of G-CSF receptor across primary human leukocytes."
+    },
+    {
+      "id": "fact_2.e2",
+      "evidence_kind": "direct_experimental",
+      "context_match": "same_system",
+      "stance": "contradicts",
+      "note": "No excerpt supplied; the quote reports single-cell detection of G-CSF receptor on primary human T cells in vivo and in vitro, against a strictly myeloid-restricted receptor, so contradicts is kept."
+    },
+    {
+      "id": "fact_3.e1",
+      "evidence_kind": "direct_experimental",
+      "context_match": "related_system",
+      "stance": "supports",
+      "note": "No excerpt supplied and no quote; classified from the item's statement of measured radioligand binding on primary monocytes plus non-binding human cell lines."
+    },
+    {
+      "id": "fact_4.e1",
+      "evidence_kind": "direct_experimental",
+      "context_match": "related_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; the quote gives a measured half-maximal stimulation of 10-20 pM in normal human myeloid cells; extension to other CSFs rests on analogy, not on this measurement."
+    },
+    {
+      "id": "fact_5.e1",
+      "evidence_kind": "direct_experimental",
+      "context_match": "same_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; the quote states a measured determination of complex number and response by surface IFN-gammaR2 in primary human T, B and myeloid cells; NK cells are absent."
+    },
+    {
+      "id": "fact_5.e2",
+      "evidence_kind": "direct_experimental",
+      "context_match": "different_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; the quote reports measured absence of the second receptor chain and of STF-IFN-gamma activation in murine TH1 clones, a different organism and cell type."
+    },
+    {
+      "id": "fact_6.e1",
+      "evidence_kind": "direct_experimental",
+      "context_match": "same_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; the quote is a measured IFNAR2 staining result in fresh human blood subsets, and the item records that NK cells were not measured."
+    },
+    {
+      "id": "fact_7.e1",
+      "evidence_kind": "direct_experimental",
+      "context_match": "same_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; the quote gives a measured 45 min STAT3/STAT5 peak in fresh human blood subsets under IFN-beta, a later peak than the intent's IFN-alpha."
+    },
+    {
+      "id": "fact_8.e1",
+      "evidence_kind": "direct_experimental",
+      "context_match": "different_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; the quote describes a staurosporine perturbation measuring Stat1 disappearance within 60 min, in cell lines under IFN-gamma."
+    },
+    {
+      "id": "fact_9.e1",
+      "evidence_kind": "direct_experimental",
+      "context_match": "related_system",
+      "stance": "contradicts",
+      "note": "No excerpt supplied; the quote's measured 4-6 h protein peaks in whole blood fall at or beyond the end of a 4 h window, so the counter-reading is kept."
+    },
+    {
+      "id": "fact_10.e1",
+      "evidence_kind": "direct_experimental",
+      "context_match": "related_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; the quote reports a measured IFN-beta mRNA time course subsiding by 8 h in human monocyte-derived macrophages, not fresh monocytes."
+    },
+    {
+      "id": "fact_10.e2",
+      "evidence_kind": "direct_experimental",
+      "context_match": "different_system",
+      "stance": "contradicts",
+      "note": "No excerpt supplied and no quote; classified from the item's statement of knockout experiments in mouse bone-marrow-derived macrophages constraining how early paracrine type I IFN can act."
+    },
+    {
+      "id": "fact_11.e1",
+      "evidence_kind": "direct_experimental",
+      "context_match": "same_system",
+      "stance": "supports",
+      "note": "No excerpt supplied and no quote on this item; classified from its statement of an LPS to IFN-beta to STAT1 chain measured in primary human PBMC, with population and timing unresolved."
+    },
+    {
+      "id": "fact_11.e2",
+      "evidence_kind": "direct_experimental",
+      "context_match": "related_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; the quote is the study's conclusion from an IFNAR2-neutralisation experiment in human monocyte-derived dendritic cells, a population not staged in the gating."
+    },
+    {
+      "id": "fact_12.e1",
+      "evidence_kind": "direct_experimental",
+      "context_match": "same_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; the quote measures the negative result for IFN-gamma in elutriated primary human monocytes; the IL-6 induction half of the claim rests on a different sentence of the same abstract."
+    },
+    {
+      "id": "fact_13.e1",
+      "evidence_kind": "direct_experimental",
+      "context_match": "same_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; the quote reports measured IL-6R levels by immunofluorescence across unstimulated primary human lymphocyte subsets; NK cells are not among them."
+    },
+    {
+      "id": "fact_14.e1",
+      "evidence_kind": "direct_experimental",
+      "context_match": "same_system",
+      "stance": "supports",
+      "note": "No excerpt supplied and no quote; classified from the item's statement of pSTAT3/pSTAT1 quantified after 10 min IL-6 in primary human PBMC subsets."
+    },
+    {
+      "id": "fact_15.e1",
+      "evidence_kind": "direct_experimental",
+      "context_match": "related_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; the quote reports a measured transcription-independent block of IL-6 signalling by LPS in primary human macrophages, not freshly rested monocytes."
+    },
+    {
+      "id": "fact_16.e1",
+      "evidence_kind": "direct_experimental",
+      "context_match": "same_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; the quote gives a measured degradation rate at 37 C on primary human monocytes, with the 4 C control, a direct quantity measurement."
+    },
+    {
+      "id": "fact_17.e1",
+      "evidence_kind": "direct_experimental",
+      "context_match": "related_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; the quote reports a co-culture experiment in purified human PBMC subsets, but the ligand is CpG through pDC, not LPS through monocytes, so I read the context as related rather than same."
+    },
+    {
+      "id": "fact_18.e1",
+      "evidence_kind": "direct_experimental",
+      "context_match": "different_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; the quote reports a secretion-blocking experiment showing interferon-mediated paracrine coordination, in mouse bone-marrow-derived dendritic cells with a transcriptional readout."
+    },
+    {
+      "id": "fact_19.e1",
+      "evidence_kind": "direct_experimental",
+      "context_match": "related_system",
+      "stance": "contradicts",
+      "note": "No excerpt supplied and no quote; classified from the item's statement that measured consumption-driven spatial boundaries bound the well-mixed assumption, in mouse tissue and in vitro systems."
+    },
+    {
+      "id": "fact_20.e1",
+      "evidence_kind": "review",
+      "context_match": "same_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; the quote's phrasing 'it is common practice' is a workflow recommendation, not a measurement or comparison of cofactors, so review stands."
+    },
+    {
+      "id": "fact_21.e1",
+      "evidence_kind": "direct_experimental",
+      "context_match": "same_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; the quote describes the barcoding experiment performed on human PBMC, which is the dataset being re-analysed."
+    },
+    {
+      "id": "fact_22.e1",
+      "evidence_kind": "direct_experimental",
+      "context_match": "same_system",
+      "stance": "supports",
+      "note": "No excerpt and no quote, and the item states the full text was not retrieved, so the reported subset timings and the IL-6/TNF-alpha attribution are unverified here; classified from the item's statement that these are the source study's own measurements."
+    },
+    {
+      "id": "fact_23.e1",
+      "evidence_kind": "direct_experimental",
+      "context_match": "same_system",
+      "stance": "contradicts",
+      "note": "No excerpt supplied and no quote; classified from the item's statement of a measured 24 h CITE-seq endpoint in LPS-stimulated human PBMC showing activation confined to monocytes."
+    },
+    {
+      "id": "fact_24.e1",
+      "evidence_kind": "direct_experimental",
+      "context_match": "related_system",
+      "stance": "contradicts",
+      "note": "No excerpt supplied; the quote shows adherence-induced mRNA was measured but secretion required a second LPS signal, in adherent monocytes rather than a rested suspension."
+    },
+    {
+      "id": "fact_25.e1",
+      "evidence_kind": "direct_experimental",
+      "context_match": "same_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; classified from the item's statement of measured copy numbers across primary human populations, but the item also states the specific receptor and STAT values were not retrieved, so no quantity here is verified."
+    }
+  ]
+}

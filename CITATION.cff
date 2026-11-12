@@ -1,0 +1,58 @@
+cff-version: 1.2.0
+message: "If you use Octomod, please cite the paper below."
+title: "Octomod"
+type: software
+authors:
+  - family-names: Dorešić
+    given-names: Domagoj
+    affiliation: "University of Bonn"
+  - family-names: Liu
+    given-names: Yuhong
+    affiliation: "European Molecular Biology Laboratory, Heidelberg"
+  - family-names: Wieland
+    given-names: Vincent
+    affiliation: "University of Bonn"
+  - family-names: Jost
+    given-names: Paul Jonas
+    affiliation: "University of Bonn"
+  - family-names: Huth
+    given-names: Manuel
+    affiliation: "University of Bonn"
+  - family-names: Pathirana
+    given-names: Dilan
+    affiliation: "University of Bonn"
+  - family-names: Hasenauer
+    given-names: Jan
+    affiliation: "University of Bonn"
+repository-code: "https://github.com/ICB-DCM/Octomod"
+license: BSD-3-Clause
+preferred-citation:
+  type: article
+  title: "Large language models complement established workflows for mechanistic model construction and refinement in systems biology"
+  authors:
+    - family-names: Dorešić
+      given-names: Domagoj
+    - family-names: Liu
+      given-names: Yuhong
+    - family-names: Wieland
+      given-names: Vincent
+    - family-names: Jost
+      given-names: Paul Jonas
+    - family-names: Huth
+      given-names: Manuel
+    - family-names: Merkt
+      given-names: Simon
+    - family-names: Alvarez-Garavito
+      given-names: Carolina
+    - family-names: Moore Dillems
+      given-names: Paula Rocio
+    - family-names: Thiele
+      given-names: Christoph
+    - family-names: Seep
+      given-names: Lea
+    - family-names: Pathirana
+      given-names: Dilan
+    - family-names: Hasenauer
+      given-names: Jan
+  journal: "bioRxiv"
+  year: 2026

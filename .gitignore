@@ -1,0 +1,64 @@
+# Python bytecode, build output, and tool caches
+__pycache__/
+*.pyc
+build/
+dist/
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+.DS_Store
+
+# The project environment. uv.lock is deliberately NOT ignored: the committed
+# lockfile is the reproducible-environment story (clone -> uv sync -> identical
+# environment).
+.venv/
+
+# A local environment file, if a user ever keeps keys in one. Nothing in the
+# repository reads it.
+.env
+
+# The user's runs. The folder itself is committed, with a README saying what it
+# holds, so a fresh clone shows where results land; everything the engine
+# writes into it stays local. `runs/*`, not `runs/`: git cannot re-include a
+# file under an ignored directory.
+runs/*
+!runs/README.md
+
+# The test battery writes its runs here (tests/run_all.py sets
+# OCTOMOD_RUNS_DIR), so `runs/` stays the user's folder: their analyses and
+# nothing else.
+test_runs/
+
+# run_all's per-suite durations from the last battery (longest-first scheduling)
+.battery_durations.json
+
+# The AMICI compile cache, pinned to the repository root and independent of the
+# runs directory. A build artifact, not a result, so it is hidden.
+.amici_cache/
+
+# The engine's archive of what earlier runs already fitted. Engine-written,
+# grows on every run, and machine-local: the same category as runs/. A run that
+# consumes it snapshots it into the run directory and records the snapshot's
+# sha, so the provenance that matters is committed with the run, not with the
+# testcase.
+testcase/*/tried_models.json
+
+# Verbatim publisher pages cached by the research probe
+# (tools/probe_research_live.py). Kept on disk as the probe's record (the probe
+# is non-deterministic and some URLs are already dead, so they cannot be
+# re-fetched) but not committed: third-party HTML.
+record/review/research_probe_sources/
+
+# marimo's per-notebook session cache (cell outputs), written next to the notebook.
+notebooks/__marimo__/
+
+# The user problems a front end stages before a run (snapshotted into the
+# record). Committed with its README, so a fresh clone shows where data goes;
+# every problem staged in it stays local.
+staging/*
+!staging/README.md
+
+# the documentation build (docs/site: uv run --group docs sphinx-build docs/site docs/site/_build/html)
+docs/site/_build/

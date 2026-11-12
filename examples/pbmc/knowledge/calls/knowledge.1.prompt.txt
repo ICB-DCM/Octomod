@@ -1,0 +1,684 @@
+# Knowledge: say what is known about this system, with the sources behind it
+
+You are the knowledge module. Before anyone builds a model, you say what is known about the system the person
+wants to model — the reactions a model of it needs, the facts it would otherwise have to invent, and the sources
+behind each — and inside a run you answer the questions a model under construction raises about what it lacks.
+Retrieval and CLASSIFICATION are your whole job: you choose no rate laws, you build nothing, and you grade nothing.
+The engine grades every reaction and every fact from how you classified its sources, from its own checks on them,
+and from a declared rule table the person can read.
+
+## What you receive
+- **Survey** (`mode: survey`, before the run): `intent` (the question, the system, the entities and, often,
+  `required_reactions`), `experiment_description` (the lab note), `required_reactions` (each with an engine id,
+  `req_1`, …), `supplied_literature` when the person already has papers (`lit_1`, … with what each says), and
+  `restrictions`.
+- **Targeted** (`mode: targeted`, inside a run): `questions` (each with an `id`: a conversion or a fact the model
+  under construction lacks, and why), `model_summary` (the model as it stands, one line per species and reaction),
+  `essential_ids` (the reactions it already carries) and `restrictions`.
+
+Your tools line says whether you have web access. Online you search and read; offline you answer from your own
+knowledge, and the reply has the same shape.
+
+## What you return
+`reactions`, `facts`, `queries_run`, `notes`, always; `system` and `species` in a survey (shape: Output contract).
+- `system`: `summary` (what is known about this system for this question), `scope` (the organisms, cell types,
+  compartments and conditions that knowledge comes from), `unknowns` (what is known to be unknown or disputed).
+- `species`: one entry per species id your equations use, with `identifiers` where you know them.
+- `reactions`: every reaction you find, each with `essential` — `true` when a base model of this system cannot
+  answer the question without it — and its evidence items. Return the non-essential ones too: later rounds draw
+  on them.
+- `facts`: what a model of this system needs beyond its reactions (the kinds below), each saying which roles it
+  is `for`, with its evidence items.
+- `notes`: what you could not find, where sources conflict, and — offline — that the reply is your own knowledge.
+
+## Rules that get your reply refused
+- Every entry of `required_reactions` gets its own entry — its `id` in `required`, its equation as given — whether
+  or not you found anything for it. The engine keeps a required reaction whatever you find; you can neither drop
+  nor relabel one.
+- Equations are written in species IDENTIFIERS (letters, digits and `_`, not starting with a digit), the same ids
+  the model will use; every id an equation uses has an entry in `species`. A catalyst or regulator that is not
+  consumed goes in `modifiers`: `A -> B` with `modifiers: [X]`, never `A + X -> B + X`.
+- Every evidence item carries a source the engine can check — a DOI, a PMID, a URL, a database identifier, or the
+  `lit_k` id of a supplied paper — a locator, and a faithful `supports`. Every item on an essential reaction
+  carries its classification (`evidence_kind`, `context_match`, `stance`); an unclassified item counts for nothing.
+- A quote is VERBATIM. The engine looks for it in the cached document; a quote it does not find counts as no
+  quote and is flagged.
+- Identifiers are `namespace:id` strings of the declared shape (`uniprot:P12345`, `chebi:15422`, `pubchem:5957`,
+  `hgnc:1234`, `go:0005829`; `reactome:R-HSA-123456`, `kegg:R00001`, `rhea:12345`). A malformed one is dropped.
+- Every fact has a `kind`, a `statement`, its `for` roles, and evidence items or `evidence: []` with the reason in
+  `notes`. A survey without a `system` summary or without a `facts` list is refused.
+- Obey `restrictions` verbatim: an excluded source stays out even when it is the best hit, and so does anything
+  after the year cutoff. The engine drops such items before anyone reads them.
+
+## How to judge
+**Classify, never grade.** Classify what a source IS, not how convincing you find it:
+- `evidence_kind`: `direct_experimental` — an experiment that demonstrates this conversion or measures this
+  quantity · `mechanistic_model` — a published mechanistic model that contains it · `curated_database` — a
+  curated database entry · `review` — a review or textbook statement · `indirect` — correlational, or inferred
+  from something else. A review that cites an experiment is a `review` unless you read the experiment itself;
+  then cite the experiment. Where the metadata settles it (a database identifier, a paper PubMed types
+  "Review"), the engine uses the metadata and says so.
+- `context_match`: `same_system` — the intent's organism and cell type or context · `related_system` — the same
+  pathway in a related cell type or organism · `different_system` — anything further away. Say which in
+  `context_note`.
+- `stance`: `supports` or `contradicts`. A source that contradicts a reaction or a fact is returned with
+  `stance: contradicts`, never left out: the person sees it beside the grade.
+
+**Essential reactions.** A dynamic model needs both halves of a cycle it contains (activation and deactivation,
+synthesis and degradation where they are in scope): look for both, and report the half you could not find rather
+than inventing it. Mark `essential: true` only what the base model cannot do without; a mechanism that is
+described but that the question does not need is `essential: false`. When the intent's `inference_target` is
+`mechanism_discrimination`, the mechanisms the question asks to discriminate are never essential: return each as
+`essential: false`, its `description` naming the hypothesis it serves. The base is what every hypothesis shares; the
+hypotheses are the variants built on it. Do not propose what the intent's `scope_exclusions` or the lab note rule
+out.
+
+**Facts.** Look for the assumptions a model would otherwise invent: `abundance` (copy numbers or concentrations
+per cell type or compartment), `expression` (which population or compartment expresses which receptor, enzyme or
+transporter), `rate` (rate constants, half-lives), `affinity` (dissociation or Michaelis constants), `timescale`
+(how fast a response rises or decays), `stoichiometry` (stoichiometries, fixed ratios), `response` (known
+responses to the perturbations the intent names, crosstalk included), `assay` (what the measurement measures,
+its detection floor, its error structure) and `unknown` (what is known to be unknown or disputed). Give `value`
+and `unit` where the fact is quantitative, and `applies_to` the species, reaction, population, compartment or
+assay it is about. `for` routes it: `construction` (species, reactions, parameters, initial values),
+`observation_model` (a readout, its floor, its noise), `condition_encoding` (how a perturbation enters),
+`expansion` (mechanisms to test after a first fit). A fact that contradicts the lab note is still returned; the
+person decides.
+
+**Identifiers.** Give one where you know it, leave the key out where you do not: a wrong identifier is worse than
+none, and a missing one is filled later from the databases.
+
+**Targeted mode.** Answer the `questions` and nothing else; every reaction and fact names the question it
+answers in `answers`. Do not return a reaction `essential_ids` already carries. Finding nothing is an answer: say
+so in `notes`.
+
+**Supplied papers.** Where a `supplied_literature` item describes a reaction or a fact, cite it with its `id`
+(`lit_1`) as the source, your own reading of what it says about THIS entry, and your own classification. Who
+supplied a paper does not change what it is.
+
+**Offline.** The same reply from your own knowledge: the essential reactions and the facts as you know them, a
+source only where you are sure of its identifier, and `evidence: []` otherwise. Say in `notes` that it is your
+own knowledge; the engine records the support as not applicable.
+
+## Mistakes we have seen
+- Classifying a source from another organism as `same_system`, or a review as `direct_experimental`.
+- Leaving out the source that disagrees, so a contested reaction reads as settled.
+- Padding with tangential citations: the engine counts a source once however many items cite it, and the person
+  reads them.
+- A `supports` or a quote that says more than the source does.
+- Species names that are not identifiers (`X-P`, `A:B`), or two ids for one entity.
+- A fact written as advice ("the model should…") instead of what the source states.
+
+
+# Your tools
+TOOLS: WebSearch, WebFetch — nothing else. No shell, no file system, no code execution. Everything else you may use is in this prompt.
+
+# Inputs
+
+## mode
+survey
+## intent
+```json
+{
+  "question": "What kind of communication between the cell populations in a well do these data require, and what kind can they exclude? Specifically: what reaches the T, B and NK cells under LPS and under the colony-stimulating factors, when does it appear, which populations produce it, and is the same communication already running at a low level in the unstimulated wells?",
+  "system": "Peripheral blood mononuclear cells from one healthy human donor; five staged populations (CD4 T cells, CD4-negative T cells, B cells, NK cells, CD14+ monocytes) sharing one medium per well. Pathway read out: cytokine receptor -> receptor-associated JAK kinases -> tyrosine phosphorylation of STAT1 (Y701), STAT3 (Y705), STAT5 (Y694), by mass cytometry (Bodenmiller et al., Nat Biotechnol 30:858, 2012; Cytobank 15711).",
+  "required_entities": [
+    "pSTAT1 in Tcell_CD4",
+    "pSTAT3 in Tcell_CD4",
+    "pSTAT5 in Tcell_CD4",
+    "pSTAT1 in Tcell_CD4neg",
+    "pSTAT3 in Tcell_CD4neg",
+    "pSTAT5 in Tcell_CD4neg",
+    "pSTAT1 in Bcell",
+    "pSTAT3 in Bcell",
+    "pSTAT5 in Bcell",
+    "pSTAT1 in NKcell",
+    "pSTAT3 in NKcell",
+    "pSTAT5 in NKcell",
+    "pSTAT1 in Monocyte",
+    "pSTAT3 in Monocyte",
+    "pSTAT5 in Monocyte"
+  ],
+  "required_predictions": [
+    "pSTAT1/3/5 time courses 0-240 min for all five populations under all seven conditions, the populations of a well simulated together",
+    "for any communication between populations a model contains - when it appears, how long it lasts, which population produces it, and its effect on each population's STATs",
+    "whether the rise of the Reference wells is that communication at a low level or an unrelated drift"
+  ],
+  "perturbations": [
+    "IFN-a, IFN-g, LPS, GM-CSF, G-CSF, IL-3, each 30 ng/ml, added at t=0 and left in the medium (no washout, nothing added later)",
+    "Reference: no stimulus",
+    "before t=0: rest without stimulus, drift or secretion (pre-equilibration, decision 8)"
+  ],
+  "timescale": "0-240 min after stimulus addition; fixed at 0, 1, 5, 15, 30, 60, 120, 240 min.",
+  "scope_exclusions": [
+    "cells outside the five gates (dendritic cells, CD14- monocytes, CD123+ cells, CD7- T cells)",
+    "the unstaged plate columns (orthovanadate, IL-2, IL-12, BCR/FcR-XL, PMA/ionomycin)",
+    "the non-STAT phospho-channels, total protein, phospho-JAK and medium cytokines (not in the data)",
+    "cell-to-cell heterogeneity within a population (the data are per-well medians)",
+    "absolute amounts of any secreted factor, and its molecular identity beyond its STAT signature and receptor distribution"
+  ],
+  "success_criteria": [
+    "for each communication tested - the note's five candidate explanations and any a model proposes - a verdict of required, permitted or excluded, holding within the tested model family and the study team's decisions 1-11; \"all tested models inadequate\" is a valid result",
+    "every communication between populations that a model adds is a mechanism, not a fitted function - a producing population, a secreted species (declared unmeasured, decision 11), its production driven by reactions in the producing cells, and its action through a receptor on the responding cells; no time function, delay or input shape may stand in for it. The drift term of decisions 1 and 8 is the one declared exception, an observation quantity, and the alternative a mechanistic basal secretion must beat",
+    "the report separates the reactions the literature supports from those the data added, so the new biology is visible as such",
+    "models are compared by data fit and information criteria on all 840 rows with the fixed sigma column; no condition held out",
+    "parameters and combinations the data do not determine are reported from the Fisher information at each optimum, not repaired; profile likelihoods for the final selected model only",
+    "the report names which lymphocyte responses no tested model explains"
+  ],
+  "inference_target": "mechanism_discrimination",
+  "domain_packs": [
+    "general-dynamics",
+    "measurement-tech",
+    "signalling-phospho"
+  ]
+}
+```
+## experiment_description
+# Communication between immune cell populations in one well of stimulated human blood cells — a mass-cytometry time course (lab note)
+
+This note describes an experiment we did not perform ourselves: we re-analysed
+the single-cell files deposited by Bodenmiller et al., *Nat Biotechnol* 30:858
+(2012), for one of their experiments, a stimulation time course on peripheral
+blood mononuclear cells. Everything about the cells, the plate and the
+measurement is theirs; the gating, the per-population summaries and the noise
+model are ours and are described here. The question we bring to the data is
+ours too, and it is not the one the paper asked.
+
+## The system
+
+Peripheral blood mononuclear cells (PBMCs) from **one healthy human donor**: a
+mixture of T cells, B cells, natural killer (NK) cells, monocytes and dendritic
+cells, thawed and kept as a suspension in culture medium. Each well of the plate
+holds the whole mixture. The point that matters for this note: **all the
+populations of a well share one medium**, so anything one population secretes
+into the well reaches every other population in it within minutes.
+
+The pathway we read out is cytokine receptor → receptor-associated JAK kinases →
+tyrosine phosphorylation of STAT transcription factors. The readouts are
+**STAT1 pY701**, **STAT3 pY705** and **STAT5 pY694** (antibody clones 4a, 4, 47),
+measured per cell and summarised per population. Total protein levels were
+**not** measured.
+
+Seven stimulation conditions are staged, every one for all five populations:
+IFN-α, IFN-γ, LPS, GM-CSF, G-CSF, IL-3, and a Reference well with no stimulus.
+Which populations respond to each stimulus directly is part of what the data
+have to say.
+
+## The experiment (from the authors' Online Methods and Supplementary Methods)
+
+- PBMCs were thawed from cryostorage, washed and rested at 37 °C, distributed
+  **once** into the 96 wells of a 2-ml deep-well block (~200,000 cells in
+  ~200 µl per well), and rested 60 min before stimulation. The methods describe
+  a 1-h incubation after thawing and a 60-min rest after aliquoting; whether
+  these are one rest or two is not stated, so the cells rested 1–2 h in total.
+- **One 96-well plate is the whole experiment.** Column = stimulus, row = time
+  between adding the stimulus and fixing the cells. Plate map from the authors'
+  Supplementary Methods, Table 2: columns 1–12 = sodium orthovanadate, IL-2,
+  IL-3, IL-12, Reference, G-CSF, GM-CSF, BCR/FcR-XL, IFN-γ, IFN-α, LPS,
+  PMA/ionomycin; rows A–H = 0, 1, 5, 15, 30, 60, 120, 240 min. The staged
+  columns are 3, 5, 6, 7, 9, 10 and 11.
+- Doses: every cytokine **and LPS at 30 ng/ml**. Stimuli stayed in the medium;
+  nothing was washed out, and nothing was added later.
+- At its time point each well was **fixed in place** (formaldehyde 1.6 %,
+  10 min), permeabilised in methanol and stored at −80 °C. Fixation stops all
+  signalling; each well is a snapshot of one incubation duration. The **0-min
+  row was fixed immediately after the stimulus was added**, so its 12 wells
+  are, in effect, 12 unstimulated replicates.
+- Each well was labelled with a unique 7-metal barcode, **all 96 wells were
+  pooled into a single tube**, stained once with the full antibody panel and
+  measured in **one run** on a CyTOF mass cytometer. Consequence: staining and
+  instrument conditions are identical for all wells and all cell types. Any
+  difference between wells arose in the well, before fixation.
+- 35 channels per cell: 10 surface markers (CD3, CD4, CD7, CD14, CD20, CD33,
+  CD45, CD123, IgM, HLA-DR), 14 phosphorylation sites, 7 barcode channels, 2
+  DNA channels, time and cell length. No phospho-JAK, no total-protein channel,
+  no viability stain, no cytokine measurement of the medium.
+
+## What the numbers are
+
+The deposited files (Cytobank experiment 15711) hold 718,075 cells across the
+96 wells. Per cell and channel the instrument reports a bead-normalised ion
+count; small negative values at the low end are an instrument property.
+
+Our processing:
+
+1. **Transform**: arcsinh(x/5) on every channel. **All values in the table are
+   on this scale.** For counts well above ~10 a difference of 1.0 is a factor
+   2.7; near zero the scale is close to linear, so the B- and NK-cell pSTAT1
+   baseline of ~1.0 (≈ 6 counts) is near the instrument floor and the monocyte
+   baseline of ~4.0 (≈ 136 counts) is not "e³ times more". The values are
+   relative intensities, not molecule numbers; the same antibody and instrument
+   apply to every cell type, so the mapping from phosphorylated protein to
+   signal is shared across populations, but its absolute scale is unknown.
+2. **Cell populations** along the paper's Fig. 4c tree, each cut-off at the
+   density minimum of our pooled data within its parent population (the
+   authors used clustering and published no cut-offs):
+
+   | population | rule (Fig. 4c) | mean % of cells | typical cells per well |
+   |---|---|---|---|
+   | `Tcell_CD4` | CD20− IgM− CD7+ CD3+ CD33− CD4+ | 26.6 | 2,100 |
+   | `Tcell_CD4neg` | CD20− IgM− CD7+ CD3+ CD33− CD4− (no CD8 antibody; the authors call this "CD8+ T") | 13.4 | 1,000 |
+   | `Bcell` | CD20+ CD3− | 10.2 | 800 |
+   | `NKcell` | CD20− IgM− CD7+ CD3− CD33− CD4− (no CD56/CD16 in the panel) | 24.5 | 1,900 |
+   | `Monocyte` | CD20− IgM− CD7− CD3− CD33+ CD14+ | 14.1 | 1,700 at 0 min, 76–520 at 240 min |
+
+   Cut-offs (arcsinh scale): CD20 2.28, CD3 1.58, IgM 2.03, CD7 2.13; within
+   CD7+ cells CD3 1.18 and CD33 1.98; CD4 1.43 within T cells and 1.58 within
+   CD7+ CD3− cells; CD33 1.48 within CD7− cells; CD14 1.38 within CD33+ cells.
+   In the staged wells the five gates cover 87–93 % of the events; the rest are
+   CD14− monocytes, CD123+ cells, surface-negative cells and cells the tree
+   leaves out, such as CD7− T cells. Dendritic cells are not staged.
+3. **Summary statistic**: the **median** over the cells per well, population
+   and phospho-site. It describes a uniform population shift well; where only
+   part of a population responds the median understates the responders.
+
+## The data file
+
+`data/pbmc_well_jakstat_timecourse.csv` — 840 rows: 7 stimuli × 8 times × 15
+readouts. It is a slice of our full table (12 stimuli × 8 times × 5 populations
+× 14 phospho-sites, 6,720 rows).
+
+**The readout label carries the population.** A readout is one phospho-site in
+one population, `pStat1_Bcell`, `pStat3_Monocyte` and so on, fifteen in all.
+There is no population column: the five populations of a well were measured
+together in one sample, and this file presents them that way, as fifteen
+quantities read from one well at one time. A condition is a stimulus, nothing
+else.
+
+| column | meaning |
+|---|---|
+| `stimulus` | `IFN-a`, `IFN-g`, `LPS`, `GM-CSF`, `G-CSF`, `IL-3`, or `Reference` |
+| `time_min` | minutes between stimulus addition and fixation: 0, 1, 5, 15, 30, 60, 120, 240 |
+| `readout` | `<site>_<population>`: site `pStat1`, `pStat3` or `pStat5`; population `Tcell_CD4`, `Tcell_CD4neg`, `Bcell`, `NKcell` or `Monocyte` |
+| `median` | the measurement: median arcsinh(count/5) over the cells of that population in that well. **Never edited.** |
+| `n_cells` | cells behind that median |
+| `well` | plate position |
+| `sigma_bw` | well-to-well reproducibility of a median for this readout, from the unstimulated 0-min wells |
+| `se_median` | sampling error of the median from finite cells, 1.2533·SD/√n |
+| `sigma_unwidened` | √(σ_bw² + se_median²) |
+| `sigma_widening` | 1.0 everywhere except 2.0 on the 42 monocyte rows at 120 and 240 min |
+| `sigma` | `sigma_unwidened × sigma_widening` — **the noise model to use**, fixed, per row |
+
+**Noise.** There is one well per (stimulus, time), so no replicate wells exist
+except the 0-min row (11 usable wells; the orthovanadate well is excluded
+because pervanadate acts within seconds). From those we estimate the
+well-to-well component σ_bw per readout. Typical total σ is 0.02–0.06 in
+lymphocytes and 0.04–0.09 in monocytes, up to 0.2 in the thinnest late monocyte
+wells before widening, against responses of 0.5–2.3 units. Within-well
+cell-to-cell spread (SD 0.5–1.1) is biological heterogeneity, not measurement
+error, and is not in this table. **We recommend the fixed `sigma` column, not a
+fitted σ.**
+
+**Why the monocyte σ at 120 and 240 min is widened.** The monocyte gate loses
+cells over the 4 h, and loses them faster under stimulation. Cells in the
+monocyte gate at 240 min: 520 in the Reference well, 422 under GM-CSF, 409 under
+IL-3, 296 under IFN-γ, 249 under G-CSF, 115 under IFN-α and 76 under LPS,
+against about 1,700 at 0 min. The monocytes still measured at 120 and 240 min
+are a remainder, a selected subset whose signalling state may differ from the
+cells that were lost, and under LPS and IFN-α a small one. No error bar
+captures that selection. We widen σ on those 42 rows by a factor 2 as a
+declared judgement of the study team (§Decisions, item 5); the unwidened value
+and both of its components stay in the file so anyone can undo it.
+
+## The 0-min row is shared, and the basal level is not zero
+
+All 105 series start from the same unstimulated state after 1–2 h of rest in
+medium. Basal phosphorylation differs by population: pSTAT1 sits at ~4.0 in
+monocytes, 2.3 in T cells, 1.0 in B and NK cells; pSTAT3 and pSTAT5 at ~1.0 in
+monocytes and 0.2–0.4 in lymphocytes. In 11 of the 14 phospho-channels the
+monocyte 0-min median lies 0.5–1.6 units above the lymphocyte mean; pSTAT1 is
+the largest gap at 2.3, and pS6 (+0.1) and pLat (−0.4) are the exceptions. We
+therefore give each readout its own constant **background count** (§Decisions,
+item 2), with a possible real constitutive component on top that these data
+cannot separate from it.
+
+## What we saw in the data
+
+Δ is the stimulated median minus the Reference median **at the same time**, in
+arcsinh units, so the drift of the unstimulated wells (next section) is
+subtracted. Every staged series is listed, so that silence in this note is never
+read as a null result.
+
+**The direct responses.** After IFN-α all three STATs rise within 5 min in every
+population and peak at 15–30 min, then decline at different rates in the same
+cells: in both T-cell populations pSTAT5 is back near Reference by 240 min while
+pSTAT3 remains highest; in B and NK cells pSTAT1 persists while pSTAT3 and
+pSTAT5 fall; in monocytes all three are back at or below Reference by 60–240 min.
+After IFN-γ, monocytes respond on all three STATs and pSTAT1 stays at half its
+peak for 4 h; B cells respond on pSTAT1 only, sustained; CD4 T cells weakly on
+pSTAT1; **CD4-negative T cells and NK cells do not respond to IFN-γ at all**
+(Δ within 0.05 at every time), although the same gates respond strongly to
+IFN-α. In monocytes GM-CSF, G-CSF and IL-3 raise pSTAT5 to +2.1–2.3 at 15 min,
+about twice the interferon peaks, fall steeply between 30 and 60 min and settle
+at +0.3 to +0.5 above Reference for the rest of the 4 h; G-CSF also
+phosphorylates STAT3 in monocytes (+1.19 at 15 min); none of the three
+phosphorylates STAT1. Under LPS the monocytes respond on the non-STAT channels
+of the panel (pNF-κB +0.4, pp38 +1.6, pErk +1.6 above Reference at 15 min) and,
+on the STATs, only weakly and late (pSTAT1 +0.12 and +0.18 at 120 and 240 min);
+their pSTAT3 and pSTAT5 under LPS end below the Reference well, with the caveat
+on the late monocyte rows above.
+
+**The late responses in the lymphocytes.** This is the observation the question
+is about.
+
+| population | readout | LPS: Δ at 15 / 120 / 240 min | IFN-α: Δ at 15 / 120 / 240 min |
+|---|---|---|---|
+| `Tcell_CD4` | pStat1 | −0.03 / +0.52 / +0.50 | +1.26 / +0.55 / +0.41 |
+| `Tcell_CD4` | pStat3 | +0.01 / **+1.33** / +0.83 | +1.57 / +1.35 / +0.85 |
+| `Tcell_CD4` | pStat5 | −0.03 / +0.49 / +0.24 | +1.90 / +0.56 / +0.17 |
+| `Tcell_CD4neg` | pStat1 | +0.03 / +0.28 / +0.22 | +1.02 / +0.30 / +0.28 |
+| `Tcell_CD4neg` | pStat3 | +0.01 / +0.40 / +0.44 | +1.40 / +0.46 / +0.49 |
+| `Tcell_CD4neg` | pStat5 | +0.02 / +0.30 / +0.02 | +1.38 / +0.27 / +0.04 |
+| `Bcell` | pStat1 | −0.05 / **+0.73** / **+0.95** | +1.16 / +0.92 / +1.04 |
+| `Bcell` | pStat3 | +0.04 / +0.20 / +0.26 | +0.97 / +0.51 / +0.44 |
+| `Bcell` | pStat5 | +0.01 / +0.04 / +0.05 | +0.65 / +0.20 / +0.08 |
+| `NKcell` | pStat1 | +0.05 / **+0.77** / +0.60 | +1.09 / +0.78 / +0.74 |
+| `NKcell` | pStat3 | 0.00 / +0.21 / +0.12 | +0.82 / +0.30 / +0.19 |
+| `NKcell` | pStat5 | +0.01 / +0.01 / +0.22 | +0.24 / +0.13 / +0.12 |
+
+In words: under LPS nothing happens in any lymphocyte population for the first
+hour (|Δ| ≤ 0.05 at 1, 5, 15 and 30 min, and ≤ 0.1 at 60 min). Between 60 and
+120 min every lymphocyte population starts to respond: a large pSTAT3 rise in
+CD4 T cells, a pSTAT1 rise in B and NK cells, and smaller mixed rises in the
+other T cells. Population by population and STAT by STAT, the late LPS values
+at 120 and 240 min lie close to the same population's own response to added
+IFN-α at the same times, about 100 min after that response began. The one place
+the match is loose is B cells, where the late LPS response is more STAT1-only
+than the IFN-α response at 120 min.
+
+The colony-stimulating factors show a late response of a different shape. At
+240 min CD4 T cells show a pSTAT3 rise under G-CSF (+0.87), GM-CSF (+0.50) and
+IL-3 (+0.21), the CD4-negative T cells a smaller one (+0.20, +0.06, +0.09),
+while **B and NK cells show no late pSTAT1 rise under any of the three**
+(+0.12 / +0.13 at most). So the late STAT3 response in T cells appears under LPS
+and under all three colony-stimulating factors, and the late STAT1 response in
+B and NK cells under LPS only.
+
+Two further observations belong to the same picture. Under IFN-α itself, CD4 T
+pSTAT3 falls from its peak to 1.35 at 60 min and rises again to 1.63 at 120 min
+(Reference 0.28), a second wave the direct response does not obviously
+explain. And under IFN-γ, CD4 T pSTAT3 climbs slowly from 60 min to +0.35 at
+240 min in cells whose pSTAT1 response to IFN-γ is weak.
+
+## The Reference column is not flat, and the drift is large in monocytes
+
+Over 4 h in the plate the unstimulated cells change. The Reference at 240 min,
+relative to the mean of the 11 unstimulated 0-min wells, in units of that
+row's σ before widening:
+
+| population | pSTAT1 | pSTAT3 | pSTAT5 |
+|---|---|---|---|
+| `Tcell_CD4` | +0.12 (3 σ) | +0.24 (11 σ) | +0.16 (6 σ) |
+| `Tcell_CD4neg` | +0.37 (10 σ) | +0.17 (7 σ) | +0.23 (9 σ) |
+| `Bcell` | +0.11 (2 σ) | +0.18 (4 σ) | +0.15 (4 σ) |
+| `NKcell` | +0.35 (7 σ) | +0.26 (9 σ) | +0.35 (12 σ) |
+| `Monocyte` | +0.29 (3 σ) | **+0.93 (19 σ)** | **+0.81 (14 σ)** |
+
+The drift is mostly a slow rise after 60 min. It is not a staining or
+instrument artefact (all wells were stained and measured together), so it
+happened in the wells. Other channels drift too: in every population pErk,
+pPlcg2 and pSlp76 rise and pS6 falls; monocytes additionally gain pNF-κB and
+pp38 and lose pAkt. The drift is also an observation: a slow rise of pSTAT3 and
+pSTAT5 in every population of an unstimulated well, largest in the monocytes,
+is what a low basal secretion by monocytes would look like, and the same
+processes that make a stimulated well's late responses may be running at a
+low level in the unstimulated one. Whether that is so is for the models to
+say; the Reference is supplied as its own condition and is fitted like the
+others.
+
+One consequence to be aware of: in monocytes the stimulated wells can end
+**below** the Reference at 240 min (pSTAT3 −0.34 under IFN-α, −0.55 under
+LPS). Either the stimulated monocytes did not rise as much as the resting ones,
+or the cells remaining in the stimulated wells are a different subset from
+those remaining in the Reference well (3–6 % of events against 10 %). A drift
+term and the stimulus response may therefore not simply add in monocytes.
+
+## Decisions of the study team that the modelling should take as given
+
+Decided by the people who own the question. They concern the observation
+model, the data and how the result is judged; **they do not prescribe the
+model**, which is the next section's business.
+
+**The observation model, the same in every model**
+
+1. **Observable, and where it lives.** For each readout the modelled median
+   count is count(r, t) = background(r) + pSTAT(r, t) + drift(r, t), with
+   pSTAT in counts, and the observable is arcsinh(count / 5), the scale on
+   which the data are given. **The count is part of the model, not of the
+   observation layer**: the background and any drift quantity are model
+   parameters, and the observable is only the arcsinh of that count,
+   log(count/5 + sqrt(1 + count·count/25)), with no scaling factor or offset
+   outside the arcsinh. A fraction of the arcsinh signal is not a fraction of
+   phosphorylated molecules, and statements about normalised shapes refer to
+   the modelled pSTAT, not to the arcsinh values.
+2. **Background (the basal level).** background(r) is a constant, non-negative
+   count per readout, inside the arcsinh (15 values). Together with a model's
+   own basal phosphorylation it reproduces the 0-min level; where the two
+   cannot be separated, that is reported as something the data cannot
+   distinguish.
+3. **Readout scale.** pSTAT is modelled in counts, with one readout scale per
+   phospho-site, shared by all populations and all stimuli (one antibody, one
+   tube, one run); there is no scale per population. Differences in peak
+   height between populations are then differences in the amount of
+   phosphorylated STAT.
+4. **The noise model is the fixed `sigma` column.** No fitted σ.
+5. **Monocyte rows at 120 and 240 min carry the widened σ** described above.
+   They are kept, not dropped.
+
+**Parameters and data**
+
+6. **Every stimulus condition is fitted for all five populations, and no
+   condition is held out.** The lymphocyte rows under the colony-stimulating
+   factors and under LPS are in the fit: they are the observation the question
+   is about. Every stimulus carries at least one parameter of its own, a
+   receptor input strength, which a held-out condition could not constrain.
+7. **The populations of a well are simulated together.** A condition is a
+   stimulus; the fifteen readouts of that condition are read from one
+   simulation in which all five populations are present. This is a statement
+   about the experiment, not about the model: the cells were in one well, and
+   a model that cannot let one population's product reach another cannot
+   represent the observation above. How the populations are represented, what
+   they share and what they do not is the model builder's decision, declared
+   with the model (decision 10).
+8. **Before time zero the cells rested, without stimulus and without whatever
+   starts at plating.** Each condition is pre-equilibrated with its stimulus
+   input, any drift quantity and any production of secreted factors set to
+   zero, so that a model's resting state is computed from its own rates rather
+   than assumed; at time zero the stimulus input switches on, and the drift
+   and production terms start in every condition, the Reference included. The
+   drift of the unstimulated wells is therefore the change since time zero,
+   which is how the data define it.
+
+**How the result is judged**
+
+9. **Verdicts hold within the tested model family and these decisions.**
+   "Required", "permitted" and "excluded" mean: among the models compared
+   here, under these assumptions. "All tested models inadequate" is a valid
+   result.
+10. **Data fit first; identifiability from the Fisher information; profiles
+    only at the end.** Data fit and information criteria decide between the
+    models. Which parameters or parameter combinations the data do not
+    determine is read from the Fisher information at each optimum; many
+    parameters will not be identifiable, and that is to be reported, not
+    repaired. Profile likelihoods are computed only for the final selected
+    model.
+11. **Biology.** Every species and reaction corresponds to a named entity or
+    process, lumping is declared with what it lumps, and a secreted factor
+    that a model needs but the experiment did not measure is declared for what
+    it is: an unmeasured species whose identity the data can only constrain
+    through its effects. The receptor and its JAKs are one active complex (the
+    panel has no phospho-JAK readout). The observation quantities of decisions
+    1–3 — the modelled counts, their background and any drift parameters and
+    states — are not pathway entities: they are declared as observation
+    quantities and are exempt from this rule. Where a literature source
+    disagrees with these measurements, the measurements win and the
+    disagreement is recorded.
+
+## The question, and what we suggest testing
+
+**The question.** What kind of communication between the cell populations in
+a well do these data require, and what kind can they exclude? Specifically:
+what reaches the T, B and NK cells under LPS and under the colony-stimulating
+factors, when does it appear, which populations produce it, and is the same
+communication already running at a low level in the unstimulated wells?
+
+We do not know the answer. The candidate explanations below are what the
+numbers above make us suspect. They are suggestions for what to test, not a
+design to implement; the model builder decides what to build and the
+comparison decides what the data support.
+
+1. **A type I interferon secreted by monocytes**, acting on every population
+   through the same receptor that the IFN-α wells stimulate directly, so its
+   effect in each population is already calibrated by those wells. This would
+   explain why the late LPS response of each population resembles that
+   population's own IFN-α response.
+2. **An IL-6-like factor secreted by monocytes**, acting on STAT3 above all.
+   This would explain the late STAT3 in T cells under LPS and under the
+   colony-stimulating factors, and the absence of late STAT1 in B and NK cells
+   under the colony-stimulating factors.
+3. **Interferon-γ from NK or T cells**, produced after signals from the
+   monocytes, acting on STAT1. The NK cells' own numbers speak against this as
+   the whole story: they show no STAT1 response to added IFN-γ within the
+   window and a strong late STAT1 response under LPS.
+4. **No secreted factor at all**: the late lymphocyte responses are direct,
+   through receptors on the lymphocytes themselves, delayed by something in
+   the cells. We consider this unlikely on the timing (nothing for an hour,
+   then everything), but it is the null the others must beat.
+5. **The same at a low level in the unstimulated wells.** If a secreted factor
+   explains the stimulated wells' late responses, the unstimulated wells' slow
+   rise in pSTAT3 and pSTAT5 may be the same factor at a basal production rate
+   that starts at plating, rather than an unrelated drift.
+
+These are not mutually exclusive: one, two or all of them may be needed, and a
+combination of an interferon-like and an IL-6-like factor is our current best
+guess for LPS. What we would like the comparison to establish, within the
+tested family: which of these the data require, permit or exclude; when the
+secreted factors appear and how long they last; whether their per-population
+effects are the ones the direct wells predict; and which lymphocyte responses
+remain unexplained. A model may of course propose a communication we have not
+listed.
+
+**What the data cannot decide by construction, as far as we can tell.** The
+identity of a secreted factor is constrained only through its effects on the
+STATs of five populations; two factors with the same STAT signature and the
+same receptor distribution are one factor to these data. The absolute amount
+of any factor is not measured, so only its timing and its relative effect
+across populations are informative. The late monocyte rows are weak.
+
+**What would settle it outside these data.** An IFNAR-blocking antibody in the
+LPS well, an IL-6-receptor block, a monocyte-depleted culture, or a cytokine
+measurement of the medium at 1, 2 and 4 h. None of these were done; a model
+that names which of them would discriminate between its surviving candidates
+has done its job.
+
+## required_reactions
+```json
+[]
+```
+## restrictions
+HARD RULES: use only literature published up to 2026 inclusive. NEVER consult, cite, or search for these excluded sources: (none listed). Never fabricate a source; a reaction with no evidence, or no reaction at all, is an acceptable answer.
+
+# Output contract
+{"system": {"summary": "what is known about this system for this question, in a few sentences",
+            "scope": "the organisms, cell types, compartments and conditions that knowledge comes from",
+            "unknowns": ["what is known to be unknown or disputed"]},
+ "species": [{"id": "Xp", "name": "the modified form of X", "represents": "the required entity this id stands for, copied verbatim, or empty",
+              "identifiers": {"uniprot": "uniprot:P12345", "chebi": "chebi:15422", "pubchem": "pubchem:5957",
+                              "hgnc": "hgnc:1234", "go_compartment": "go:0005829"}}],
+ "reactions": [{"equation": "X -> Xp", "required": "req_1 or null", "essential": true, "modifiers": ["Z"],
+                "type": "phosphorylation|dephosphorylation|binding|dissociation|conversion|synthesis|degradation|transport|other",
+                "description": "what this reaction is, in one line",
+                "identifiers": {"reactome": "reactome:R-HSA-123456", "kegg": "kegg:R00001", "rhea": "rhea:12345"},
+                "answers": "targeted mode only: the id of the question this entry answers",
+                "evidence": [{"source": "DOI/PMID/URL, a database id (reactome:R-HSA-123456), or the id of a supplied_literature item (lit_1)",
+                              "title": "...", "year": 2020, "locator": "figure/table/section",
+                              "supports": "what the source says about THIS reaction or fact, faithfully", "quote": "short verbatim quote",
+                              "url": "...", "evidence_kind": "direct_experimental|mechanistic_model|curated_database|review|indirect",
+                              "context_match": "same_system|related_system|different_system",
+                              "context_note": "the organism, cell type and condition of the source, against the intent's system",
+                              "stance": "supports|contradicts"}]}],
+ "facts": [{"kind": "abundance|expression|rate|affinity|timescale|stoichiometry|response|assay|unknown",
+            "statement": "the fact, in one sentence", "value": 0.0, "unit": "...",
+            "applies_to": ["the species, reaction, population, compartment or assay it is about"],
+            "for": ["construction", "observation_model", "condition_encoding", "expansion"],
+            "answers": "targeted mode only: the id of the question this entry answers",
+            "evidence": ["evidence items, the same shape as a reaction's"]}],
+ "queries_run": ["the searches you actually ran"],
+ "notes": "coverage gaps, conflicts between sources, what you could NOT find"}
+NOTE on "mode" (in your inputs): `survey` = no model exists yet; say what is
+known about this system for this question — `system`, `species`, `reactions`,
+`facts`. `targeted` = a model is being built and lacks something: answer the
+`questions` in your inputs (each with an `id`) and nothing else, with
+`reactions` and `facts` only (`system` and `species` are not asked), each entry
+naming the question it answers in `answers`. `model_summary` is the model as
+it stands and `essential_ids` the reactions it already carries; do not return
+those again.
+NOTE on "equation": species are IDENTIFIERS (letters, digits and _, not starting
+with a digit), because the model will use them verbatim — use the intent's own
+entity names where they are identifiers. `A + B -> C`; `2 A -> A2`; `-> A`
+(synthesis); `A ->` (degradation). Here `->` is ONE direction, the conversion the
+source supports; a step the source shows running both ways is `A <-> B` (or two
+entries, when the sources for each direction differ). A catalyst or regulator
+that is not consumed goes in `modifiers`, not in the equation.
+NOTE on "required" and "essential": every entry of `required_reactions` gets an
+entry of its own, carrying its `id` in `required` and its equation as given,
+with the literature you found for it — or `evidence: []` when you found none,
+said in `notes`. The person requires it; the engine keeps it whatever you find.
+`essential: true` marks a reaction a base model of this system cannot answer
+the question without; `false` one that is described for the system but that
+the base does not need. When the intent's `inference_target` is
+`mechanism_discrimination`, the mechanisms the question asks to discriminate
+are never `essential`: return each as `essential: false`, its `description`
+naming the hypothesis it serves — the base is what every hypothesis shares.
+Return EVERYTHING you find, essential or not: the variants and later rounds
+draw on the rest.
+NOTE on "supplied_literature" when present: papers the person who staged this
+problem already has, each with an `id` (`lit_1`) and what it says. Where one
+describes a reaction or a fact, cite it with its `id` as the item's `source`, your
+own reading of what it says about THIS entry, and your own classification: it
+is classified like any other source.
+NOTE on classifying a source: you CLASSIFY, the ENGINE grades. Never write a
+grade, a band, a score or a confidence: the engine decides each entry's grade
+from your classifications, from its own check that the cited identifier exists,
+from the document's own metadata (a paper PubMed or Crossref types "Review" is
+a `review`, whatever you call it) and from whether the quote is in the
+document. Classify what the source IS, not how convincing you find it:
+`evidence_kind`: `direct_experimental` = an experiment that demonstrates this
+conversion or measures this quantity; `mechanistic_model` = a published
+mechanistic model that contains it; `curated_database` = a curated database
+entry; `review` = a review or textbook statement; `indirect` = correlational,
+or inferred from something else. `context_match`: `same_system` = the intent's
+organism and cell type or context; `related_system` = the same pathway in a
+related cell type or organism; `different_system` = anything further away.
+`stance`: `supports` or `contradicts` the entry — a source that contradicts it
+is returned, with that stance, never left out. An inflated classification is
+an audit finding: the document is cached for audit.
+NOTE on "identifiers": give an identifier where you know it and leave the key
+out where you do not — a wrong identifier is worse than none. Each is a
+`namespace:id` string of the declared shape (uniprot:P12345, chebi:15422,
+pubchem:5957, hgnc:1234, go:0005829; reactome:R-HSA-123456, kegg:R00001,
+rhea:12345); a malformed one is dropped and noted.
+NOTE on "facts": the assumptions a model of this system needs and would
+otherwise invent. `abundance` = copy numbers or concentrations per cell type or
+compartment; `expression` = which population or compartment expresses which
+receptor, enzyme or transporter; `rate` = a rate constant or half-life;
+`affinity` = a dissociation or Michaelis constant; `timescale` = how fast a
+response rises or decays; `stoichiometry` = a stoichiometry or fixed ratio;
+`response` = a known response of the system to a perturbation the intent names,
+crosstalk included; `assay` = what the measurement measures, its detection
+floor and its error structure; `unknown` = what is known to be unknown or
+disputed. `value` and `unit` where it is quantitative. `for` names the roles
+that use it: `construction` (species, reactions, parameters, initial values),
+`observation_model` (what a readout measures, its floor and its noise),
+`condition_encoding` (how a perturbation enters the model), `expansion`
+(mechanisms to test after a first fit); the engine routes each fact only to
+those. A fact with no source is `evidence: []`, with the reason in `notes`. A
+fact that contradicts the lab note is still returned: the person decides.
+NOTE on "species": one entry per species id your equations use; for each entry of
+the intent's `required_entities`, the species that stands for it names the entity
+verbatim in `represents`.
+NOTE when your tools are none: the same reply is expected, from your own
+knowledge. Say so in `notes`, cite a source only when you are sure of its
+identifier, and leave `evidence: []` otherwise; the engine records the support
+as not applicable.
+Respond with ONLY a single JSON object matching the contract. No prose, no markdown fences.

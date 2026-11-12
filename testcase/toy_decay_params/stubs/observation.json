@@ -1,0 +1,23 @@
+{
+  "observables": [
+    {
+      "observable_id": "obs_A",
+      "maps_to_label": "A_conc",
+      "formula": "A",
+      "transformation": "lin",
+      "noise": {
+        "distribution": "normal",
+        "formula": "sigma_obs_A",
+        "estimate_sigma": true
+      },
+      "scaling": {
+        "mode": "none",
+        "scale_parameter": null,
+        "offset_parameter": null,
+        "shared_across_conditions": true
+      },
+      "rationale": "MAPPING: The reporter is the only species and the calibrated readout is directly proportional to it on an absolute scale, so the observable is the species itself with no transformation. Linear rather than log: the noise is additive in calibrated units and the late timepoints approach zero, where a log transformation would inflate the weight of the least informative points. NOISE + TRANSFORMATION: Additive normal noise with a single constant sigma. The two wells differ by a similar absolute amount at t=0 as at t=10 h, so the scatter is instrument-dominated and does not scale with signal; a proportional model would down-weight the early points that carry most of the information about k1. Sigma is estimated because no error column was supplied and two wells per timepoint cannot fix it empirically. SCALING: No scale and no offset. The instrument was calibrated against a purified dilution series, so the measured column is already on the model's concentration scale \u2014 this is the one case where declining a scale factor is the correct call. Adding one would be actively harmful: with a single condition, a free scale is exactly collinear with the estimated initial level A0, and the resulting flat direction would widen the k1 profile without adding any explanatory power. No offset because background was subtracted during calibration and is stated to be small at all timepoints."
+    }
+  ],
+  "_fixture_note": "regenerated 2026-09-07 from the former observable_model / noise_model / scaling_offset stubs: one role, one observation function"
+}

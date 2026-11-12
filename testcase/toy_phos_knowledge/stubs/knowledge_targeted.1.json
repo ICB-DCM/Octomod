@@ -1,0 +1,31 @@
+{
+  "reactions": [
+    {
+      "equation": "L + R -> L + Rp",
+      "answers": "q_1",
+      "essential": true,
+      "type": "phosphorylation",
+      "description": "the bound ligand phosphorylates the receptor and is not consumed; the rate rises in proportion to the ligand dose",
+      "evidence": [
+        {
+          "source": "Ligand-driven receptor activation in a related line — a note (fixture, 2023)",
+          "title": "Ligand-driven receptor activation in a related line",
+          "year": 2023,
+          "locator": "paragraph 2",
+          "supports": "in a related receptor line the bound ligand phosphorylates the receptor directly, at a rate proportional to the dose",
+          "quote": "the phosphorylation rate of the receptor rises in proportion to the ligand dose",
+          "url": "file:./sources/ligand_activation.txt",
+          "evidence_kind": "direct_experimental",
+          "context_match": "related_system",
+          "context_note": "a related receptor line, not the module's own cells",
+          "stance": "supports"
+        }
+      ]
+    }
+  ],
+  "facts": [],
+  "queries_run": [
+    "ligand dose receptor phosphorylation rate (fixture)"
+  ],
+  "notes": "FIXTURE: one direct experiment in a related receptor line describes the ligand-driven step."
+}

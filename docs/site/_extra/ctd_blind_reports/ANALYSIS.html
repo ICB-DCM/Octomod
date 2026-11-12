@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Analysis — ctd_blind_local_v3_opus55_20261004_022720</title>
+<style>
+:root{--ink:#191b1d;--mute:#6a7075;--rule:#e4e6e8;--soft:#f7f8f9;
+ --pass:#136c3a;--fail:#b3261e;--flag:#8a5300;--blue:#2c5f8a}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:#fff;color:var(--ink);font-size:15px;line-height:1.55;
+ font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,
+ "Helvetica Neue",sans-serif}
+main{max-width:900px;margin:0 auto;padding:34px 24px 72px}
+h1{font-size:24px;line-height:1.25;margin:0 0 6px;letter-spacing:-.01em}
+h2{font-size:17px;margin:0 0 14px;padding-bottom:8px;border-bottom:1px solid var(--rule);
+ display:flex;align-items:baseline;gap:10px;letter-spacing:-.005em}
+h2 .n{font-size:12px;color:var(--mute);font-variant-numeric:tabular-nums;
+ min-width:1.4em}
+h3{font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--mute);
+ margin:22px 0 8px;font-weight:600}
+p{margin:0 0 10px}
+.sec{margin:34px 0 0}
+.hdr{padding-bottom:20px;border-bottom:2px solid var(--ink)}
+.sub{color:var(--mute);margin:0 0 14px}
+.badge{display:inline-block;font-weight:600;font-size:14px;padding:7px 14px;
+ border-radius:4px;margin:2px 0 16px;border:1px solid}
+.badge.pass{color:var(--pass);background:#eef7f1;border-color:#bfe0cc}
+.badge.fail{color:var(--fail);background:#fdefee;border-color:#f0c4c1}
+.badge.flag{color:var(--flag);background:#fdf5e7;border-color:#eeddb8}
+.kv{display:grid;grid-template-columns:190px 1fr;gap:5px 16px;font-size:13.5px;
+ margin:0 0 12px}
+.kv .k{color:var(--mute)}
+.kv .v{min-width:0;overflow-wrap:anywhere}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.88em;
+ background:var(--soft);padding:1px 4px;border-radius:3px}
+pre{background:var(--soft);border:1px solid var(--rule);border-radius:4px;
+ padding:12px 14px;overflow-x:auto;font-size:12px;line-height:1.45;
+ font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;margin:0 0 12px}
+pre.listing{background:#fbfbfa}
+pre.md{white-space:pre-wrap}
+details{margin:0 0 12px;font-size:14px}
+summary{cursor:pointer;color:var(--blue);padding:4px 0;font-size:13.5px}
+.tw{overflow-x:auto;margin:0 0 14px}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{text-align:left;padding:6px 10px;border-bottom:1px solid var(--rule);
+ vertical-align:top}
+th{font-weight:600;color:var(--mute);font-size:11.5px;text-transform:uppercase;
+ letter-spacing:.05em;border-bottom:1px solid #c9cdd1;white-space:nowrap}
+tbody tr:last-child td{border-bottom:none}
+td{font-variant-numeric:tabular-nums}
+table.verdicts td:nth-child(3){font-variant-numeric:normal;font-size:12.5px;
+ color:#3b4045}
+table.gates td:last-child{font-size:12px;color:#3b4045;font-variant-numeric:normal}
+.chip{display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:.05em;
+ padding:1px 6px;border-radius:3px;white-space:nowrap}
+.chip.pass{color:var(--pass);background:#e8f3ec}
+.chip.fail{color:var(--fail);background:#fbeae9}
+.chip.flag{color:var(--flag);background:#fbf1e0}
+.chip.mute{color:var(--mute);background:#eef0f1}
+.note{font-size:12.5px;color:var(--mute);background:var(--soft);
+ border-left:3px solid #d3d7da;padding:8px 12px;border-radius:0 3px 3px 0}
+.none{color:var(--mute);font-size:13px;font-style:italic}
+/* the one picture of a space: which axes each candidate carries, ordered by distance */
+table.axgrid td{text-align:center}
+table.axgrid td:first-child{text-align:left;font-family:ui-monospace,monospace;
+ font-size:12.5px}
+.axon{display:inline-block;min-width:26px;padding:1px 5px;border-radius:3px;
+ background:#e7f5ef;color:#065f46;font-size:11px;font-weight:600}
+.axoff{color:#cbd5e1}
+.dbar{display:inline-block;width:96px;height:9px;background:#eef0f1;
+ border-radius:2px;vertical-align:middle;overflow:hidden}
+.dbar i{display:block;height:100%;background:#94a3b8}
+.axlegend{font-size:12.5px;color:var(--mute);margin:6px 0 14px;line-height:1.6}
+ul.ran{margin:6px 0 0;padding-left:20px;font-size:13.5px}
+ul.ran li{margin:3px 0}
+.against{font-size:14px;background:#fdf5e7;border-left:4px solid var(--flag);
+ padding:11px 14px;margin:14px 0}
+.against p{margin:0 0 7px}
+.against p:last-child{margin:0}
+.against b{color:var(--flag)}
+.legend{display:flex;flex-wrap:wrap;gap:7px 16px;margin:2px 0 12px;
+ font-size:12.5px;color:#3b4045}
+.legend .swatch{display:flex;align-items:center;gap:6px}
+.legend .swatch i{width:13px;height:13px;border-radius:3px;border:1.6px solid;
+ flex:0 0 auto}
+.epi-row{display:flex;gap:8px;align-items:baseline;font-size:13.5px;
+ padding:3px 0;border-bottom:1px solid #f0f2f3}
+.epi-row:last-child{border-bottom:none}
+.epi-row .chip{flex:0 0 auto}
+h3.grp{font-size:15px;text-transform:none;letter-spacing:-.005em;color:var(--ink);
+ margin:30px 0 2px;padding-top:14px;border-top:2px solid var(--rule);font-weight:600}
+.grpq{font-size:12.5px;color:var(--mute);margin:0 0 14px;font-style:italic}
+h4{font-size:12.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--mute);
+ margin:20px 0 8px;font-weight:600}
+h3 .count{margin-left:7px;font-size:11px;color:var(--mute);background:var(--soft);
+ padding:1px 6px;border-radius:8px;font-variant-numeric:tabular-nums}
+.chipset{margin:0 0 10px}
+.vrow{display:flex;gap:9px;align-items:baseline;padding:4px 0;
+ border-bottom:1px solid #f0f2f3}
+.vrow:last-child{border-bottom:none}
+.vev{font-size:13px;color:#3b4045;min-width:0;overflow-wrap:anywhere}
+.tl{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 10px}
+.tl-sig{display:flex;gap:6px;align-items:center;font-size:12.5px;
+ border:1px solid var(--rule);border-radius:14px;padding:3px 11px 3px 8px}
+.tl-dot{width:9px;height:9px;border-radius:50%;flex:0 0 auto}
+.tl-dot.on{background:var(--flag)}
+.tl-dot.off{background:#cfd4d7}
+.crit{margin:0;padding-left:18px}
+.crit li{margin:0 0 3px}
+.fig{margin:6px 0 16px;padding:0;text-align:center}
+.fig svg{max-width:100%;height:auto}
+.fig.net{border:1px solid var(--rule);border-radius:4px;padding:14px;
+ background:#fdfdfc}
+.fig.net svg{max-width:100%;height:auto;display:block;margin:auto}
+.fig.net h4{margin:0 0 6px;font-size:12.5px;color:var(--mute);text-align:left}
+h4{font-size:12px;text-transform:uppercase;letter-spacing:.05em;
+ color:var(--mute);margin:16px 0 6px;font-weight:600}
+table.model td:nth-child(1){white-space:nowrap}
+table.model td code{background:none;padding:0}
+table.model td:last-child{font-variant-numeric:normal}
+.qqgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin:0 0 14px}
+.qq{border:1px solid var(--rule);border-radius:4px;padding:10px;
+ background:#fdfdfc}
+.qq.reject{border:1.5px solid #e3c98f;background:#fdf8ec}
+.qq svg{max-width:100%;height:auto;display:block;margin:auto}
+.qqobs{font-size:12px;font-weight:600;margin-bottom:4px}
+.qqcap{font-size:11px;color:var(--mute);margin:6px 0 0;line-height:1.4}
+.qqnote{font-size:11px;color:#8a5300;font-weight:600;margin:6px 0 0;
+ line-height:1.35}
+.qqmuted{font-size:12px;color:var(--mute);font-style:italic;margin:6px 0 0}
+.mods{display:block;margin-top:3px;font-size:11.5px;color:var(--mute)}
+.derived{color:#5a6570;font-style:italic}
+.mute{color:var(--mute)}
+figcaption{font-size:11.5px;color:var(--mute);margin-top:4px;text-align:left}
+/* the four figures a modeller reads first: fit, waterfall, parameters vs
+   bounds, profiles. Tables support them; they do not lead. */
+.fig.lead{margin:10px 0 22px}
+.fig.lead figcaption{font-size:12px;color:#4a5055}
+.flagbox{border:1px solid #eeddb8;background:#fdf9f0;border-radius:4px;
+ padding:10px 14px;font-size:13px;margin:0 0 14px}
+.okbox{border:1px solid #bfe0cc;background:#f3f9f5;border-radius:4px;
+ padding:10px 14px;font-size:13px;margin:0 0 14px}
+.flagbox ul,.okbox ul{margin:6px 0 0;padding-left:18px}
+.epi{display:grid;grid-template-columns:1fr 1fr;gap:20px;border:1px solid var(--rule);
+ border-radius:4px;padding:16px 18px;margin:0 0 14px;background:#fcfcfb}
+.epi h3{margin-top:0}
+.epi .epi-col.wide{grid-column:1/-1}
+.epi ul{margin:0;padding-left:18px;font-size:13.5px}
+.epi li{margin:0 0 5px}
+.ref{font-size:11.5px;color:var(--mute);margin:10px 0 0;
+ border-top:1px dotted var(--rule);padding-top:7px;overflow-wrap:anywhere}
+.pocket{background:#f6f4ef;border-left:4px solid #b99a56;border-radius:0 4px 4px 0;
+ padding:6px 20px 16px}
+.pocket-hd{font-size:11.5px;font-weight:700;letter-spacing:.09em;
+ text-transform:uppercase;color:#7d6631;margin:12px 0 4px}
+.pocket h3{margin-top:16px}
+.pocket .rec{font-weight:600}
+.pocket pre,.pocket table{background:#fffdf8}
+.colophon{font-size:11.5px;color:var(--mute);margin-top:20px;
+ border-top:1px solid var(--rule);padding-top:12px}
+.askbox{border:1px solid #e3c98f;background:#fdf8ec;border-radius:4px;
+ padding:14px 18px;font-size:14px;margin:0 0 16px}
+.asks{margin:12px 0 0;padding-left:22px}
+.asks li{margin:0 0 14px}
+.ask{font-weight:600;margin:0 0 4px}
+.askmeta{font-size:12.5px;color:#57606a;margin:0}
+.tier{display:inline-block;font-size:11px;padding:1px 6px;border-radius:3px;
+ white-space:nowrap}
+.tier-default{color:#8a5300;background:#fbf1e0}
+.tier-transferred{color:#8a6a1f;background:#fdf8ea}
+.tier-direct{color:var(--pass);background:#e8f3ec}
+.tier-none{color:var(--mute);background:#eef0f1}
+.conf{font-variant-numeric:tabular-nums;font-weight:600}
+.conf.lo{color:#b3261e}
+.conf.hi{color:#3b4045}
+table.assumptions{table-layout:fixed}
+table.assumptions th:nth-child(1),table.assumptions td:nth-child(1){width:70%}
+table.assumptions th:nth-child(2),table.assumptions td:nth-child(2){width:18%}
+table.assumptions th:nth-child(3),table.assumptions td:nth-child(3){width:12%}
+table.assumptions td{font-variant-numeric:normal;overflow-wrap:break-word}
+table.assumptions tbody td{padding-top:12px;padding-bottom:12px}
+.dtext{font-weight:600}
+/* the argument the model rests on: primary content, full reading size */
+.rationale{margin:7px 0 0;font-size:13.5px;line-height:1.5;color:#22262a;
+ border-left:3px solid #c3ccd4;padding-left:11px}
+.evlist{margin:8px 0 0;padding-left:11px;border-left:3px solid #eceff1}
+.ev{display:block;font-size:12px;line-height:1.45;color:#3b4045}
+.ev.gen{color:#8b9298}
+.ev .loc{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+ font-size:.92em;color:#57606a}
+.prec{margin:8px 0 0;font-size:11.5px;color:#9aa1a7;font-style:italic}
+.alts{margin:8px 0 0;font-size:12px;color:#6a7075}
+.demoted{display:block;margin-top:5px;font-size:10.5px;font-weight:600;
+ line-height:1.3;color:#8a5300;background:#fbf1e0;border:1px solid #eeddb8;
+ border-radius:3px;padding:3px 5px}
+.qnote{display:block;margin-top:8px;font-size:12px;color:#7d6631;
+ border-left:2px solid #d8c48b;padding-left:8px}
+@media (max-width:720px){.kv{grid-template-columns:1fr}
+ .epi{grid-template-columns:1fr}
+ .qqgrid{grid-template-columns:1fr}}
+@media print{main{max-width:none;padding:0}
+ body{font-size:11pt}
+ .sec{break-inside:avoid-page}
+ details{display:block}
+ details>summary{list-style:none}
+ .fig{break-inside:avoid}
+ a{color:inherit;text-decoration:none}}
+</style>
+</head>
+<body>
+<main>
+<h1>Analysis report — ctd_blind_local_v3_opus55_20261004_022720</h1>
+<p class="lede">Build a model of this CTD phosphorylation time course that explains the measured distributions, and say what it implies about how P-TEFb modifies the substrate. Report explicitly what these data can and cannot establish about the mechanism. In particular, test whether the modification of a repeat changes the rate at which its immediate neighbours in the array are modified, against the alternatives that the rate depends only on how many repeats are already modified (cooperativity between repeats) or on nothing at all, and say which of these the data can and cannot separate. Also test the earlier conclusion, drawn by eye, that the kinase acts distributively rather than processively.</p>
+<p class="meta">RNA polymerase II CTD (8 heptarepeats, in vitro), phosphorylated by P-TEFb (CDK9/cyclin T1); mass-spectrometry time course &middot; goal <code>mechanism_discrimination</code> &middot; 2 round(s) &middot; outcome <code>completed</code></p>
+
+<h2>What won</h2>
+<p class="lede">The selected structure is <code>M5_neighbour_and_count</code> plus <code>product_load_inhibition</code>. Against the questions the space was built to settle:</p>
+<ul><li><strong>Yes</strong> — Does the kinase slow as phosphate product accumulates? That would make the second hour slower relative to the first than a constant-activity kinase allows, on top of M5&#x27;s count and neighbour coupling. <code>product_load_inhibition</code></li><li><strong>No</strong>, on this evidence — Once count and neighbour coupling are present, does a processive component (several repeats modified per kinase encounter) still improve the fit, or does the distributive call hold? <code>processive_with_coupling</code></li></ul>
+<div class="tw"><table><thead><tr><th></th><th></th></tr></thead><tbody><tr><td>chosen over</td><td>1 other structure(s) in the final round (5 fitted across all rounds)</td></tr><tr><td>nearest rival</td><td>ΔAIC 6.40 — AIC counts fit and parameters together, so a rival within about 2 units is not distinguishable by this evidence</td></tr><tr><td>its share of the evidence</td><td>0.961 — the Akaike weight, which is that model's share of the total evidence ACROSS THE SET THAT WAS FITTED. It says nothing about a structure nobody proposed.</td></tr><tr><td>distinguishable?</td><td>yes — one structure stands alone at this evidence</td></tr></tbody></table></div>
+<h2>Why it won</h2>
+<p class="lede">Against the nearest structure this evidence does separate it from — <code>base</code>, ΔAIC 6.40 — the difference is not spread evenly over the data. It is paid for by 3 measurement group(s):</p>
+<div class="tw"><table><thead><tr><th>measurement</th><th>share of the difference</th><th>points</th></tr></thead><tbody><tr><td><code>obs_phos5__sc_ctd_ms_t60__sigma_ctd_ms__cond_invitro_PTEFb_CTD8@cond_invitro_PTEFb_CTD8</code></td><td>15%</td><td>1</td></tr><tr><td><code>obs_phos1__sc_ctd_ms_t60__sigma_ctd_ms__cond_invitro_PTEFb_CTD8@cond_invitro_PTEFb_CTD8</code></td><td>10%</td><td>1</td></tr><tr><td><code>obs_phos8__sc_ctd_ms_t120__sigma_ctd_ms__cond_invitro_PTEFb_CTD8@cond_invitro_PTEFb_CTD8</code></td><td>9%</td><td>1</td></tr></tbody></table></div>
+<p class="note">Read as: these are the measurements the losing structure could not reproduce. A verdict paid for by one group is a narrower claim than one paid for across the design — and either way it names where to look, and where a new experiment would settle it.</p>
+<h2>Still open</h2>
+<ul><li>declared undetermined: Neighbour-dependent rates (nb) versus a count-dependent rate profile with more than one shape parameter. Counts-only MS </li><li>declared undetermined: Processive versus distributive modification on the selected structure. q_proc is fixed at 0.0 in both round-1 candidates</li><li>declared undetermined: Positive count cooperativity versus processivity (and versus molecule-to-molecule rate heterogeneity, not in the model s</li><li>declared undetermined: The identity of the global slowdown. Inhibition of P-TEFb by ADP and by phosphorylated CTD both equal Σn·CTD_n by stoich</li><li>declared undetermined: kon_I and koff_I separately. koff_I is fixed at 1.0, so only K_I = koff_I/kon_I ≈ 1.1 mM is estimated. With samples 60 m</li><li>declared undetermined: K_ATP and any ATP-depletion effect. K_ATP is fixed at 50 µM, and ATP stays at or above about 2.2 mM throughout, so the d</li></ul>
+<p class="note">These are stated because they are true, not because the run failed. A limit declared is worth more than a limit hidden.</p>
+<h2>The candidates</h2>
+<div class="tw"><table class="axgrid"><thead><tr><th>structure</th><th>product_load_inhibition</th><th>ΔAIC (shorter is better)</th><th>weight</th><th></th></tr></thead><tbody><tr><td>M5_neighbour_and_count</td><td><span class="axoff">·</span></td><td><span class="dbar"><i style="width:100%"></i></span> 0.00</td><td>0.997</td><td><strong>selected</strong></td></tr><tr><td>M5_neighbour_and_count + product_load_inhibition</td><td><span class="axon">on</span></td><td><span class="dbar"><i style="width:100%"></i></span> 0.00</td><td>0.961</td><td><strong>selected</strong></td></tr><tr><td>M5_neighbour_and_count</td><td><span class="axoff">·</span></td><td><span class="dbar"><i style="width:89%"></i></span> 6.40</td><td>0.039</td><td></td></tr><tr><td>M3_neighbour</td><td><span class="axoff">·</span></td><td><span class="dbar"><i style="width:79%"></i></span> 11.90</td><td>0.003</td><td></td></tr><tr><td>M2_count_coop</td><td><span class="axoff">·</span></td><td><span class="dbar"><i style="width:69%"></i></span> 17.12</td><td>0.000</td><td></td></tr><tr><td>M4_processive</td><td><span class="axoff">·</span></td><td><span class="dbar"><i style="width:67%"></i></span> 18.50</td><td>0.000</td><td></td></tr><tr><td>M1_independent</td><td><span class="axoff">·</span></td><td><span class="dbar"><i style="width:1%"></i></span> 55.69</td><td>0.000</td><td></td></tr></tbody></table></div>
+<div class="axlegend"><code>product_load_inhibition</code> — Does the kinase slow as phosphate product accumulates? That would make the second hour s</div>
+<h2>How the analysis got there</h2>
+<div class="tw"><table><thead><tr><th>round</th><th>what changed, and why</th><th>selected</th></tr></thead><tbody><tr><td>0</td><td>initial model space</td><td><code>M5_neighbour_and_count</code></td></tr><tr><td>1</td><td>space expanded on top of M5_neighbour_and_count, adding product_load_inhibition, processive_with_coupling</td><td><code>M5_neighbour_and_count + product_load_inhibition</code></td></tr></tbody></table></div>
+<h3>Against the questions asked at the start</h3><ul>
+<li><strong>the selected mechanism is reported with its information criterion, its Akaike weight and the indistinguishable set, honestly, whatever they turn out to be</strong> — pass<br><span class="note">product_load_inhibition: AIC −172.80, Akaike weight 0.961. Base (M5_neighbour_and_count) at ΔAIC 6.40, weight 0.039. …</span><details><summary>the evidence in full</summary><p>product_load_inhibition: AIC −172.80, Akaike weight 0.961. Base (M5_neighbour_and_count) at ΔAIC 6.40, weight 0.039. Indistinguishable set {product_load_inhibition}, decisive against the 2.0 / 0.7 thresholds. Stated with its caveats: only 2 of 4 lattice models were visited; there is no held-out data; 1.76 of the 4.20 nllh units are collected at t0/t960 only through the shared sigma, and the 60/120-min spectra alone would give roughly 2.9 AIC units.</p></details></li>
+<li><strong>the observation model is stated explicitly, including how predicted amounts are mapped onto relative MS intensities at each time point</strong> — pass<br><span class="note">Intensity = sc_t × amount (µM), linear, with one free scale per time point: 0.00999, 0.0404, 0.0393 and 0.0086 at 0, 60, 120 and 960 min. …</span><details><summary>the evidence in full</summary><p>Intensity = sc_t × amount (µM), linear, with one free scale per time point: 0.00999, 0.0404, 0.0393 and 0.0086 at 0, 60, 120 and 960 min. Model totals are 1.00, 4.04, 3.93 and 0.86 against measured 1.00, 4.07, 3.79 and 0.85. Noise is additive normal with one sigma_ctd_ms = 0.890 µM for every peak, scaled by the same sc_t, giving σ = 0.0089, 0.036, 0.035 and 0.0077 intensity units.</p></details></li>
+<li><strong>any mechanistic question the data cannot resolve is named as unresolved rather than decided</strong> — partial<br><span class="note">Named here as unresolved: neighbour versus flexible count dependence; processive versus distributive on the winning structure; count cooperativity versus …</span><details><summary>the evidence in full</summary><p>Named here as unresolved: neighbour versus flexible count dependence; processive versus distributive on the winning structure; count cooperativity versus processivity versus heterogeneity (M2 vs M4 ≈1.4 AIC); ADP versus phospho-CTD versus kinase inactivation; kon_I versus koff_I; K_ATP; positional pattern. But the run itself decided two of these by construction (q_proc fixed at 0.0, koff_I fixed at 1.0). computed_cannot_distinguish is empty, and no profiles were computed. Processivity is therefore untested, not shown to be undecidable.</p></details></li>
+<li><strong>test whether modification of a repeat changes its neighbours&#x27; rate, against count cooperativity or nothing at all</strong> — partial<br><span class="note">&#x27;Nothing at all&#x27; is rejected by about 62 AIC units. Neighbour-only beats count-only by about 5.2 AIC, and neighbour+count beats neighbour-only by about 11.9 …</span><details><summary>the evidence in full</summary><p>&#x27;Nothing at all&#x27; is rejected by about 62 AIC units. Neighbour-only beats count-only by about 5.2 AIC, and neighbour+count beats neighbour-only by about 11.9 (one parameter per term assumed). This separates neighbour from count only against the one-parameter count form; a count-only model with two or more shape parameters, the alternative counts-only data cannot a priori exclude, was not fitted.</p></details></li>
+<li><strong>test the earlier by-eye conclusion that P-TEFb acts distributively rather than processively</strong> — partial<br><span class="note">The distributions are unimodal at 60 and 120 min, consistent with distributive action. However, q_proc is fixed at 0.0 in the selected model. …</span><details><summary>the evidence in full</summary><p>The distributions are unimodal at 60 and 120 min, consistent with distributive action. However, q_proc is fixed at 0.0 in the selected model. The only processive model (M4, −log L −80.95) loses to M5 by about 18.5 AIC while also lacking the neighbour and count terms, and it ties count-only M2 within about 1.4 AIC. Processivity on top of the selected structure has not been fitted.</p></details></li>
+</ul>
+<h2>Beyond this data</h2>
+<p>Mechanisms the expansion agent names as acting in this system that the data cannot separate from the selected model, each with the experiment that would. They were not fitted and are not part of the answer; they are what the next experiment could decide.</p>
+<h3>Named after round 0</h3><ul>
+<li><strong>An immediate-neighbour effect as such (modifying repeat i changes the rate at i±1), as distinct from a count-dependent step rate whose profile rises through the mid-counts and brakes near the end</strong><br>not separable here: MS resolves only the count, so the neighbour term reaches the data only through the count distribution. Its estimate crosses neutral between models (nb 1.81 in M3, 0.31 in M5), which suggests it is acting as a shape term for the step-rate profile. With four time points, no replicates and nine peaks per spectrum, a count-only profile with as many parameters can absorb the same imprint. A count-only flexible-profile candidate should still be fitted at construction, but even a tie would leave the question open.<br>the experiment that would: Use a position-resolved readout at 1 h and 2 h: cleave between repeats (or use middle-down MS with ETD) to localise each phosphate. Alternatively, make one internal repeat unmodifiable (S2A/S5A at repeat 4). A neighbour effect changes the rates at repeats 3 and 5 specifically; a count effect changes every repeat equally per mark.</li>
+<li><strong>A phosphorylation-count-dependent MS ionisation and detection response</strong><br>not separable here: Each spectrum has one free gain, and the 0-h and 16-h spectra each contain a single species. Per-count response factors are therefore confounded with cp, nb and the kinetics. A single factor on phos8 alone would simply absorb the one informative cell (phos8 at 2 h).<br>the experiment that would: Calibrate with defined mixtures of synthetic or enzymatically completed phospho-isoforms (for example, known ratios of 0P and 8P CTD) in the same injection, or spike a known amount of 8P standard into the 2-h sample.</li>
+<li><strong>Loss of kinase activity during the incubation, rather than product inhibition, as the cause of the slower second hour</strong><br>not separable here: It would be separated from M5 only by the same timing signal the product-inhibition axis uses. With one condition sampled at 0, 1, 2 and 16 h, a time-dependent loss and a load-dependent brake both just slow the second hour relative to the first. The lab note states the kinase is unchanged, so it is not proposed as a competing axis.<br>the experiment that would: Add fresh P-TEFb at 2 h (activity loss predicts a burst; inhibition by product does not). Alternatively, pre-incubate the kinase with ATP and no substrate for 2 h before starting the reaction.</li>
+<li><strong>Inhibition by phosphorylated CTD, as opposed to ADP, as the product that occupies the kinase</strong><br>not separable here: In this assay each phosphate added produces one ADP, so both inhibitors equal Σ n·CTD_n at every time point.<br>the experiment that would: Spike ADP at t = 0, or run with an ATP-regenerating system (pyruvate kinase with PEP) that keeps ADP near zero. Separately, add pre-phosphorylated CTD at t = 0.</li>
+<li><strong>Genuine processivity (several repeats per binding event), as opposed to distributive release followed by rapid rebinding to the same molecule</strong><br>not separable here: Both produce clustered modification events. A count-level jump term cannot tell them apart at a single kinase and substrate concentration with no chase.<br>the experiment that would: Run a substrate-trap or dilution chase: add a 10-fold excess of unlabelled CTD, or vary the kinase concentration at fixed substrate, and compare count distributions at matched mean. Processive runs are insensitive to the trap; rebinding-driven clustering is not.</li>
+</ul>
+<h2>The evidence behind this page</h2>
+<p class="note">Everything above is read from these; nothing on this page is an agent&#x27;s summary of them. Open one when you want to check a number, not to find out what happened.</p>
+<p><strong>round 0</strong></p><ul><li><a href="round_0/report/report.html">the round report — fits, gates, uncertainty</a></li><li><a href="round_0/report/model_report.html">the model as built — assumptions and evidence</a></li><li>who decided what, and why — <code>./run.sh show --run-id ctd_blind_local_v3_opus55_20261004_022720 rounds/round_0/decisions_md</code></li></ul><p><strong>round 1</strong></p><ul><li><a href="round_1/report/report.html">the round report — fits, gates, uncertainty</a></li><li><a href="round_1/report/model_report.html">the model as built — assumptions and evidence</a></li><li>who decided what, and why — <code>./run.sh show --run-id ctd_blind_local_v3_opus55_20261004_022720 rounds/round_1/decisions_md</code></li></ul>
+<h2>Gate policy</h2>
+<p>Profile <b>strict</b> (<code>e5c2195af0378fc1</code>, from <code>strict.yaml</code>). 0 gate(s) answered by policy, 15 by a human.</p>
+<p class="note">The verdict was signed by human (via the front end). A policy signature is not a human&#x27;s: it names the file and its hash, so the claim can be traced to the configuration that made it.</p>
+<h2>What it cost</h2>
+<div class="tw"><table><thead><tr><th>agent calls</th><th>USD</th><th>human decisions</th><th>policy decisions</th><th>module redrafts</th><th>contract retries</th><th>extra attempts granted</th><th>attempts per call</th></tr></thead><tbody><tr><td>19</td><td>$25.4</td><td>15</td><td>0</td><td>3</td><td>2</td><td>0</td><td>1.105</td></tr></tbody></table></div>
+<p class="note">every gate verdict, agent call and human decision is in the run&#x27;s ledger. every round after the first came from an expansion, which copies the data and the shared assembly forward unchanged and only enlarges the model space: the criterion is over the same data in all 2 rounds, so the values ARE comparable across them</p>
+<h2>What this run was started with</h2>
+<div class="tw"><table><thead><tr><th></th><th></th></tr></thead><tbody><tr><td>source</td><td>&lt;repo&gt;/testcase/ctd_blind_local_v3</td></tr><tr><td>project</td><td><code>ctd_blind_local_v3</code></td></tr><tr><td>input sha</td><td><code>988971b38fbdf050</code></td></tr></tbody></table></div>
+<ul class="files"><li><code>input/blocklist.txt</code></li><li><code>input/data/ctd_ms_timecourse.csv</code></li><li><code>input/description.md</code></li><li><code>input/intent.yaml</code></li><li><code>input/testcase.yaml</code></li></ul>
+<p class="note">These files are IN this run&#x27;s record. The engine copied them there before the first module and read nothing else for the rest of the run, so what is above is what produced what is below — whatever has happened since to the case they came from.</p>
+<h2>What code produced this</h2>
+<div class="against"><p><b>This run is not reproducible from a commit alone</b></p><p>code: commit 0f8649d plus UNCOMMITTED CHANGES in 4 file(s), diff 9d342c77ea94ba14 — this run is NOT reproducible from the commit alone</p></div>
+<p class="meta">versions: python 3.13.12 · pypesto 0.6.0 · amici 1.0.1 · petab 0.8.2 · petab_select 0.4.0 · numpy 2.5.2 · scipy 1.18.1</p>
+<p class="meta">uv.lock <code>80579277076996be</code> — the digest of the whole resolved environment</p>
+</main>
+</body>
+</html>

@@ -1,0 +1,301 @@
+{
+  "network": {
+    "species": [
+      {
+        "id": "A",
+        "name": "active sensor",
+        "compartment": "cell"
+      },
+      {
+        "id": "P",
+        "name": "product",
+        "compartment": "cell"
+      }
+    ],
+    "interactions": [
+      {
+        "id": "J1",
+        "type": "regulation",
+        "participants": [
+          {
+            "species": "A",
+            "role": "product",
+            "stoichiometry": 1
+          }
+        ],
+        "evidence_tier": "direct",
+        "note": "the note says the sensor switches to an active form on input"
+      },
+      {
+        "id": "J2",
+        "type": "conversion",
+        "participants": [
+          {
+            "species": "A",
+            "role": "substrate",
+            "stoichiometry": 1
+          }
+        ],
+        "evidence_tier": "direct",
+        "note": "and switches back on its own"
+      },
+      {
+        "id": "J3",
+        "type": "synthesis",
+        "participants": [
+          {
+            "species": "A",
+            "role": "modifier",
+            "stoichiometry": 1
+          },
+          {
+            "species": "P",
+            "role": "product",
+            "stoichiometry": 1
+          }
+        ],
+        "evidence_tier": "direct",
+        "note": "the active sensor drives product formation"
+      },
+      {
+        "id": "J4",
+        "type": "degradation",
+        "participants": [
+          {
+            "species": "P",
+            "role": "substrate",
+            "stoichiometry": 1
+          }
+        ],
+        "evidence_tier": "default",
+        "note": "the product is lost; the route is one of the note's open questions"
+      }
+    ]
+  },
+  "antimony": "model toy_super_base\n  compartment cell = 1;\n  species A in cell = 0;\n  species P in cell = 0;\n  u = 1;\n  Atot = 1;\n  k_in = 0.1;\n  k_out = 0.3;\n  k_cat = 0.6;\n  k_deg = 0.03;\n  J1: -> A; k_in * u * (Atot - A);\n  J2: A -> ; k_out * A;\n  J3: -> P; k_cat * A;\n  J4: P -> ; k_deg * P;\nend",
+  "parameters": [
+    {
+      "id": "k_in",
+      "nominal_value": 0.1,
+      "unit": "1/(min*dose)",
+      "evidence_tier": "default",
+      "source": "no literature value exists for a synthetic sensor with no host homologue; order-of-magnitude placeholder for an activation resolved over tens of minutes",
+      "estimate": true,
+      "lb": 0.0005,
+      "ub": 5.0,
+      "denotes": "activation rate per unit input"
+    },
+    {
+      "id": "k_out",
+      "nominal_value": 0.3,
+      "unit": "1/min",
+      "evidence_tier": "default",
+      "source": "same reasoning as k_in; the note says the sensor relaxes on its own",
+      "estimate": true,
+      "lb": 0.0005,
+      "ub": 5.0,
+      "denotes": "spontaneous deactivation rate"
+    },
+    {
+      "id": "k_cat",
+      "nominal_value": 0.6,
+      "unit": "uM/min",
+      "evidence_tier": "default",
+      "source": "set so the product reaches a few uM over 120 min, the range the note's LC-MS numbers occupy",
+      "estimate": true,
+      "lb": 0.001,
+      "ub": 20.0,
+      "denotes": "product formed per unit active sensor per minute"
+    },
+    {
+      "id": "k_deg",
+      "nominal_value": 0.03,
+      "unit": "1/min",
+      "evidence_tier": "default",
+      "source": "first-order loss is the note's own obvious guess; the magnitude is a placeholder for a loss resolved over the 120-minute window",
+      "estimate": true,
+      "lb": 0.0001,
+      "ub": 2.0,
+      "denotes": "first-order product loss rate"
+    }
+  ],
+  "build_report": {
+    "decisions": [
+      {
+        "decision": "The sensor readout is a FRACTION of a fixed total normalised to 1, so A is dimensionless in [0,1] and the total appears as Atot = 1 rather than as an estimated pool.",
+        "rationale": "The note says so outright \u2014 'a fraction of total sensor between 0 and 1, not a concentration' \u2014 and it says the total is fixed and normalised. Estimating a total the note declares fixed would add a parameter the data cannot separate from k_in.",
+        "evidence": [
+          {
+            "source": "lab_note",
+            "locator": "'we read the active fraction with a FRET sensor, so the number is a fraction of total sensor between 0 and 1'",
+            "supports": "the readout is a normalised fraction, and the total is constant",
+            "origin": "user-provided"
+          }
+        ],
+        "alternatives_considered": "Treating A_frac as a concentration and estimating the sensor total \u2014 rejected as unidentifiable against k_in and contradicted by the note.",
+        "evidence_tier": "direct",
+        "confidence": "high",
+        "user_decision_required": false,
+        "question": ""
+      },
+      {
+        "decision": "Activation is written as k_in * u * (Atot - A): first order in the input and in the inactive pool.",
+        "rationale": "Mass action on the pool the note describes, and it is the least the note supports. A saturating activation in u would add a constant the three-dose design can barely constrain.",
+        "evidence": [
+          {
+            "source": "lab_note",
+            "locator": "'switches to an active form when we add the small-molecule input'",
+            "supports": "input-driven activation of the inactive form",
+            "origin": "user-provided"
+          }
+        ],
+        "alternatives_considered": "A Hill term in u \u2014 rejected: three doses cannot resolve a cooperativity and an activation constant together.",
+        "evidence_tier": "transferred",
+        "confidence": "medium",
+        "user_decision_required": false,
+        "question": ""
+      },
+      {
+        "decision": "Product loss is written first-order (k_deg * P) in the BASE model, and the alternative constant loss is declared as a structural axis rather than chosen here.",
+        "rationale": "The note asks the question and does not answer it: 'first-order decay is the obvious guess. But the extract may contain a saturated consuming enzyme'. A guess belongs in the base model; the alternative belongs in the space, where the data decide it.",
+        "evidence": [
+          {
+            "source": "lab_note",
+            "locator": "'How is the product lost? First-order decay is the obvious guess. But the extract may contain a saturated consuming enzyme'",
+            "supports": "both routes are live and the note prefers neither",
+            "origin": "user-provided"
+          }
+        ],
+        "alternatives_considered": "Picking one and not declaring the other \u2014 rejected: it would hide a question the note asked.",
+        "evidence_tier": "default",
+        "confidence": "low",
+        "user_decision_required": false,
+        "question": ""
+      },
+      {
+        "decision": "The two readouts map straight onto the two states: A_frac to A, P_uM to P, with no scaling or offset.",
+        "rationale": "The note gives A_frac already normalised and P_uM in absolute units from LC-MS against standards, so a scaling factor would be a fit device rather than a measurement model.",
+        "evidence": [
+          {
+            "source": "lab_note",
+            "locator": "'the active sensor drives formation of a product we read by LC-MS in uM'",
+            "supports": "the product readout is absolute",
+            "origin": "user-provided"
+          }
+        ],
+        "alternatives_considered": "An offset on the LC-MS channel \u2014 not declared, because the note attributes the negative t=0 values to additive noise around a true zero rather than to a background.",
+        "evidence_tier": "direct",
+        "confidence": "high",
+        "user_decision_required": false,
+        "question": ""
+      }
+    ]
+  },
+  "consulted_sources": [
+    "the bench note supplied with this case (2026-09-08)",
+    "general mass-action kinetics for a two-state sensor with a fixed total"
+  ],
+  "entity_glossary": {
+    "species": [
+      {
+        "id": "A",
+        "denotes": "the ACTIVE fraction of the sensor; the inactive fraction is Atot - A and is not a state",
+        "unit_convention": "fraction of total sensor, total normalised to 1",
+        "lump_membership": "one active form only; no partially-modified states are represented"
+      },
+      {
+        "id": "P",
+        "denotes": "the product measured by LC-MS",
+        "unit_convention": "uM, absolute against standards",
+        "lump_membership": "one species; no downstream metabolites are represented"
+      }
+    ],
+    "parameters": [
+      {
+        "id": "u",
+        "role": "input dose, set per condition",
+        "convention": "arbitrary units of the stock; only ratios are meaningful"
+      },
+      {
+        "id": "Atot",
+        "role": "total sensor, fixed by the note",
+        "convention": "normalised to 1, so A is a fraction"
+      }
+    ]
+  },
+  "model_space": [
+    {
+      "id": "product_feedback",
+      "question": "Does the product feed back on sensor activation? The note's first open question.",
+      "default": "off",
+      "priority": 1,
+      "priority_reason": "the note says the top-dose trace does not look like a simple saturating rise, which is the only shape claim it makes",
+      "on_antimony_patch": {
+        "replace_reaction": "J1",
+        "with": "J1: -> A; k_in * u * (Atot - A) / (1 + fb * P);"
+      },
+      "adds_parameters": [
+        {
+          "id": "fb",
+          "nominal_value": 0.5,
+          "unit": "1/uM",
+          "evidence_tier": "to_be_estimated",
+          "source": "no value exists; the fit decides. Written as a STRENGTH so its off-state is fb = 0 rather than an infinite half-saturating constant, which is what makes the axis switchable by the parameter table alone",
+          "estimate": true,
+          "lb": 0.001,
+          "ub": 50.0,
+          "denotes": "product feedback strength on sensor activation",
+          "neutral_value": 0.0
+        }
+      ],
+      "rationale": "A product that slows its own production is the commonest reason a sensor trace peaks and relaxes instead of saturating, and the note reports exactly that impression at the top dose.",
+      "discriminating_evidence": "A_frac at u=8: a peak followed by a decline is impossible for any parameter setting without feedback, which rises monotonically to a plateau."
+    },
+    {
+      "id": "alt_route",
+      "question": "Is the sensor the only route to the product, or does the input drive some formation directly? The note's second open question.",
+      "default": "off",
+      "priority": 2,
+      "priority_reason": "cheap to settle \u2014 one free parameter, and the note says it cannot rule it out",
+      "on_antimony_patch": {
+        "append": "J5: -> P; k_alt * u;"
+      },
+      "adds_parameters": [
+        {
+          "id": "k_alt",
+          "nominal_value": 0.05,
+          "unit": "uM/(min*dose)",
+          "evidence_tier": "to_be_estimated",
+          "source": "no value exists; the fit decides. Off at k_alt = 0, so the axis is switchable by the parameter table alone",
+          "estimate": true,
+          "lb": 0.0001,
+          "ub": 10.0,
+          "denotes": "product formed per unit input, bypassing the sensor",
+          "neutral_value": 0.0
+        }
+      ],
+      "rationale": "A small molecule that reacts directly would give a dose-proportional term with no sensor dependence, which the note explicitly says it cannot exclude.",
+      "discriminating_evidence": "P_uM early at u=8, before the sensor has activated: a bypass route makes product immediately, the sensor route cannot."
+    },
+    {
+      "id": "cooperative_production",
+      "question": "Does product formation need two active sensors rather than one? The note's third open question, in the form the data can actually settle.",
+      "default": "off",
+      "priority": 3,
+      "priority_reason": "it changes the shape of the product's rise rather than the mechanism upstream of it, so it is the least load-bearing of the three",
+      "on_antimony_patch": {
+        "replace_reaction": "J3",
+        "with": "J3: -> P; k_cat * A * A;"
+      },
+      "adds_parameters": [],
+      "rationale": "If the product-forming step requires a sensor dimer, the rate is second order in the active fraction and the product's rise lags the sensor's more than a first-order step would.",
+      "discriminating_evidence": "P_uM early against A_frac early, across doses: a second-order step makes almost no product while the active fraction is still small, which a first-order step does not.",
+      "_fixture_note": "Deliberately NOT neutralizable, and by the cleanest of the module's three reasons: it adds no parameter, so no parameter value can turn it off. It must fall out of the supermodel and stay its own structure. The first version of this axis was a constant product loss (v_max), which is worse than non-neutralizable \u2014 it is unsimulable, because a constant loss drives P negative from t = 0, and the engine's non-negativity gate dropped every combination carrying it. Found on the fixture's first run."
+    }
+  ],
+  "recommended_tier": {
+    "tier": "all",
+    "reasoning": "three axes, eight models \u2014 the note asks three questions, two of the three axes cost one parameter each and the third costs none; settling them together is cheaper than a second round."
+  },
+  "_fixture_note": "Stub reply for toy_super. The two neutralizable axes declare neutral_value: 0.0 and the third declares none, which is the mixed grouping the supermodel encoding exists for. Whether the feedback structure wins is the engine's arithmetic, not this stub's claim."
+}

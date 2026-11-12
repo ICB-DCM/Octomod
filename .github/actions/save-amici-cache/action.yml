@@ -1,0 +1,45 @@
+name: Save the AMICI compile cache
+description: >-
+  The other half of setup-engine's restore: prune what no job has loaded for a
+  week, then save the cache under a key naming its contents, unless nothing
+  changed since the restore.
+
+runs:
+  using: composite
+  steps:
+    # Every build that is not an in-process hit opens `.lock_<key>` for
+    # writing (estimation._cache_key_lock), and tar keeps mtimes across a
+    # restore, so a lock untouched for a week names a model no job has loaded
+    # in that time. Without this every entry carries every model compiled
+    # since the toolchain last changed.
+    - name: Prune unused models and name the contents
+      id: manifest
+      if: env.AMICI_CACHE_PREFIX != ''
+      shell: bash
+      run: |
+        mkdir -p .amici_cache
+        if ! find .amici_cache -maxdepth 1 -name '.lock_*' \
+            -newer "$RUNNER_TEMP/amici-cache-restored" | grep -q .; then
+          echo "cache: no model compiled or loaded by this job; nothing to save"
+          exit 0
+        fi
+        find .amici_cache -maxdepth 1 -name '.lock_*' -mtime +7 -printf '%f\n' |
+          while read -r lock; do
+            rm -rf ".amici_cache/amici_${lock#.lock_}" ".amici_cache/$lock"
+          done
+        key="${AMICI_CACHE_PREFIX}$(ls .amici_cache | sort | sha256sum | cut -c1-16)"
+        echo "key=$key" >> "$GITHUB_OUTPUT"
+        echo "cache: $(ls .amici_cache | wc -l) model(s), key $key (restored ${AMICI_CACHE_MATCHED:-nothing})"
+
+    # A restore that compiled nothing new has the key it was restored from:
+    # saving it again would upload an identical entry.
+    - name: Save the AMICI compile cache
+      if: >-
+        steps.manifest.outputs.key != '' &&
+        steps.manifest.outputs.key != env.AMICI_CACHE_MATCHED
+      uses: actions/cache/save@v4
+      with:
+        path: |
+          .amici_cache/amici_*/m_*
+          .amici_cache/.lock_*
+        key: ${{ steps.manifest.outputs.key }}

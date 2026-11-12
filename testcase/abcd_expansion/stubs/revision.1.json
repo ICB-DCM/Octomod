@@ -1,0 +1,45 @@
+{
+  "diagnosis": "STUB call 1: the selected model still carries sigma_obs_ProD above the replicate floor while KinA_p and RegB_p sit at it. Before proposing I want the residuals of the selected model grouped by the inhibitor flag, the form of the ProD residual in the BX-11 arm, the identical-prediction control for the two u=1 arms, and what the selected model predicts with the RegB route shut.",
+  "requested_diagnostics": [
+    {
+      "kind": "residuals_for",
+      "args": {
+        "candidate_id": "product_feedback",
+        "group_by": "bx11"
+      }
+    },
+    {
+      "kind": "fit_residual_form",
+      "args": {
+        "candidate_id": "product_feedback",
+        "observable_id": "obs_ProD",
+        "condition_id": "c_u1_bx"
+      }
+    },
+    {
+      "kind": "compare_conditions",
+      "args": {
+        "candidate_id": "product_feedback",
+        "observable_id": "obs_ProD",
+        "conditions": [
+          "c_u1",
+          "c_u1_bx"
+        ]
+      }
+    },
+    {
+      "kind": "simulate_with",
+      "args": {
+        "candidate_id": "product_feedback",
+        "parameter_overrides": {
+          "k_actB": 1e-06
+        },
+        "observables": [
+          "obs_ProD"
+        ]
+      }
+    }
+  ],
+  "axes": [],
+  "stop_instead": false
+}

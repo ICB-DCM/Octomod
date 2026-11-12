@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 480" width="1200" height="480" role="img" aria-labelledby="t d" font-family="Helvetica Neue, Helvetica, Arial, sans-serif">
+  <title id="t">How mechanistic modelling has been done</title>
+  <desc id="d">Five steps in sequence: research question; literature and data; reduce to essentials; build the model; fit and gain insight. A sixth step, adjust if needed, loops from the fit back to any earlier step. Steps two to five are shaded as the iterative part, and step four is highlighted.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,1 L9,5 L0,9 z" fill="#6b6b6b"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="480" rx="14" fill="#f8f6f1"/>
+
+  <!-- the iterative part: steps 2-6 -->
+  <rect x="236" y="34" width="944" height="424" rx="34" fill="#f3e2cd"/>
+
+  <!-- step boxes: 196 wide, 20 apart in the shaded band -->
+  <g stroke-width="1.5">
+    <rect x="20"  y="60" width="196" height="196" rx="10" fill="#faf8f3" stroke="#e2dcd2"/>
+    <rect x="256" y="60" width="196" height="196" rx="10" fill="#f5e6d4" stroke="#e7d4be"/>
+    <rect x="492" y="60" width="196" height="196" rx="10" fill="#f5e6d4" stroke="#e7d4be"/>
+    <rect x="728" y="60" width="196" height="196" rx="10" fill="#f5e6d4" stroke="#e7d4be"/>
+    <rect x="964" y="60" width="196" height="196" rx="10" fill="#f5e6d4" stroke="#e7d4be"/>
+  </g>
+  <!-- step 4 highlighted -->
+  <rect x="716" y="48" width="220" height="220" rx="22" fill="none" stroke="#e39a4c" stroke-width="3.5"/>
+
+  <g font-size="15" font-weight="700" letter-spacing="1.5" fill="#2f5b8c">
+    <text x="36"  y="90">STEP 1</text>
+    <text x="272" y="90">STEP 2</text>
+    <text x="508" y="90">STEP 3</text>
+    <text x="744" y="90">STEP 4</text>
+    <text x="980" y="90">STEP 5</text>
+  </g>
+  <g font-size="22" font-weight="700" fill="#1c2433">
+    <text x="36"  y="120">Research</text>
+    <text x="36"  y="146">question</text>
+    <text x="272" y="120">Literature</text>
+    <text x="272" y="146">&amp; data</text>
+    <text x="508" y="120">Reduce to</text>
+    <text x="508" y="146">essentials</text>
+    <text x="744" y="120">Build the</text>
+    <text x="744" y="146">model</text>
+    <text x="980" y="120">Fit &amp; gain</text>
+    <text x="980" y="146">insight</text>
+  </g>
+  <g font-size="17" fill="#55585e">
+    <text x="36" y="184">What should the</text>
+    <text x="36" y="206">model explain or</text>
+    <text x="36" y="228">predict?</text>
+    <text x="272" y="184">What is already</text>
+    <text x="272" y="206">known, and what</text>
+    <text x="272" y="228">can be measured?</text>
+    <text x="508" y="184">Keep only the parts</text>
+    <text x="508" y="206">and interactions</text>
+    <text x="508" y="228">the question needs</text>
+    <text x="744" y="184">Choose the</text>
+    <text x="744" y="206">appropriate model</text>
+    <text x="980" y="184">Estimate</text>
+    <text x="980" y="206">parameters,</text>
+    <text x="980" y="228">simulate, interpret</text>
+  </g>
+  <text x="910" y="146" text-anchor="end" font-family="Georgia, 'Times New Roman', serif" font-size="22" font-weight="700" font-style="italic" fill="#e39a4c">ẋ = f(x)</text>
+
+  <!-- forward arrows -->
+  <g stroke="#6b6b6b" stroke-width="1.5" marker-end="url(#arrow)">
+    <line x1="220" y1="158" x2="250" y2="158"/>
+    <line x1="456" y1="158" x2="486" y2="158"/>
+    <line x1="692" y1="158" x2="722" y2="158"/>
+    <line x1="940" y1="158" x2="958" y2="158"/>
+  </g>
+
+  <!-- step 6 and the loop back -->
+  <rect x="510" y="314" width="400" height="116" rx="10" fill="#f0d6ba" stroke="#d99d62" stroke-width="1.5"/>
+  <text x="528" y="346" font-size="19" font-weight="700" fill="#1c2433">STEP 6 · Adjust if needed</text>
+  <text x="528" y="374" font-size="17" fill="#55585e">Mismatch? Revisit the data, the</text>
+  <text x="528" y="398" font-size="17" fill="#55585e">assumptions or the model's form</text>
+  <g fill="none" stroke="#6b6b6b" stroke-width="1.5" marker-end="url(#arrow)">
+    <polyline points="1062,256 1062,372 916,372"/>
+    <polyline points="510,372 354,372 354,264"/>
+  </g>
+  <text x="342" y="306" text-anchor="end" font-size="17" font-style="italic" fill="#55585e">back to any earlier step</text>
+</svg>

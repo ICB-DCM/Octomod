@@ -1,0 +1,59 @@
+{
+  "observables": [
+    {
+      "observable_id": "obs_KinA_p",
+      "maps_to_label": "KinA_p",
+      "formula": "Aa",
+      "transformation": "lin",
+      "noise": {
+        "distribution": "normal",
+        "formula": "sigma_obs_KinA_p",
+        "estimate_sigma": true
+      },
+      "scaling": {
+        "mode": "none",
+        "scale_parameter": null,
+        "offset_parameter": null,
+        "shared_across_conditions": true
+      },
+      "rationale": "MAPPING: The MS assay targets the phosphopeptide, so the column reports the active form only and the observable is the state Aa alone \u2014 not Aa plus the implicit inactive pool. Linear: the noise is additive in uM and the table contains values at and below zero, which a log transformation cannot represent. NOISE + TRANSFORMATION: Additive normal noise with one constant sigma across doses, inhibitor states and times. The replicate spread does not grow with signal level, which rules out a proportional or log-normal model, and the near-zero t=0 lanes scatter to both sides of zero, which a multiplicative model gives zero likelihood. Sigma is estimated per observable because no error column was supplied and two replicates per point is far too few to fix it empirically. SCALING: No scale factor and no offset. The description states the MS is calibrated against heavy-labelled peptide standards and reports absolute uM, and the model's KinA total is normalised to 1 on the same calibration, so the simulated state and the measured column are already in the same units. A free scale factor here would be exactly collinear with the fixed total Atot and would turn a stated calibration into an estimated one."
+    },
+    {
+      "observable_id": "obs_RegB_p",
+      "maps_to_label": "RegB_p",
+      "formula": "Ba",
+      "transformation": "lin",
+      "noise": {
+        "distribution": "normal",
+        "formula": "sigma_obs_RegB_p",
+        "estimate_sigma": true
+      },
+      "scaling": {
+        "mode": "none",
+        "scale_parameter": null,
+        "offset_parameter": null,
+        "shared_across_conditions": true
+      },
+      "rationale": "MAPPING: Same reasoning as KinA_p: the phospho-specific measurement maps to the active state Ba. Linear for the same reason. NOISE + TRANSFORMATION: Same argument as KinA_p. A separate sigma rather than one shared across all three observables: the three peptides are quantified against different standards and there is no reason their precision should be identical, and pooling them would let the noisiest column set the weight of the other two. SCALING: Same reasoning: calibrated absolute concentration against a total normalised to 1. A scale factor would trade off against Btot and against k_actB, widening every downstream interval for no evidential gain."
+    },
+    {
+      "observable_id": "obs_ProD",
+      "maps_to_label": "ProD",
+      "formula": "D",
+      "transformation": "lin",
+      "noise": {
+        "distribution": "normal",
+        "formula": "sigma_obs_ProD",
+        "estimate_sigma": true
+      },
+      "scaling": {
+        "mode": "none",
+        "scale_parameter": null,
+        "offset_parameter": null,
+        "shared_across_conditions": true
+      },
+      "rationale": "MAPPING: ProD is a single species and is measured directly, so the observable is D. Note that PreC is not measured and is not a state; nothing in the observable set constrains the precursor pool independently, so the stated Ctot = 5 uM is carrying real weight in the fit. NOISE + TRANSFORMATION: Same additive-normal argument. ProD is the observable the intent is scored on, so an over-tight sigma here directly inflates the apparent significance of any misfit; estimating it rather than assuming it is what keeps the residual scale honest. SCALING: Same reasoning, and here the cost of getting it wrong is largest: a free scale on ProD would trade off against the 5 uM precursor pool and against the conversion rate, so the model could absorb a structurally wrong conversion route by rescaling the product instead of fitting it. No offset either \u2014 the description explains the sub-zero early values as standard-curve subtraction around a true zero, not as a systematic baseline, and the t=0 samples are uninduced cells with no product present."
+    }
+  ],
+  "_fixture_note": "regenerated 2026-09-07 from the former observable_model / noise_model / scaling_offset stubs: one role, one observation function"
+}

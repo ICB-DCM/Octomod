@@ -1,0 +1,87 @@
+model ifng_gmcsf_macrophage_v2
+  // The selected model of run macrophage_xue_20260929_210535 (round 4,
+  // upstream_stimulus_delay), cleaned of its inert switch machinery and
+  // reparameterised where the fit had walked to a corner of its box:
+  //   - the attenuator R: dR/dt = G_R*A - k_R*R, inhibition 1/(1 + R)
+  //     (G_R = g_R*k_R of the first run; its corner g_R = 100, k_R = 0.12 /h
+  //     is G_R = 12 /h inside the new box)
+  //   - IRF1 production: d*(1 + F_IRF1*h_IRF1*A/(1 + h_IRF1*A)), F_IRF1 the
+  //     fold at saturation (f_IRF1/h_IRF1 of the first run)
+  //   - w_S = 1 and w_lag = 1 (fractions at their physical limit) fixed and
+  //     removed: A is driven by the delayed stimulus stage S_in only, the
+  //     chemokines by the delayed activity A2 only.
+  compartment cell = 1;
+
+  species A in cell, S_in in cell, L_frac in cell, R in cell, A2 in cell;
+  species IRF1_mRNA in cell, SOCS1_mRNA in cell, CXCL9_mRNA in cell, CXCL10_mRNA in cell;
+  species H1 in cell, H2 in cell;
+
+  // initial state: the unstimulated steady state (mRNAs in units of their basal level)
+  A = 0;
+  S_in = 0;
+  L_frac = 1;
+  R = 0;
+  A2 = 0;
+  IRF1_mRNA = 1;
+  SOCS1_mRNA = 1;
+  CXCL9_mRNA = 1;
+  CXCL10_mRNA = 1;
+  H1 = 1;
+  H2 = 0;
+
+  // upstream signalling stage: the IFN-γ input (IFNg, 1 or 0 per condition) reaches A through a first-order delay
+  J_Sin_on: -> S_in; cell * k_Sin * IFNg;
+  J_Sin_off: S_in -> ; cell * k_Sin * S_in;
+
+  // effective IFN-γ-driven transcriptional activity: generated from the delayed stimulus,
+  // scaled by the remaining stimulus fraction, inhibited by the attenuator R; one shared k_A
+  // fixes its scale (unattenuated stimulated steady state 1)
+  J_A_prod: -> A; cell * k_A * S_in * L_frac / (1 + R);
+  J_A_deg: A -> ; cell * k_A * A;
+
+  // activity-dependent loss of signalling capacity (receptor down-regulation or ligand consumption)
+  J_L_use: L_frac -> ; cell * k_LA * A * L_frac;
+
+  // generic A-induced attenuator (phosphatases, PIAS, receptor down-regulation lumped)
+  J_R_syn: -> R; cell * G_R * A;
+  J_R_deg: R -> ; cell * k_R * R;
+
+  // delayed copy of the activity driving the chemokines (a stand-in for secondary induction)
+  J_A2_syn: -> A2; cell * k_lag * A;
+  J_A2_deg: A2 -> ; cell * k_lag * A2;
+
+  // transcripts: basal + activity-dependent production, first-order degradation
+  J_IRF1_syn: -> IRF1_mRNA; cell * d_IRF1 * (1 + F_IRF1 * h_IRF1 * A / (1 + h_IRF1 * A));
+  J_IRF1_deg: IRF1_mRNA -> ; cell * d_IRF1 * IRF1_mRNA;
+  J_SOCS1_syn: -> SOCS1_mRNA; cell * d_SOCS1 * (1 + f_SOCS1 * A);
+  J_SOCS1_deg: SOCS1_mRNA -> ; cell * d_SOCS1 * SOCS1_mRNA;
+  J_CXCL9_syn: -> CXCL9_mRNA; cell * d_CXCL9 * (1 + f_CXCL9 * A2);
+  J_CXCL9_deg: CXCL9_mRNA -> ; cell * d_CXCL9 * CXCL9_mRNA;
+  J_CXCL10_syn: -> CXCL10_mRNA; cell * d_CXCL10 * (1 + f_CXCL10 * A2);
+  J_CXCL10_deg: CXCL10_mRNA -> ; cell * d_CXCL10 * CXCL10_mRNA;
+
+  // culture-handling transient at t = 0, present in every culture (both arms), acting on CXCL10 production only
+  J_H12: H1 -> H2; cell * k_H * H1;
+  J_H2_deg: H2 -> ; cell * k_H * H2;
+  J_CXCL10_H: -> CXCL10_mRNA; cell * d_CXCL10 * f_H * H2;
+
+  // parameters (nominals = the first run's fitted values)
+  IFNg = 1;
+  k_Sin = 1.67;
+  k_A = 0.102;
+  k_LA = 1.0;
+  G_R = 12;
+  k_R = 0.12;
+  k_lag = 1.2;
+  d_IRF1 = 2.63;
+  d_SOCS1 = 0.569;
+  d_CXCL9 = 0.371;
+  d_CXCL10 = 1.46;
+  F_IRF1 = 10.7;
+  h_IRF1 = 130;
+  f_SOCS1 = 50.9;
+  f_CXCL9 = 628;
+  f_CXCL10 = 1830;
+  f_H = 20.6;
+  k_H = 0.304;
+end

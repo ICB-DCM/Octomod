@@ -1,0 +1,68 @@
+name: abcd_combined
+
+# Simulation horizon for the S1 gate ladder; matches the last sampled time.
+t_end: 120
+
+# The combined case. Same truth and lab note as abcd_mechanism; the design
+# adds a sixth condition, the low-dose BX-11 cell (u = 0.25, bx11 = 1), and holds
+# it out here at staging. Written as column=value pairs in the DATA's own column
+# vocabulary (synmod4_ms.csv: u, bx11), matched semantically against the
+# engine-derived condition keys — never against the agent's display labels.
+# The agent never chooses what it is scored on.
+#
+# Why this cell and not u=4,bx11=1 (abcd_prediction's exam): the five training
+# conditions keep the two mechanism-revealing arms — BX-11 at u=1 and u=4
+# (the RegB-independent conversion route) and u=4 untreated (the product
+# feedback) — so the criterion still identifies the mechanism, and the held-out
+# cell is the one where the structures DISAGREE most about ProD: a RegB-only
+# chain predicts none, the true wiring predicts a rise. T2' per candidate is
+# therefore informative rather than a formality.
+holdout:
+  condition_labels:
+    - u=0.25,bx11=1
+
+# No externally supplied model or network: mechanism discrimination needs the
+# agent to propose the candidate set.
+supplied: {}
+
+notes: >-
+  Blind-modelling benchmark on a fictional module with an invented, known ground
+  truth. Same generating equations, parameters and noise SDs as abcd_mechanism
+  and abcd_prediction; its own make_data.py (one more condition, 96 rows) and
+  its own truth/. truth/ holds the answer key and MUST NEVER be staged into
+  agent context: the pipeline stages description.md and data/ only, and a run
+  whose agent I/O contains anything from truth/ is void.
+
+  This case carries BOTH checks the two sibling cases carry one of. The
+  information criterion over the candidate set identifies the mechanism on the
+  five training conditions (as in abcd_mechanism); the held-out prediction at
+  (u=0.25, BX-11) then corroborates — or contradicts — what the criterion
+  picked (as in abcd_prediction). The engine judges T2' PER CANDIDATE and a
+  candidate that fails the held-out cell cannot be the winner, whatever its
+  criterion rank (Rule 3): the report shows T2' beside every candidate's
+  weight, and a run in which every candidate fails ends as
+  completed_t2prime_unmet rather than as a success.
+
+  Amended: the question
+  in intent.yaml and the lab note are abcd_blind's, verbatim — no candidate
+  wiring is enumerated, the lab note carries no "open questions" section — plus
+  one sentence asking for the held-out prediction. A listed candidate is
+  transcribed, not found; a claim of "unseen mechanisms" needs the blind
+  intent. The live run is where the blindness matters; the stubs are canned and
+  the stub smoke's numbers do not change.
+
+  Expected on the stub backend: the three canned candidates are fitted; the one
+  with both extra ingredients wins the criterion and passes T2'; the base chain
+  fails T2' on ProD, because under BX-11 it cannot make ProD at any parameter
+  setting. The stubs' canned interpretation asserts that winner; the computed
+  table and the S7 consistency gate are what hold it to that.
+
+  Readout is calibrated MS in uM, so the correct scaling decision is "none".
+  Negative early-time values are honest noise realisations around zero and must
+  not be clipped or dropped.
+
+# A token-free fixture: it runs without the knowledge module, on its
+# canned replies.
+grounding:
+  skip: true
+  why: fixture

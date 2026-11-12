@@ -1,0 +1,112 @@
+name: toy_super_redraft
+
+# Simulation horizon for the S1 gate ladder; matches the last sampled time.
+t_end: 120
+
+# The middle dose is predicted, not fitted. It is the right one to hold out:
+# the two extremes carry the contrast the design rests on — the feedback barely
+# moves the sensor at u=0.5 and moves it by 11 sigma at u=8 — so training on
+# both ends and predicting the middle asks the model to interpolate a mechanism
+# rather than a curve. Verified before shipping: discrimination survives it
+# (the feedback structure wins by 428 AIC units on the two training doses).
+holdout:
+  condition_labels:
+    - u=2
+
+# No externally supplied model or network — construction is unconstrained.
+supplied: {}
+
+notes: >-
+  WHY THIS CASE EXISTS.
+  The supermodel encoding had no end-to-end exercise. No shipped axis
+  declared a `neutral_value`, so `partition`, `verified_partition`,
+  `enumerate_grouped` and the T1 neutrality gate only ever ran on synthetic
+  dictionaries, and the first real exercise would have been a LIVE run. This is
+  a small, deterministic, stub-driven case whose axes are written to be
+  neutralizable — and one that is deliberately not.
+
+  THE THREE AXES, and what each is for:
+
+    product_feedback   the product divides sensor activation. Written as a
+                       STRENGTH that is off at 0, not as a half-saturating
+                       constant that is off at infinity, so `neutral_value: 0`
+                       is finite and exact. TRUE in the truth.
+    alt_route          an input route to the product that bypasses the sensor,
+                       off at 0. Exactly neutralizable, and FALSE — so the
+                       lattice contains a cheap wrong axis, which is what makes
+                       the criterion comparison informative rather than a
+                       parameter-count contest.
+    zeroth_order_loss  constant product loss replacing first-order. Declares NO
+                       neutral value, because no constant equals k_deg*P. It
+                       must fall OUT of the supermodel and stay its own
+                       structure — which is the mixed grouping the module
+                       describes, and the branch nothing else exercises.
+
+  So the expected encoding is 2 structures for 8 candidates: two AMICI compiles
+  where the per-candidate encoding needs eight, and within each structure the
+  candidates differ by parameter table alone, which is what makes their dAIC a
+  statement about the parameter table and nothing else.
+
+  ONE CLAIM THIS CASE DOES NOT SUPPORT, corrected by the engine on the first
+  full run. I expected the runner-up to land INSIDE the indistinguishable band
+  and so to give the `undecided_axes` rule its first real exercise. It does
+  not: `product_feedback+alt_route` measures dAIC = 2.055, and the band is
+  dAIC <= 2. The reason is exact rather than unlucky — `k_alt`'s lower bound is
+  1e-4 and its true value is 0, so the optimiser pins it AT the bound
+  (`at_bounds: ['k_alt']`, fitted 1.0e-4), the extra parameter buys 0.055 of
+  chi2, and dAIC settles just above 2 x dk = 2. Whether it lands at 1.9 or 2.1
+  is then decided by noise, so this fixture must not be used to test the
+  undecided rule and the intent does not ask for it. What it DOES show, and
+  reports, is a false axis priced honestly: pinned at its bound, buying
+  nothing, two AIC units worse.
+
+  MEASURED OFFLINE BEFORE SHIPPING (make_data.py's signature checks plus a
+  direct 8-structure fit, both reproducible from the seed):
+
+    the sensor overshoots by 8.1 sigma at the top dose — a model without
+      feedback is monotone at EVERY parameter value, so this is a qualitative
+      separation and not a tight fit
+    feedback moves the sensor by 11.8 sigma at u=8 and 1.8 sigma at u=0.5, so
+      the dose series carries the contrast rather than repeating one condition
+    on all three doses: fb 78.4 AIC, fb+alt 80.4, everything without fb 766.9
+      or worse. Winner weight 0.73, and the runner-up is the useless-parameter
+      neighbour at dAIC 2.02
+    on the two training doses (u=2 held out): fb 56.4, fb+alt 58.4, base 484.8
+
+  AND MEASURED BY THE ENGINE ITSELF (runs/toysuper_6, exit 0, 612 s wall):
+    encoding: product_feedback + alt_route absorbed into one structure,
+      cooperative_production separated because it "adds no parameter, so no
+      parameter can turn it off" — 8 candidates over 2 structures, 6 AMICI
+      compiles saved, both neutral values verified to rtol 1e-6
+    winner product_feedback, decisive, weight 0.7365 (offline: 0.7356)
+    runner-up product_feedback+alt_route at dAIC 2.055 (offline: 2.05)
+    every structure without feedback >= 104.9 AIC units behind
+    held-out dose u=2 predicted at nRMSE 0.093 (sensor) and 0.025 (product)
+    petab_select 0.4.0 agrees with the local arithmetic on AIC, weights and
+      winner; misfit closed on the winner; all seven profiles finite
+
+  truth/ holds the answer key and MUST NEVER be staged into agent context: the
+  pipeline stages description.md and data/ only, and a run whose agent_io
+  contains anything from truth/ is void. The truth was authored by Opus on
+  2026-09-10 with explicit human approval, overriding the standing rule that
+  Opus does not write truth/; truth/true_parameters.json is signed off by a person.
+
+  The shipped stubs declare the three axes and their neutral values; whether
+  the feedback structure actually wins is the ENGINE's arithmetic, not the
+  stub's claim, and the S7 consistency gate is what holds the canned
+  interpretation to it.
+
+# Fixture (2026-09-20): a copy of toy_super for ONE protocol test — a human
+# `redraft:` at the assembly_cost_boundary gate must be DELIVERED to the observation
+# agent, not only ledgered (macrophage_xue_1, 2026-09-18: the caches were
+# deleted but the per-candidate s3 marker was not, so nothing was re-assembled
+# and the identical observables.tsv came back). The observation stub is
+# a two-reply SEQUENCE: .1.json has no scaling on either channel, .2.json puts
+# a scale factor `sc_P` on the P_uM channel — what the test asks for. No truth/
+# on purpose: nothing is scored here, only whether the request arrived.
+
+# A token-free fixture: it runs without the knowledge module, on its
+# canned replies.
+grounding:
+  skip: true
+  why: fixture

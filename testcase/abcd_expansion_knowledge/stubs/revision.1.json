@@ -1,0 +1,8 @@
+{
+  "diagnosis": "STUB call 1: the selected model leaves systematic residuals in RegB_p and KinA_p late at the top dose, where ProD is highest. Before proposing I want to know whether a product-driven inactivation of active KinA is described for this kind of module.",
+  "requested_research": [
+    "Is ProD described as inactivating active KinA without being consumed (Aa + D -> D)?"
+  ],
+  "axes": [],
+  "stop_instead": false
+}

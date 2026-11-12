@@ -1,0 +1,36 @@
+name: toy_phos_blank
+
+# Holdout is fixed here at staging time and matched against the S2 condition
+# labels. The agent never chooses what it is scored on. The engine renders
+# numeric condition labels with %g, so the dose column value 3.0 becomes "dose=3".
+holdout:
+  condition_labels:
+    - dose=3
+
+# No externally supplied network specification for this case — construction is
+# unconstrained and must be derived from description.md alone.
+supplied: {}
+
+notes: >-
+  Synthetic, known truth (see make_data.py, which the agents never see). The
+  generating model is structurally identical to the model the construction agent
+  is expected to build, so a failure here is a pipeline failure, not a model
+  misspecification: this case is a floor, not a challenge. The readout carries an
+  unknown scale factor and additive noise, so the pipeline must introduce an
+  observable scaling parameter; comparing the simulated species to the
+  densitometry column directly will fail the magnitude-reconciliation gate.
+  Fitting uses doses 0.3 and 1 only, which still identifies both rate constants
+  (two dose levels give two independent effective rates), so the held-out
+  prediction at dose 3 is a genuine test rather than an interpolation.
+  Three of the 36 measured values are negative; they are honest noise
+  realisations around a near-zero signal and must not be clipped or dropped.
+
+# Acceptance fixture: the densitometry is NOT background-subtracted here; blank lanes
+# (dose 0, no ligand) carry the ~0.5 AU background. data_extraction.1.json names the HELD-OUT
+# dose=3 as its reference (must be refused by name); .2.json names dose=0 (the blank).
+
+# A token-free fixture: it runs without the knowledge module, on its
+# canned replies.
+grounding:
+  skip: true
+  why: fixture

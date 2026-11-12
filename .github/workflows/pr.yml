@@ -1,0 +1,120 @@
+name: PR
+
+# Style, then the whole battery: every suite once, each group of
+# tests/run_all.py GROUPS (the step or part of the engine a suite tests) as its
+# own job on its own runner, so the groups run side by side and the wall time
+# is the slowest group's. A green tick here is the battery, including the
+# scientific suites — parameter recovery, held-out rejection, the model-space
+# search, selection, expansion — which run at full effort; the plumbing suites
+# run under the reduced-effort overlay (workflows/overlays/quick.yaml), which
+# changes effort only, never a pass criterion.
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+concurrency:
+  # A new push supersedes the old run on the same branch; main is never
+  # cancelled, so its history stays complete.
+  group: pr-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+permissions:
+  contents: read
+
+jobs:
+  style:
+    name: style (black + ruff)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-engine
+        with:
+          amici-cache: "false"
+      # Both are PINNED dev dependencies, so this runs them from the lockfile
+      # rather than from whatever the runner has on PATH — a formatter's output
+      # is only reproducible at a fixed version.
+      - run: uv run black --check .
+      - run: uv run ruff check .
+
+  # The list of groups comes from the registry, so a new group needs no edit
+  # here; `--list-groups` is stdlib-only and needs no environment.
+  battery-plan:
+    name: battery (plan)
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      groups: ${{ steps.plan.outputs.groups }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: plan
+        run: |
+          groups=$(python3 tests/run_all.py --list-groups \
+            --exclude lb3 --exclude curves)
+          echo "groups: $groups"
+          echo "groups=$groups" >> "$GITHUB_OUTPUT"
+
+  battery:
+    name: battery (${{ matrix.group }})
+    needs: battery-plan
+    runs-on: ubuntu-latest
+    # the slowest group is one or two end-to-end smokes (~10-15 min on the
+    # 2-core default); the ceiling is generous so a slow runner reports real
+    # failures rather than a timeout that says nothing
+    timeout-minutes: 60
+    strategy:
+      # every group reports, so one red group does not hide another
+      fail-fast: false
+      matrix:
+        group: ${{ fromJSON(needs.battery-plan.outputs.groups) }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-engine
+        with:
+          cache-group: ${{ matrix.group }}
+
+      # Token-free: the battery runs stub agents, so no API key and no `claude`
+      # CLI are needed, and a fork's PR costs nothing to test.
+      #
+      # --jobs is set from the runner's cores rather than left to the default
+      # (cores/2), because these suites are mostly waiting on subprocesses.
+      #
+      # The two exclusions are not flaky tests being swept under a rug: both
+      # read artifacts of PREVIOUS runs out of `runs/`, which is gitignored and
+      # therefore empty on any fresh checkout.
+      #
+      #   lb3     any run with analysis_report.json
+      #   curves  any run carrying a residual series
+      #
+      # They pass on a developer's machine only because `runs/` there holds
+      # dozens of finished runs. `scaleshapes` and `batteryfeedback` need the
+      # hardcoded runs/live_ctd_blind_{4,3} too, but declare it themselves: one
+      # `SKIP: <reason>` line and exit 77, which run_all reports as SKIP, so
+      # they need no flag.
+      - name: Run the battery (${{ matrix.group }})
+        run: |
+          uv run python tests/run_all.py --group "${{ matrix.group }}" \
+            --jobs "$(nproc)" \
+            --exclude lb3 --exclude curves
+
+      # also after a failed battery: its compiles are as good as a green one's
+      # (a cancelled job may stop mid-compile, so it saves nothing)
+      - name: Save the AMICI compile cache
+        if: success() || failure()
+        uses: ./.github/actions/save-amici-cache
+
+  # One check that is green only when every group is: the name a branch rule
+  # can require, whatever the groups are.
+  battery-result:
+    name: battery
+    needs: battery
+    # not always(): a superseded run is cancelled, not red
+    if: ${{ !cancelled() }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - run: |
+          echo "groups: ${{ needs.battery.result }}"
+          test "${{ needs.battery.result }}" = success

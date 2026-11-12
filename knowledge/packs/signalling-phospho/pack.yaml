@@ -1,0 +1,21 @@
+id: signalling-phospho
+version: 0.1.0
+layer: domain
+scope: >
+  Tacit failure modes specific to modelling phosphorylation-based intracellular signalling on the minutes-to
+  -hours timescale: conserved protein pools across phospho-states, basal phosphatase activity and what
+  starvation does to it, timescale separation between signalling and expression, dose entering through
+  receptor occupancy, and antibody specificity. Assumes the measurement layer for assay mechanics. Does not
+  cover metabolism, gene-regulatory dynamics or epidemiological compartment models.
+applies_to:
+  - construction
+  - observation
+  - condition
+  - interpretation
+  - revision_proposal
+curation_status: draft-unreviewed
+provenance:
+  drafted_by: agent
+  drafted_on: 2026-08-31
+  method: LLM draft; no expert review yet
+  reviewed_by: null

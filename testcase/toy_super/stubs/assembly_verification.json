@@ -1,0 +1,25 @@
+{
+  "verdicts": [
+    {
+      "aspect": "noise model vs readout physics",
+      "ok": true,
+      "note": "Additive normal with an estimated constant sigma per observable matches both channels as the note describes them \u2014 a single absolute precision each, taken from replicate spread on standards \u2014 and it is the only family consistent with the sub-zero early-time values, which a multiplicative or log-normal model assigns zero likelihood."
+    },
+    {
+      "aspect": "identifiability of the enumerated space",
+      "ok": true,
+      "note": "Six free parameters at most (four base, plus at most two axis parameters, plus two sigmas) against 56 training measurements over two doses and seven timepoints. The bypass route and the feedback strength enter the two channels differently \u2014 the bypass adds product with no sensor dependence, the feedback bends the sensor trace \u2014 so they are not trading against one another."
+    },
+    {
+      "aspect": "degrees of freedom on the training set",
+      "ok": true,
+      "note": "The middle dose is held out, so training is two doses. That is thin for a dose response and it is stated: the case asks the model to interpolate a mechanism, not to extrapolate one, and the two training doses are the extremes so the interpolation is bounded on both sides."
+    },
+    {
+      "aspect": "condition encoding",
+      "ok": true,
+      "note": "`u` is the only factor and it is a condition-owned constant, not an estimated parameter. Nothing is pre-equilibrated, which matches a note that reports both readouts starting at zero."
+    }
+  ],
+  "overall": "pass"
+}

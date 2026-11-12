@@ -1,0 +1,42 @@
+# Frozen S0 intent for toy_phos_knowledge: toy_phos, with the one reaction the
+# person knows the model must contain written down. Written at staging time and
+# never edited by an agent.
+
+question: >-
+  How does phospho-R respond to ligand dose, and can a calibrated model predict
+  the response at the highest dose?
+
+system: synthetic receptor module (toy)
+
+required_entities:
+  - R
+  - Rp
+
+# The reactions the model must contain. The knowledge module keeps each one,
+# required, whatever the literature says: the base implements it, and a draft
+# that lacks one fails `model_essential_reactions`.
+required_reactions:
+  - equation: R -> Rp
+    note: ligand-driven phosphorylation; the ligand enters as a dose, not a species
+
+required_predictions:
+  - pR_au time course at dose=3
+
+perturbations:
+  - ligand dose 0.3 / 1 / 3 (relative units)
+
+timescale: minutes, horizon 60 min
+
+scope_exclusions:
+  - receptor synthesis/degradation
+  - spatial effects
+
+success_criteria:
+  - held-out dose=3 normalised RMSE < 0.2
+  - ensemble band covers >= 80% of held-out points
+
+inference_target: prediction
+
+domain_packs:
+  - general-dynamics
+  - measurement-tech

@@ -1,0 +1,5 @@
+A two-state model of receptor phosphorylation — a note (fixture document, 2021).
+
+A published two-state model of a related receptor, in another cell line, writes the
+dephosphorylation of Rp as first order in Rp, catalysed by a constitutive phosphatase.
+Nothing here names a rate constant value.

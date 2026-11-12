@@ -1,0 +1,6 @@
+Receptor module phosphorylation kinetics — a note (fixture document, 2024).
+
+In cells expressing the receptor module, ligand addition drives phosphorylation of R to Rp
+within minutes; a constitutive phosphatase returns Rp to R, and the steady-state fraction
+phosphorylated rises with dose and saturates. Total receptor stays near 10 normalised units
+over the first hour. Nothing here names a rate constant value.

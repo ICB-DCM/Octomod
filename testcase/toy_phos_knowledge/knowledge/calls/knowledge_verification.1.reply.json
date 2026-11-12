@@ -1,0 +1,39 @@
+{
+  "classifications": [
+    {
+      "id": "req_1.e1",
+      "evidence_kind": "direct_experimental",
+      "context_match": "same_system",
+      "stance": "supports",
+      "note": "the note shows the conversion in these cells"
+    },
+    {
+      "id": "rx_1.e1",
+      "evidence_kind": "direct_experimental",
+      "context_match": "same_system",
+      "stance": "supports",
+      "note": "the note shows the return in these cells"
+    },
+    {
+      "id": "rx_1.e2",
+      "evidence_kind": "mechanistic_model",
+      "context_match": "related_system",
+      "stance": "supports",
+      "note": "a published model of a related receptor"
+    },
+    {
+      "id": "rx_2.e1",
+      "evidence_kind": "indirect",
+      "context_match": "related_system",
+      "stance": "supports",
+      "note": "correlational, over hours; no quote to read around"
+    },
+    {
+      "id": "fact_1.e1",
+      "evidence_kind": "direct_experimental",
+      "context_match": "same_system",
+      "stance": "supports",
+      "note": "the note reports the total over the first hour"
+    }
+  ]
+}

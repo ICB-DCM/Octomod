@@ -1,0 +1,12 @@
+observableId	observableFormula	noiseFormula	noiseDistribution
+obsv_Pal	Pal	sigma_Pal * Pal	normal
+obsv_Sph	Sph	sigma_Sph * Sph	normal
+obsv_DhCer	DhCer	sigma_DhCer * DhCer	normal
+obsv_Cer	Cer	sigma_Cer * Cer	normal
+obsv_SM	SM	sigma_SM * SM	normal
+obsv_HexCer	HexCer	sigma_HexCer * HexCer	normal
+obsv_PC	PC	sigma_PC * PC	normal
+obsv_DG	DG	sigma_DG * DG	normal
+obsv_CE	CE	sigma_CE * CE	normal
+obsv_Hexdece	Hexdece	sigma_Hexdece * Hexdece	normal
+obsv_Hexdeca	Hexdeca	sigma_Hexdeca * Hexdeca	normal

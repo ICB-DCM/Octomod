@@ -1,0 +1,10 @@
+observableId	observableFormula	noiseFormula
+obsv_Pal	Pal	noiseParameter1_obsv_Pal
+obsv_Sph	Sph	noiseParameter1_obsv_Sph
+obsv_DhCer	DhCer	noiseParameter1_obsv_DhCer
+obsv_Cer	Cer	noiseParameter1_obsv_Cer
+obsv_SM	SM	noiseParameter1_obsv_SM
+obsv_HexCer	HexCer	noiseParameter1_obsv_HexCer
+obsv_PC	PC	noiseParameter1_obsv_PC
+obsv_DG	DG	noiseParameter1_obsv_DG
+obsv_CE	CE	noiseParameter1_obsv_CE

@@ -1,0 +1,28 @@
+{
+  "mappings": [
+    {
+      "file": "decay.csv",
+      "observable_label": "A_conc",
+      "time_column": "time_h",
+      "value_column": "A_conc",
+      "condition_columns": [],
+      "condition_label_template": "main",
+      "replicate_column": "replicate",
+      "units": "calibrated a.u.",
+      "error_type": "replicates"
+    }
+  ],
+  "observable_labels": [
+    {
+      "label": "A_conc",
+      "description": "calibrated fluorescence of reporter A",
+      "units": "calibrated a.u.",
+      "error_type": "replicates",
+      "n": 2
+    }
+  ],
+  "flags": [
+    "single experimental condition — no condition column exists, so the condition label is the literal 'main' and no held-out condition is available"
+  ],
+  "notes": "One file, one observable, one condition. Units are declared 'calibrated a.u.' rather than 'arbitrary' on the strength of the description's dilution-series calibration; that declaration is what licenses the scaling decision 'none' downstream, and it is the load-bearing difference between this case and toy_phos. No error column supplied and the two wells are described as independent biological replicates, so error_type is 'replicates' and sigma is estimated. Time is in hours, matching the 10 h horizon in the intent."
+}

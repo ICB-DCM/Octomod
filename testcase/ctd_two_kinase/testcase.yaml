@@ -1,0 +1,47 @@
+name: ctd_two_kinase
+
+t_end: 960
+
+# The exam: the two-kinase tube is held out by its own label. The model is built
+# and fitted on the single-kinase tubes and must predict the combination.
+holdout:
+  condition_labels:
+    - condition=both
+
+supplied: {}
+
+# Research is on and the fence is the year of the supplied paper; the blocklist
+# blocks nothing (blocklist.txt carries the argument). The paper's claims are
+# supplied in intent.yaml as typed evidence and declared in truth/STAGED-ON-PURPOSE.txt.
+research:
+  enabled: true
+  max_publication_year: 2026
+
+notes: >-
+  SYNTHETIC DATA, TRUTH AUTHORED BY THE FRONT END; a person signs off truth/ before
+  any agent sees the case. Regenerate the data with
+  `uv run python testcase/ctd_two_kinase/make_data.py`; truth/ holds the generating
+  values, the generator settings and the mechanism in words.
+
+  WHAT THIS CASE IS FOR. The real CTD measurement resolves how many repeats are
+  phosphorylated, not which; the published analysis of it found local
+  cooperativity and left direction undecided. This case reads the repeats, adds a
+  second kinase with no published kinetic characterisation on this substrate, and
+  holds out the condition in which both kinases act. Three questions the truth
+  answers and the data can reach: the direction of P-TEFb's local effect (broken
+  symmetry, as in ctd_positional), whether the local effect is the kinase's or the
+  substrate's (CDK7 on the same substrate shows none), and whether the two
+  activities add (they do, in the truth). The truth's own assumptions sit only in
+  areas the literature leaves open; the published facts are kept.
+
+  WHAT IT EXERCISES THAT ctd_positional DOES NOT: a held-out condition on a CTD
+  case; three conditions in one problem with two readouts; supplied literature
+  beside research; a second enzyme as an experimental control inside the design.
+
+  truth/ MUST NEVER be staged into agent context.
+
+# A benchmark with ground truth: it runs without the knowledge module,
+# so nothing the module could find reaches the blind run.
+grounding:
+  skip: true
+  why: benchmark

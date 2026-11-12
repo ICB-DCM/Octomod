@@ -1,0 +1,5 @@
+parameterId	parameterScale	lowerBound	upperBound	nominalValue	estimate
+omega	lin	0.5	6.0	1.9	1
+zeta	log10	0.005	0.5	0.02	1
+amp	lin	0.5	1.5	1.0	1
+sigma_obs_A	log10	0.001	1.0	0.05	1

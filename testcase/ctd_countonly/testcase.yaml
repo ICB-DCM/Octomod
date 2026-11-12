@@ -1,0 +1,40 @@
+name: ctd_countonly
+
+t_end: 960
+
+holdout:
+  condition_labels: []
+
+supplied: {}
+
+# Research access is IDENTICAL to ctd_positional's — the control is only a
+# control if the only thing that differs between the two runs is the data. Same
+# cutoff, same (empty) blocklist. See this folder's blocklist.txt.
+research:
+  enabled: true
+  max_publication_year: 2026
+
+notes: >-
+  THE NEGATIVE CONTROL for `testcase/ctd_positional`. Same generating truth, same
+  seed (20260911), same question; the only change is that the positional columns
+  are withheld. Regenerate with
+  `uv run python testcase/ctd_positional/make_data.py`, which writes both files.
+
+  EXPECTED OUTCOME, stated before the run: the mechanism's neighbour dependence
+  should be recoverable, and its DIRECTION should not. The count-data likelihood is
+  exactly invariant under swapping the two directional rate factors — verified at
+  1e-15 relative, so this is a structural non-identifiability rather than a hard
+  estimation problem. The honest answer is to credit the neighbour effect and
+  declare the direction undetermined.
+
+  A run that names a direction here is WRONG. That is the most valuable failure
+  this pair can produce, and it is what makes the positional case's success a
+  RESULT rather than an assertion.
+
+  truth/ points at ctd_positional/truth, which is shared. It MUST NEVER be staged.
+
+# A benchmark with ground truth: it runs without the knowledge module,
+# so nothing the module could find reaches the blind run.
+grounding:
+  skip: true
+  why: benchmark

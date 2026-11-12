@@ -1,0 +1,30 @@
+# benchmark — no human exists. Every gate reached must be covered here; an
+# uncovered gate stops the run honestly (exit 1, "policy did not cover gate X").
+# A benchmark run is fully specified by (testcase, workflow spec, this file).
+profile: benchmark
+caps:
+  usd_cap: 50.0
+  max_expansions: 1      # policy must not become an unbounded mechanism-buying machine
+  redraft_grants: 1
+  n_starts: null
+answers:
+  intent: {answer: y}
+  model_scope: {answer: y, note: "tier: all"}   # capped by search.max_models
+  model_base_scope: {answer: y}                       # the optional base gate — no human to look at the base
+  assembly_cost_boundary: {answer: y}
+  cost_boundary_estimation: {answer: y}
+  evaluation_profiling_gate: {answer: y}
+  revision: {answer: y}                     # then declined once max_expansions is reached
+  revision_proposal_stop_vs_revise: {answer: n}
+  revision_proposal: {answer: y}
+  evaluation_verdict: {answer: y}                          # signed: policy(<sha>), never as a human
+  # a benchmark has no human to judge whether a crossed convergence check
+  # is expected for this model, and accepting one unattended would let an
+  # unconverged fit become a recorded result. It stops instead — the failure is
+  # in the ledger with the check that crossed.
+  estimation_convergence: {answer: n}
+  model_redraft_budget: {answer: y}
+  model_expansion_redraft_budget: {answer: y}   # one more attempt for the candidate expansions, like s1/s2
+  data_redraft_budget: {answer: y}
+  assembly_redraft_budget: {answer: y}   # one more attempt, like s1/s2; never a fallback
+uncovered: stop

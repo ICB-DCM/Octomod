@@ -1,0 +1,7 @@
+{
+  "verdicts": [
+    {"aspect": "candidate set", "ok": true, "note": "each candidate differs from the base only in its declared feature, and the reference chain M1 is present"},
+    {"aspect": "structure sanity", "ok": false, "note": "stub concern so the smoke can see an audit line reach the card"}
+  ],
+  "overall": "concerns"
+}

@@ -1,0 +1,31 @@
+# Frozen S0 intent for toy_decay_params. Written at staging time and never edited
+# by an agent. Inference target is parameter_values, so the case is scored on the
+# uncertainty interval and not on any predicted trajectory.
+
+question: >-
+  What is the degradation rate constant k1 of reporter A, with uncertainty?
+
+system: fluorescent reporter decay (toy)
+
+required_entities:
+  - A
+
+required_predictions:
+  - k1 with finite confidence interval
+
+perturbations:
+  - synthesis shutoff at t=0
+
+timescale: hours, horizon 10 h
+
+scope_exclusions:
+  - synthesis
+  - growth dilution
+
+success_criteria:
+  - profile CI for k1 finite and narrower than one decade
+
+inference_target: parameter_values
+
+domain_packs:
+  - general-dynamics

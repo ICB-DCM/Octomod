@@ -1,0 +1,180 @@
+{
+ "species": [
+  {
+   "id": "A",
+   "denotes": "Effective IFN-γ-driven transcriptional activity shared by all four genes; lumps receptor/JAK/STAT1 activation, nuclear STAT1 and any co-activators. Not a STAT1 concentration and not observed.",
+   "unit_convention": "Dimensionless; 0 without IFN-γ, unattenuated stimulated steady state exactly 1 (scale fixed by the shared k_A)",
+   "lump_membership": "All IFN-γ-dependent transcriptional input upstream of the four promoters"
+  },
+  {
+   "id": "S_in",
+   "denotes": "Upstream signalling stage between the IFN-γ input and the activity: a first-order delay of the stimulus (receptor engagement and JAK activation lumped). Not observed.",
+   "unit_convention": "Dimensionless; relaxes to IFNg (1 under IFN-γ, 0 in controls) with rate k_Sin",
+   "lump_membership": "Receptor binding and JAK activation"
+  },
+  {
+   "id": "L_frac",
+   "denotes": "Fraction of the initial effective IFN-γ stimulus still acting; lost in proportion to the activity (receptor down-regulation or ligand consumption lumped). Not observed.",
+   "unit_convention": "Dimensionless fraction, starts at 1",
+   "lump_membership": "Ligand depletion and loss of receptor responsiveness"
+  },
+  {
+   "id": "R",
+   "denotes": "Generic unmeasured attenuator produced in response to A (phosphatases, PIAS, receptor down-regulation lumped), inhibiting the generation of A. Not observed.",
+   "unit_convention": "Dimensionless, in inhibition units: the generation of A is divided by (1 + R); basal 0",
+   "lump_membership": "All A-induced negative regulators other than an explicit SOCS1-transcript route"
+  },
+  {
+   "id": "A2",
+   "denotes": "Delayed copy of the activity that drives CXCL9 and CXCL10 production (a stand-in for secondary induction through co-activators). Not observed.",
+   "unit_convention": "Units of A (steady state A2 = A)",
+   "lump_membership": "Secondary transcriptional input to the chemokine promoters"
+  },
+  {
+   "id": "IRF1_mRNA",
+   "denotes": "IRF1 transcript, measured by probe ILMN_1708375 (data column IRF1_log2)",
+   "unit_convention": "Relative to its own basal steady-state level (basal = 1). The readout is log2 intensity: log2(IRF1_mRNA) plus an offset (the baseline log2 intensity, per donor if declared); no second log of the data",
+   "lump_membership": "All IRF1 mRNA isoforms hybridising the single probe"
+  },
+  {
+   "id": "SOCS1_mRNA",
+   "denotes": "SOCS1 transcript, probe ILMN_1774733 (data column SOCS1_log2); the measured mRNA only, never the protein",
+   "unit_convention": "Relative to basal steady state (basal = 1); log2 readout with offset as for IRF1. Control values near 6.1-6.6 log2 are the array floor",
+   "lump_membership": "Single probe"
+  },
+  {
+   "id": "CXCL9_mRNA",
+   "denotes": "CXCL9 transcript, probe ILMN_1745356 (data column CXCL9_log2)",
+   "unit_convention": "Relative to basal steady state (basal = 1); log2 readout with offset. Basal and most control values sit at the array floor (6.1-6.6 log2), so basal = 1 maps to the floor, not to a measured abundance",
+   "lump_membership": "Single probe"
+  },
+  {
+   "id": "CXCL10_mRNA",
+   "denotes": "CXCL10 transcript, probe ILMN_1791759 (data column CXCL10_log2)",
+   "unit_convention": "Relative to basal steady state (basal = 1); log2 readout with offset; many control values are at the array floor",
+   "lump_membership": "Single probe"
+  },
+  {
+   "id": "H1",
+   "denotes": "Precursor of the culture-handling transient: a stimulus-independent signal present in every culture at t = 0 (both arms), converted to H2. Not observed; not IFN-γ biology.",
+   "unit_convention": "Dimensionless, starts at 1",
+   "lump_membership": "Whatever handling or medium change at t = 0 induces CXCL10 in untreated cells"
+  },
+  {
+   "id": "H2",
+   "denotes": "Active form of the culture-handling transient, driving extra CXCL10 production and decaying at k_H. Not observed; never acts on A.",
+   "unit_convention": "Dimensionless, starts at 0, peaks near 1/k_H",
+   "lump_membership": "As H1"
+  }
+ ],
+ "parameters": [
+  {
+   "id": "IFNg",
+   "role": "IFN-γ stimulus level, set per condition",
+   "convention": "1 in every stimulus = IFNg condition (200 IU/ml), 0 in every stimulus = control condition including the 0 h arrays",
+   "set_per_condition": true
+  },
+  {
+   "id": "k_Sin",
+   "role": "Rate of the upstream signalling stage (delay of the stimulus reaching A)",
+   "convention": "1/h",
+   "set_per_condition": false
+  },
+  {
+   "id": "k_A",
+   "role": "Generation and deactivation rate of the activity A (one shared rate fixes A's scale)",
+   "convention": "1/h",
+   "set_per_condition": false
+  },
+  {
+   "id": "k_LA",
+   "role": "Activity-dependent loss rate of the stimulus fraction",
+   "convention": "1/h per unit A",
+   "set_per_condition": false
+  },
+  {
+   "id": "G_R",
+   "role": "Gain of the attenuator: R is produced at G_R*A",
+   "convention": "1/h; with k_R it sets the attenuation strength (G_R/k_R at steady state) and timescale (1/k_R)",
+   "set_per_condition": false
+  },
+  {
+   "id": "k_R",
+   "role": "Relaxation rate of the attenuator R",
+   "convention": "1/h; the attenuation timescale is 1/k_R",
+   "set_per_condition": false
+  },
+  {
+   "id": "k_lag",
+   "role": "Rate of the delayed activity stage A2 driving the chemokines",
+   "convention": "1/h",
+   "set_per_condition": false
+  },
+  {
+   "id": "d_IRF1",
+   "role": "IRF1 mRNA degradation rate; also its basal production rate in basal units",
+   "convention": "1/h",
+   "set_per_condition": false
+  },
+  {
+   "id": "d_SOCS1",
+   "role": "SOCS1 mRNA degradation rate; also its basal production rate in basal units",
+   "convention": "1/h",
+   "set_per_condition": false
+  },
+  {
+   "id": "d_CXCL9",
+   "role": "CXCL9 mRNA degradation rate; also its basal production rate in basal units",
+   "convention": "1/h",
+   "set_per_condition": false
+  },
+  {
+   "id": "d_CXCL10",
+   "role": "CXCL10 mRNA degradation rate; also its basal production rate in basal units",
+   "convention": "1/h",
+   "set_per_condition": false
+  },
+  {
+   "id": "F_IRF1",
+   "role": "Fold of basal IRF1 production at saturating activity",
+   "convention": "dimensionless",
+   "set_per_condition": false
+  },
+  {
+   "id": "h_IRF1",
+   "role": "Inverse half-saturation of IRF1 promoter activation by A",
+   "convention": "1/[A]",
+   "set_per_condition": false
+  },
+  {
+   "id": "f_SOCS1",
+   "role": "Activity-dependent SOCS1 production per unit A, relative to basal",
+   "convention": "dimensionless",
+   "set_per_condition": false
+  },
+  {
+   "id": "f_CXCL9",
+   "role": "A2-dependent CXCL9 production per unit A2, relative to basal",
+   "convention": "dimensionless",
+   "set_per_condition": false
+  },
+  {
+   "id": "f_CXCL10",
+   "role": "A2-dependent CXCL10 production per unit A2, relative to basal",
+   "convention": "dimensionless",
+   "set_per_condition": false
+  },
+  {
+   "id": "f_H",
+   "role": "CXCL10 production per unit of the handling transient H2, relative to basal",
+   "convention": "dimensionless",
+   "set_per_condition": false
+  },
+  {
+   "id": "k_H",
+   "role": "Rate of the handling transient (H1 -> H2 -> loss)",
+   "convention": "1/h",
+   "set_per_condition": false
+  }
+ ]
+}

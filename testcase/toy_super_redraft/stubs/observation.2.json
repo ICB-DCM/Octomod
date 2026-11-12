@@ -1,0 +1,41 @@
+{
+  "observables": [
+    {
+      "observable_id": "obs_A_frac",
+      "maps_to_label": "A_frac",
+      "formula": "A",
+      "transformation": "lin",
+      "noise": {
+        "distribution": "normal",
+        "formula": "sigma_obs_A_frac",
+        "estimate_sigma": true
+      },
+      "scaling": {
+        "mode": "none",
+        "scale_parameter": null,
+        "offset_parameter": null,
+        "shared_across_conditions": true
+      },
+      "rationale": "MAPPING: the readout is A_frac and the state is A, with no conversion \u2014 the note gives the FRET channel already normalised to the sensor total and the LC-MS channel in absolute uM against standards, so a scaling factor or an offset would be a fit device rather than a measurement model. NOISE: additive normal with one estimated sigma per observable. Additive because the note quotes a single absolute precision per channel from the replicate spread on standards, not a percentage; normal because the negative values at t = 0 have zero likelihood under a multiplicative or log-normal model."
+    },
+    {
+      "observable_id": "obs_P_uM",
+      "maps_to_label": "P_uM",
+      "formula": "P",
+      "transformation": "lin",
+      "noise": {
+        "distribution": "normal",
+        "formula": "sigma_obs_P_uM",
+        "estimate_sigma": true
+      },
+      "scaling": {
+        "mode": "factor",
+        "scale_parameter": "sc_P",
+        "offset_parameter": null,
+        "shared_across_conditions": true
+      },
+      "rationale": "REDRAFT at the human's request: a scale factor sc_P on the P_uM channel, shared across conditions (one LC-MS calibration for all doses). MAPPING otherwise unchanged: the readout is P_uM and the state is P. NOISE: additive normal with one estimated sigma per observable, as before."
+    }
+  ],
+  "_fixture_note": "Second reply of the observation SEQUENCE: identical to .1.json except for the scale factor sc_P on obs_P_uM that the cost-boundary redraft asks for. observables.tsv must differ between the two passes."
+}

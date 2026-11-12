@@ -1,0 +1,28 @@
+name: sphingolipid_phase2
+
+# Phase 2: structural comparison on the user's network. Base model in
+# supplied/network.json (the phase-1 SBML, translated one to one); data in data/
+# (the phase-1 table reshaped: one label, biological replicates as rows, each series
+# divided by its own total label at t=0). Round 1 tests three structural switches
+# chosen by the user 2026-09-23: sphinganine entry, hexadecenal route, pruning of
+# the terms phase 1 found consistent with zero.
+
+t_end: 180
+
+# One experimental condition, so nothing can be held out. Structures are compared
+# by in-sample fit and information criterion only; there is no predictive check.
+# Agreed with the user 2026-09-23.
+holdout:
+  condition_labels: []
+
+# Runs without the knowledge module until the module is run on this case.
+grounding:
+  skip: true
+  why: "staged before the knowledge module existed; run it before the next live run"
+
+notes: >-
+  Follows phase 1, testcase sphingolipid_metabolism, run sphingo_phase1b
+  (verdict signed 2026-09-23, revise: no). The user asked that phase 2 really
+  touches the model structure where necessary. The literature behind the
+  hexadecenal and sphinganine switches is in literature/phase2_search_2026-09-23.md;
+  the six verified items are also supplied in intent.yaml.

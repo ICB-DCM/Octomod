@@ -1,0 +1,10 @@
+observableId	observableName	observableFormula	noiseDistribution	noiseFormula
+p_0	0_phosphorylations	__obs0 * observableParameter1_p_0 * observableParameter2_p_0	normal	observableParameter1_p_0 * noiseParameter1_p_0
+p_1	1_phosphorylation	__obs1 * observableParameter1_p_1 * observableParameter2_p_1	normal	observableParameter1_p_1 * noiseParameter1_p_1
+p_2	2_phosphorylations	__obs2 * observableParameter1_p_2 * observableParameter2_p_2	normal	observableParameter1_p_2 * noiseParameter1_p_2
+p_3	3_phosphorylations	__obs3 * observableParameter1_p_3 * observableParameter2_p_3	normal	observableParameter1_p_3 * noiseParameter1_p_3
+p_4	4_phosphorylations	__obs4 * observableParameter1_p_4 * observableParameter2_p_4	normal	observableParameter1_p_4 * noiseParameter1_p_4
+p_5	5_phosphorylations	__obs5 * observableParameter1_p_5 * observableParameter2_p_5	normal	observableParameter1_p_5 * noiseParameter1_p_5
+p_6	6_phosphorylations	__obs6 * observableParameter1_p_6 * observableParameter2_p_6	normal	observableParameter1_p_6 * noiseParameter1_p_6
+p_7	7_phosphorylations	__obs7 * observableParameter1_p_7 * observableParameter2_p_7	normal	observableParameter1_p_7 * noiseParameter1_p_7
+p_8	8_phosphorylations	__obs8 * observableParameter1_p_8 * observableParameter2_p_8	normal	observableParameter1_p_8 * noiseParameter1_p_8

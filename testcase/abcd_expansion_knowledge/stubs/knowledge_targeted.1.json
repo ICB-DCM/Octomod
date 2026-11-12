@@ -1,0 +1,31 @@
+{
+  "reactions": [
+    {
+      "equation": "Aa + D -> D",
+      "answers": "q_1",
+      "essential": false,
+      "type": "dephosphorylation",
+      "description": "the product inactivating active KinA, not consumed",
+      "evidence": [
+        {
+          "source": "A remark on kinase activity and pathway products in engineered modules — a note (fixture, 2019)",
+          "title": "A remark on kinase activity and pathway products in engineered modules",
+          "year": 2019,
+          "locator": "paragraph 2",
+          "supports": "across engineered modules the active kinase is lower where more product accumulates; correlational, untested",
+          "quote": "the active kinase level was lower in strains that accumulated more of the pathway product",
+          "url": "file:./sources/kinase_product_remark.txt",
+          "evidence_kind": "indirect",
+          "context_match": "related_system",
+          "context_note": "several engineered modules, end-point correlations only",
+          "stance": "supports"
+        }
+      ]
+    }
+  ],
+  "facts": [],
+  "queries_run": [
+    "pathway product inactivates active kinase engineered module (fixture)"
+  ],
+  "notes": "FIXTURE: one correlational remark across engineered modules; no experiment tests the step."
+}

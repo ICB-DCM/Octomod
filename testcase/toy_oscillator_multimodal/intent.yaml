@@ -1,0 +1,37 @@
+# Frozen S0 intent for toy_oscillator_multimodal. Written at staging time and
+# never edited by an agent. The inference target is parameter_values: the case
+# is scored on whether the frequency is recovered with a finite interval, not
+# on any predicted trajectory.
+#
+# This case exists to exercise the OPTIMISER, not the modelling agents. The
+# whole PEtab problem is supplied, so construction and assembly never run and
+# S6 is the only stage whose behaviour varies between runs.
+
+question: >-
+  What is the natural frequency of the damped oscillator, with uncertainty?
+
+system: damped harmonic oscillator (toy, mechanical)
+
+required_entities:
+  - pos
+
+required_predictions:
+  - omega with finite confidence interval
+
+perturbations:
+  - released from rest at unit displacement at t=0
+
+timescale: minutes, horizon 80 min
+
+scope_exclusions:
+  - forcing
+  - nonlinear restoring force
+
+success_criteria:
+  - omega recovered within 5% of the value the data supports
+  - profile CI for omega finite and narrower than one decade
+
+inference_target: parameter_values
+
+domain_packs:
+  - general-dynamics

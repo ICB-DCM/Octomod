@@ -1,0 +1,11 @@
+format_version: 1
+parameter_file: parameters.tsv
+problems:
+- sbml_files:
+  - pysb_model.sbml
+  condition_files:
+  - experimentalCondition.tsv
+  observable_files:
+  - observables.tsv
+  measurement_files:
+  - measurementData.tsv

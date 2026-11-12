@@ -1,0 +1,151 @@
+# S0 intent for sphingolipid_phase2. Drafted with the user 2026-09-23; frozen only
+# once the user signs it off. The success criteria are the user's.
+#
+# inference_target is parameter_values rather than mechanism_discrimination on
+# purpose: the engine compares structural switches (open axes) only under this
+# target. Under mechanism_discrimination it accepts 2-5 whole candidate models and
+# shows axes for information only. The user chose the switch-based comparison
+# (2026-09-23). The question below is the discrimination question.
+
+question: >-
+  Which structure of the sphingolipid network do the two-tracer pulse-chase data
+  support? Starting from the user's base model, test whether sphinganine is made
+  from Pal or is purely the supplied tracer pool, whether hexadecenal returns to
+  Pal directly or via hexadecanal, and whether the SM to Cer return and the
+  outflux terms can be removed. Report the rate constants of the selected structure
+  with intervals.
+
+system: >-
+  Sphingolipid metabolism in neuroblastoma cells followed by LC-MS lipidomics after
+  a 60 min pulse with alkyne sphinganine and alkyne 13C-palmitate; supplied reaction
+  network of 14 species and 21 mass-action reactions, both tracers summed as one label
+
+required_entities:
+  - Sph
+  - DhCer
+  - Cer
+  - SM
+  - HexCer
+
+required_predictions:
+  - for each tested structural switch, whether the data support it, with the
+    criterion difference and weight behind that call
+  - the set of structures the data cannot tell apart, stated explicitly
+  - point estimates with confidence intervals for the rate constants of the
+    selected structure
+  - the fitted time courses of all eleven observed lipid pools over the 180 min chase
+
+perturbations:
+  - none; a single pulse-chase condition, t=0 is the end of the 60 min pulse
+
+timescale: minutes, horizon 180 min
+
+scope_exclusions:
+  - separating the two tracers, which stays deferred
+  - the SA1P branch and removing hexadecenal entirely, deferred to a later round
+  - glycerolipid and recycling detail beyond the supplied network
+
+success_criteria:
+  - every tested switch is called supported, rejected, or undecided, with its
+    criterion difference and weight; undecided is named, not forced
+  - the selected structure fits every sphingolipid pool (Sph, DhCer, Cer, SM,
+    HexCer) without systematic misfit, or the pool it misses is named
+  - every estimated parameter of the selected structure is reported with an
+    interval, and any the data do not bound is named as such
+  - convergence of the multistart is evidenced for every structure compared
+
+inference_target: parameter_values
+
+domain_packs:
+  - general-dynamics
+  - measurement-tech
+
+supplied_literature:
+  - source: "Smith & Merrill (1995), sphinganine vs sphingosine fates in J774A.1 cells"
+    title: >-
+      Differential roles of de novo sphingolipid biosynthesis and turnover in the
+      "burst" of free sphingosine and sphinganine, and their 1-phosphates and
+      N-acyl-derivatives, that occurs upon changing the medium of cells in culture
+    year: 1995
+    locator: abstract
+    supports: >-
+      sphinganine in cells is mostly N-acylated to dihydroceramide rather than
+      phosphorylated; this is cell-made (de novo) sphinganine, not supplied sphinganine
+    quote: >-
+      sphinganine was mostly (80-85%) acylated and incorporated into dihydroceramide
+      and complex sphingolipids, whereas most of the sphingosine (70%) was
+      phosphorylated and degraded, with incorporation of the resulting ethanolamine
+      phosphate into phosphatidylethanolamine.
+    url: https://doi.org/10.1074/jbc.270.32.18749
+  - source: "Riboni et al. (1999), acylation of exogenous sphingosine in cultured cells"
+    title: >-
+      Predominance of the acylation route in the metabolic processing of exogenous
+      sphingosine in neural and extraneural cells in culture
+    year: 1999
+    locator: abstract
+    supports: >-
+      a sphingoid base supplied to cultured cells, including neuroblastoma, is mainly
+      N-acylated and only a small fraction phosphorylated; this is sphingosine, not
+      sphinganine
+    quote: >-
+      [3H]Sphingosine 1-phosphate accounted for less than 2% of the total radioactivity
+      incorporated in all cases. Throughout the pulse period and in all cell types,
+      3H-labelled organic metabolites largely prevailed over 3H2O, indicating that
+      N-acylation is the major metabolic fate of sphingosine in these cells under
+      apparently physiological conditions.
+    url: https://doi.org/10.1042/bj3380147
+  - source: "Michel et al. (1997), dihydroceramide desaturase"
+    title: >-
+      Characterization of ceramide synthesis. A dihydroceramide desaturase introduces
+      the 4,5-trans-double bond of sphingosine at the level of dihydroceramide
+    year: 1997
+    locator: abstract
+    supports: ceramide is formed by desaturation of dihydroceramide (DhCer to Cer)
+    quote: >-
+      These studies have conclusively established the pathway of ceramide synthesis
+      via desaturation of dihydroceramide and have uncovered several properties of
+      this reaction that warrant further consideration for their relevance to both
+      sphingolipid metabolism and signaling.
+    url: https://doi.org/10.1074/jbc.272.36.22432
+  - source: "Haynes et al. (2011), [U-13C]palmitate flux into sphingolipids in HEK293 cells"
+    title: >-
+      Factors to consider in using [U-13C]palmitate for analysis of sphingolipid
+      biosynthesis by tandem mass spectrometry
+    year: 2011
+    locator: abstract
+    supports: >-
+      labelled palmitate is diluted in the palmitoyl-CoA pool (about 60% labelled by
+      3 h), and de novo flux to SM exceeds that to hexosylceramide about 4.6-fold
+    quote: >-
+      For HEK293 cells incubated with 0.1 mM [U-¹³C]palmitic acid, ∼60% of the total
+      palmitoyl-CoA was ¹³C-labeled by 3 h (which was near isotopic equilibrium); with
+      this correction, the rates of de novo biosynthesis of C16:0-ceramide,
+      C16:0-monohexosylceramide, and C16:0-sphingomyelins were 62 ± 3, 13 ± 2, and
+      60 ± 11 pmol/h per mg protein, respectively
+    url: https://doi.org/10.1194/jlr.D015586
+  - source: "Gerl et al. (2016), clickable sphingosine label through S1P lyase"
+    title: >-
+      Sphingosine-1-Phosphate Lyase Deficient Cells as a Tool to Study Protein Lipid
+      Interactions
+    year: 2016
+    locator: Introduction; Results and Discussion, Fig 1A-B
+    supports: >-
+      the chain label of a clickable sphingoid base survives S1P lyase via hexadecenal
+      to palmitoyl-CoA, and a large share reaches PC within hours
+    quote: >-
+      pacSph’s photoactivatable and clickable group contained in the sphingoid base
+      hydrocarbon chain are maintained after degradation to hexadecenal and subsequent
+      oxidation and activation to palmitoyl-CoA
+    url: https://doi.org/10.1371/journal.pone.0153009
+  - source: "Wronowska et al. (2015), compartmental ODE model of sphingolipid metabolism"
+    title: Computational modeling of sphingolipid metabolism
+    year: 2015
+    locator: Results and discussion, "Ceramide synthesis and degradation"; Background
+    supports: >-
+      a published model enters de novo synthesis as an inflow rather than modelling
+      its intermediate steps, and uses mass action for transport and Michaelis-Menten
+      for enzymes
+    quote: >-
+      CER synthesis via de novo pathway is described as the inflow of these molecules
+      into the endoplasmic reticulum.
+    url: https://doi.org/10.1186/s12918-015-0176-9

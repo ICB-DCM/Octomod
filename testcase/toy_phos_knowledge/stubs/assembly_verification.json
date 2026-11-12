@@ -1,0 +1,25 @@
+{
+  "verdicts": [
+    {
+      "aspect": "noise model vs readout physics",
+      "ok": true,
+      "note": "Additive normal noise with an estimated constant sigma matches an uncalibrated densitometry readout whose replicate spread does not scale with band intensity. It is also the only choice consistent with the three negative values in the table, which a multiplicative or log-normal model assigns zero likelihood."
+    },
+    {
+      "aspect": "condition encoding",
+      "ok": true,
+      "note": "All three condition labels present in the measurement table are encoded, the dose column maps onto the single condition-owned dose parameter L with the numeric values it actually takes, and L is correctly absent from the parameter table. Pre-equilibration off is consistent with t=0 being an unstimulated sample rather than a resting steady state."
+    },
+    {
+      "aspect": "scaling for arbitrary units",
+      "ok": true,
+      "note": "A shared multiplicative scale parameter is declared, which is required: the observable is a model species in normalised units and the data are uncalibrated densitometry. Sharing it across doses is the load-bearing choice \u2014 a per-dose scale would absorb the dose response the intent asks to predict."
+    },
+    {
+      "aspect": "observable mapping",
+      "ok": true,
+      "note": "obs_pR maps to the pR_au label, formula Rp only. The phospho-specific antibody does not report total receptor, so summing R and Rp would be wrong; the time column is minutes in both the data and the model."
+    }
+  ],
+  "overall": "pass"
+}

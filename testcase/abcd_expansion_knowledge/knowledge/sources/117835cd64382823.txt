@@ -1,0 +1,3 @@
+Product-driven inactivation of the regulator in a related synthetic module (fixture document, 2022).
+
+In a related synthetic module assembled from the same parts library, the product inactivates the active regulator directly: adding the purified product to cells expressing the module lowered the active regulator within minutes, and the product itself was not consumed. Nothing here names a rate constant value.

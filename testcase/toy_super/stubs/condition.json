@@ -1,0 +1,31 @@
+{
+  "conditions": [
+    {
+      "condition_id": "c_u0p5",
+      "maps_to_label": "u=0.5",
+      "overrides": {
+        "u": 0.5
+      },
+      "preequilibration": false,
+      "rationale": "Input dose 0.5 in the same extract. `u` is a condition-owned constant in the model and is not in the parameter table: it multiplies the sensor activation rate. No pre-equilibration \u2014 the note says both readouts start at zero and the samples are taken from t = 0, so the initial state is the model's own."
+    },
+    {
+      "condition_id": "c_u2p0",
+      "maps_to_label": "u=2",
+      "overrides": {
+        "u": 2.0
+      },
+      "preequilibration": false,
+      "rationale": "Input dose 2 in the same extract. `u` is a condition-owned constant in the model and is not in the parameter table: it multiplies the sensor activation rate. No pre-equilibration \u2014 the note says both readouts start at zero and the samples are taken from t = 0, so the initial state is the model's own."
+    },
+    {
+      "condition_id": "c_u8p0",
+      "maps_to_label": "u=8",
+      "overrides": {
+        "u": 8.0
+      },
+      "preequilibration": false,
+      "rationale": "Input dose 8 in the same extract. `u` is a condition-owned constant in the model and is not in the parameter table: it multiplies the sensor activation rate. No pre-equilibration \u2014 the note says both readouts start at zero and the samples are taken from t = 0, so the initial state is the model's own."
+    }
+  ]
+}

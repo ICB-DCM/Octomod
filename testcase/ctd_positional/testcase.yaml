@@ -1,0 +1,67 @@
+name: ctd_positional
+
+t_end: 960
+
+# No holdout: the design question is mechanistic and every time point carries part
+# of the positional signal. Discrimination rests on information criteria, reported
+# honestly (`holdout.available: false`).
+holdout:
+  condition_labels: []
+
+supplied: {}
+
+# The ONLINE hole is on for this case — it is a literature case by construction.
+# The cutoff is raised to 2026 and blocklist.txt blocks NOTHING, deliberately:
+# the brief for this case is "find our paper and all other research on CTD
+# phosphorylation mechanisms and THEN make a subsequent analysis with new
+# positional data". The published paper leaves DIRECTION undetermined, so it
+# cannot hand over what this case tests, and these data are synthetic with
+# parameters that appear nowhere in it. blocklist.txt carries the full argument
+# and the two-line reversal if the harder unaided variant is wanted instead.
+research:
+  enabled: true
+  max_publication_year: 2026
+
+notes: >-
+  SYNTHETIC DATA, TRUTH AUTHORED BY THE FRONT END 2026-09-11 on an
+  instruction to build the CTD examples overnight. A person signs off truth/.
+
+  WHAT THIS CASE IS FOR. The real CTD measurement resolves how MANY repeats are
+  phosphorylated, not which. The published analysis of that data found local
+  cooperativity but could not settle whether P-TEFb has a directional preference.
+  This case supplies a readout that can settle it, and asks whether the pipeline
+  notices.
+
+  THE CLAIM, VERIFIED NUMERICALLY BEFORE STAGING (truth/true_model.md has the
+  numbers):
+    · reversing the chain swaps the two directional rate factors and leaves the
+      COUNT trajectories identical to 1e-15 relative — an EXACT symmetry, so
+      direction is structurally non-identifiable from count data, not merely
+      poorly determined;
+    · the same swap moves the per-site occupancies by up to 0.183, which is 18.3
+      sigma at the simulated noise. The positional readout separates them cleanly.
+
+  THE NEGATIVE CONTROL is `testcase/ctd_countonly`: identical truth, identical
+  seed, count observable only. It MUST fail to resolve direction. Without it, "the
+  positional data revealed the mechanism" is an assertion rather than a result.
+
+  WHAT IT EXERCISES THAT NOTHING ELSE DOES:
+    the research hole      first case with research.enabled — real web access, a
+                           real year cutoff and a real blocklist
+    two readouts at once   a bounded fraction (occupancy) and a drifting relative
+                           intensity (counts) in one problem, needing different
+                           observation models on the same run
+    replicates             three per point, so the model-free noise floor IS
+                           available here — unlike ctd_blind, which has none
+    a provable negative    the control's expected outcome is a declared
+                           non-identifiability, which is the honest answer
+
+  truth/ MUST NEVER be staged into agent context. Regenerate the data with
+  `uv run python testcase/ctd_positional/make_data.py` (seed 20260911); it writes
+  this case's file and the control's.
+
+# A benchmark with ground truth: it runs without the knowledge module,
+# so nothing the module could find reaches the blind run.
+grounding:
+  skip: true
+  why: benchmark

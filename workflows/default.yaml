@@ -1,0 +1,710 @@
+# Octomod workflow spec — the declared configuration the agent cannot edit.
+# Every threshold here is Rule 1 territory: an agent that picks its own pass
+# criteria has not been evaluated. All values are provisional until the toy
+# cases have tuned them; re-tune on the real test case and record why.
+
+name: default
+version: 1
+
+models:
+  # Opus across the board: a cheaper tier is not yet trusted for sub-agents.
+  # Per-role knobs kept so we can measure where a cheaper tier suffices;
+  # override_all: haiku gives a near-free plumbing test.
+  default: opus
+  override_all: null
+
+agents:
+  # null (or 0) = NO LIMIT. Deliberate for the phase this project is in: we are
+  # measuring how long agents actually need, and cutting a call off answers a
+  # different question while destroying the evidence for the one being asked.
+  #
+  # The measurements that justify it, from this repo's own ledgers: eleven
+  # single-attempt construction calls, median 347 s, MAX 581 s — against a
+  # 600 s limit. Nineteen seconds of headroom: a harder problem goes over,
+  # and the run ends at the limit instead of at an answer.
+  #
+  # The tradeoff, stated: a genuinely hung call waits for a human. That is
+  # acceptable here because these runs are watched and the progress line shows
+  # elapsed time against the role's measured range. Set a number before anyone
+  # runs this unattended.
+  timeout_s: null
+  # T0 cap on the bytes of EVERY agent prompt, checked before the call is
+  # made. Blocking: a prompt over the cap stops the run rather than being
+  # truncated, because a silently shortened payload is a wrong answer with
+  # no trace.
+  #
+  # Justified from both sides, measured on the full battery:
+  #   floor  the largest LEGITIMATE prompt is 128,171 B (the interpreter on
+  #          the search smoke: 73 kB of residual curves, 22 kB of ΔAIC
+  #          attribution — all of it payload the agent must reason about).
+  #          Both dominant terms scale with candidates x measurements, so a
+  #          real case bigger than the fixtures needs real headroom: this is
+  #          1.95x it.
+  #   ceiling it must catch what it exists for: the two over-size prompts
+  #          measured are 426,717 B (interpretation) and 310,028 B
+  #          (revision_proposal); 250,000 refuses both.
+  #
+  # null = NO cap: these are live model runs, not a test of limits, and a
+  # capped prompt would degrade what the agent is asked to reason about.
+  # Nothing is degraded, and the gate records every prompt's size on the ledger. Write
+  # 250000 back to restore the budget and the blocking gate exactly as argued
+  # above. The model's context window stays the one hard limit.
+  max_prompt_bytes: null
+  # the reasoning effort every agent call runs at, passed
+  # as `claude --effort`, on the agent_call row and the run page header.
+  # `xhigh` is the CLI's own default for Opus; `max` is chosen here for
+  # the application runs, a deliberate, hashed setting. A per-role key
+  # (e.g. `construction: max`) overrides the default for that role.
+  effort:
+    default: max
+
+retry:
+  agent_json: 2        # malformed-JSON retries per call
+  # A TIMEOUT is a different failure from a bad reply and gets its own budget.
+  # Telling a model its JSON was malformed gives it something to fix; handing
+  # it the identical prompt after it ran the clock out does not, and each
+  # attempt costs the WHOLE timeout. Measured on a live run: one
+  # 600 s timeout became 30 minutes and three calls' usage, and the run then
+  # died with nothing in the ledger. 0 = fail on the first timeout, with the
+  # elapsed time and prompt size written to the call's
+  # `agent_calls/<role>/replies/<n>/timeout` so the cause is visible.
+  agent_timeout: 0
+  refit_max: 2         # refits the convergence gate may buy per round
+  module_draft: 2      # gate-failed redrafts per module (hard floor after that)
+  auto_grants: 2       # extra attempts --auto-approve may grant at an exhaustion
+                       # gate — once, as one grant — before it answers n. A static reply
+                       # fails identically forever (one unattended run made 764 calls).
+
+s1:
+  max_escalations: 5   # how many 'needs your decision' items the scope gate
+                       # lists. The KEY keeps the engine's word on purpose:
+                       # renaming it changes workflow_sha, which refuses every
+                       # paused run in flight. What a READER sees is worded on
+                       # the card, and no card or report prints this name.
+  # a discrimination round is built in two calls — the BASE by construction,
+  # tested as one model, then each candidate as a declared difference from it
+  # (role `expansion`), built by the engine, so no candidate can differ from
+  # the base in anything it does not declare.
+  # the optional human gate on the base, before any variation is written;
+  # per run: `s1: {base_gate: true}` in testcase.yaml
+  base_gate: false
+
+verification:
+  s1: true             # independent construction audit (citations, tiers,
+                       # rationale quality) — concerns surface at the scope gate
+  citation_check: true # deterministic source resolution (hallucination trap);
+                       # unresolvable-only evidence demotes the tier
+  s3: true             # the richest judgment surface gets the checker
+  assembly_overlay_delta: true  # observation-axis candidates: audit only the
+                       # overlay's changed entries, once per candidate
+
+gates:
+  sim_box:
+    n_samples: 16
+    min_frac_integrable: 0.8   # <1.0 on purpose: wide log bounds legitimately
+    nonneg_tol: -1.0e-6        # kill some corners; total failure is the signal
+  magnitude:
+    max_log10_ratio: 2.0       # decades apart with no scaling param -> fail
+  dof:
+    max_par_per_datapoint: 1.0
+  waterfall:
+    k: 3
+    eps: 0.5
+  grad_norm_tol: 10.0
+  max_frac_integration_failures: 0.3
+  ensemble_delta_nllh: 1.92    # chi2(0.95, df=1)/2 — the classic PL threshold
+  cannot_distinguish_log10_spread: 1.0   # PROXY PATH ONLY. Used when a
+                               # round has no profiles at all, where the
+                               # ensemble's log10 spread is the declared
+                               # cheap stand-in and there is no interval
+                               # to close. It carries the same scale
+                               # caveat as the absolute rule it replaced
+                               # for profiles. Profiles use the two
+                               # unambiguous ends instead (see
+                               # determined_box_fraction).
+  tight_prediction_rel_width: 0.5
+  holdout:
+    max_nrmse: 0.3             # T2' blocking threshold (prediction goal)
+  predictive_z: 1.96           # observation-noise width added to ensemble bands
+  noise_check_alpha: 0.01      # post-fit residuals-vs-assumed-distribution test
+  misfit:                      # model-free structural-misfit evidence (S7);
+    alpha: 0.01                # while OPEN, S11 may not propose 'stop'
+    max_sigma_over_floor: 1.3  # fitted sigma / replicate-derived noise SD
+    autocorr_alpha: 0.05       # residual-SHAPE screen, one-sided (positive
+                               # autocorrelation only); looser on purpose —
+                               # it corroborates, it does not fire alone. That
+                               # is ENFORCED, not hoped for: on its own it is
+                               # reported under misfit_evidence.also_seen and
+                               # does not open the flag. Firing alone, it buys
+                               # a round the evidence does not support.
+    escalate_stop: true        # these are INDICATORS, never deciders: a stop
+                               # proposed against open indicators goes to the
+                               # HUMAN (who may spend another round or end it),
+                               # instead of the run ending on agent judgment
+  near_bound_fraction: 0.05    # a best-fit value within this fraction of its
+                               # box edge is REPORTED as near-bound. Not a
+                               # failure: a parameter may legitimately sit
+                               # there. But the constant compensating for a
+                               # missing mechanism sits near the edge without
+                               # reaching it, and the at-bounds flag only fires
+                               # AT it.
+  # While a model is being found, data fit is the measure that matters: the FIM
+  # screens every fit, and profiles, which cost far more, wait for the model
+  # worth profiling. Profiles are computed ON REQUEST for every goal
+  # but parameter_values (there the estimates are the deliverable): `profiles`
+  # at the verdict card, or `--profiles "<why>"`. The FIM screen runs on every
+  # fit. `on_request: false` restores the projection rule below for every goal.
+  profiles:
+    on_request: true
+  profiles_auto:
+    enabled: true              # prediction goal: profiles run WITHOUT a gate when
+    # Same resource asymmetry as n_starts_default: profiles are deterministic
+    # CPU, and a prediction verdict without uncertainty is half a verdict —
+    # a 60 s cap silently produces exactly that on a live run.
+    # Profiles start unasked only when the HIGH projection (every parameter
+    # walking to both bounds) is under this cap; otherwise the profiling gate
+    # asks with the low and the high end. Once started, a batch is not begun
+    # when the time spent plus the LOW estimate for the rest would pass it.
+    max_projected_s: 600
+    # One profile point, in multistart starts, before this run has profiled
+    # anything: a point is a warm-started local optimisation, and what it costs
+    # beside a start is not a constant. On a stiff 32-parameter model one point
+    # cost 1.9 starts (1,479 points, median 35 per parameter, 9 workers).
+    # Measured profiling replaces this range.
+    point_cost_range: [1.0, 2.0]
+    # A per-point cost measured on an earlier round's model reaches this
+    # round's model as starts per point, times its own start, within this band.
+    carried_point_band: 0.25
+  # Identifiability is REPORTED, not adjudicated (the same principle the FIM
+  # screen follows: the eigenvalue spectrum, never a rank verdict). A blocking
+  # gate is raised only at the two unambiguous ends:
+  #   · a profile that does not CLOSE inside its box — the data did not bound
+  #     that parameter, which is a fact and needs no threshold;
+  #   · a closed profile taking no more than `determined_box_fraction` of its
+  #     prior box — the data clearly narrowed it, so refusing to credit it is
+  #     underclaiming.
+  # A closed profile in between is given as a number (width, and fraction of
+  # box) and no gate takes a side. An absolute 1-decade rule is fragile in
+  # exactly the way that matters: two fixture parameters sit at 0.89 and 0.95
+  # decades, and a more faithful profiler step method widens them past 1.0
+  # and flips their verdict.
+  determined_box_fraction: 0.1
+  discrimination:
+    delta_aic_indistinguishable: 2.0   # dAIC below this = same support (Burnham/Anderson)
+    decisive_weight: 0.7               # Akaike weight for a 'decisive' winner
+  structural_nulls:            # directions no output depends on at ANY
+    n_points: 2                # parameter value — flat at every one of n_points random points
+    rel_tol: 1.0e-5            # at once; an indicator, AIC charges every estimated parameter
+    # The points are drawn within ±spread (scaled units: half a decade for a
+    # log10 parameter) of the nominal values, clipped to the bounds: on a stiff
+    # model most of the box does not integrate, and a probe sampling the whole
+    # box measures nothing there. The directions found are re-checked at the fit.
+    spread: 0.5
+
+  fim:
+    flat_decades: 8.0          # an eigendirection this many decades below
+                               # the largest is reported FLAT. A screen, never a
+                               # verdict: rank deficiency proves local
+                               # non-identifiability, full rank proves nothing.
+                               # Declared here rather than left as a Python
+                               # default so it is hashed into workflow_sha —
+                               # a threshold the ledger cannot see is a
+                               # threshold two runs can disagree about while
+                               # claiming the same spec.
+
+uncertainty:
+  # prediction bands from the joint confidence region nllh <= best +
+  # chi2(alpha, df)/2: the profile points under that threshold plus rejection
+  # samples (n_box_samples proposals) from an ellipsoid fitted to them.
+  # df="n_free" uses chi2(alpha, n_estimated)/2 — the joint region; df=1 would
+  # under-contain it.
+  n_box_samples: 400
+  alphas: [0.95, 0.90]
+  joint_df: n_free
+  ellipsoid_inflate: 1.5       # proposal = skeleton-fitted ellipsoid, inflated;
+                               # too small a skeleton draws no samples: the band
+                               # is the skeleton alone, flagged as undersampled
+  min_acceptance_note: 0.05
+  # mcmc_comparison (pypesto.sample cross-check, band-overlap agreement as a
+  # convergence read) is later work and NOT declared until something
+  # reads it: a declared key nothing honours changes nothing while claiming to.
+
+  # Profile settings, from a profiling benchmark. Its shell-first
+  # recommendation when robustness matters is `o0 n6 medium`; pyPESTO 0.6.0
+  # reaches the step-order half only (its own default is order 1, so this IS
+  # a change), and has no restarts-per-profile-point option at all — that is
+  # an open PR upstream. Recorded here so the gap is declared, not implied.
+  # pyPESTO's DEFAULT, deliberately. The profiling benchmark recommends
+  # `o0 n6 medium` for robustness, and order_0 in this engine, measured,
+  # does not break anything, and it CHANGES A
+  # VERDICT. On a fixture it widens k_phos from 0.945 to 1.028 decades and
+  # sc_obs_pR from 0.894 to 1.020, across the 1.0-decade
+  # `cannot_distinguish_log10_spread` line — so two parameters flip from
+  # determined to undetermined. Every profile still closes; the CIs are just
+  # slightly wider, which is what a method that does not extrapolate should
+  # give. That is a scientific call on the fixture, not a plumbing change, so
+  # it is a human decision, not a default to change unattended. The knob and the
+  # benchmark's step preset are here, ready:
+  profile_next_guess: adaptive_step_order_1   # pyPESTO's own default
+  # profile_next_guess: adaptive_step_order_0      # the benchmark's choice
+  # profile_step_sizes:        # the benchmark's `medium` preset, which belongs
+  #   min_step_size: 0.01      # WITH order_0 — it does not extrapolate, so it
+  #   default_step_size: 0.02  # needs larger steps to cover the same range.
+  #   max_step_size: 0.2       # (Tried; the verdict flip is not a step-size
+  #                            #  effect — it persists with these.)
+  # profile restarts per point (the benchmark's n6): pypesto 0.6.0
+  # ProfileOptions has no nstarts field; the recommendation lands when the
+  # upstream PR does. Revisit on a pin bump. (A comment, not a key: prose
+  # stored as a value is a key nothing reads.)
+
+research:
+  enabled: false               # dedicated ONLINE hole (web tools only) feeding
+  max_items: 12                # construction; OFF for synthetic benchmarks —
+  max_publication_year: 2025   # ON per-testcase (testcase.yaml research.enabled)
+                               # for literature cases. Blocklist:
+                               # testcase/<case>/blocklist.txt, engine-enforced
+                               # (research on => the case declares its own
+                               # publication horizon or the run is refused;
+                               # the blocklist is OPTIONAL — empty or absent is
+                               # ledgered at run start as "no forbidden sources").
+  at_expansion: true           # with research on: one more research call before
+                               # each expansion proposal, about mechanisms the
+                               # selected model lacks (same fence, frozen in
+                               # round_k/evidence/expansion_evidence.json);
+                               # testcase.yaml research.at_expansion overrides
+  max_requested_rounds: 1      # with research on: literature searches the
+                               # expansion agent may ask for per expansion round
+                               # (`requested_research`, 1-3 questions; same
+                               # fence, frozen in
+                               # round_k/evidence/expansion_research_<n>.json);
+                               # a further request is refused by name and the
+                               # agent asked once more; 0 = none; testcase.yaml
+                               # research.max_requested_rounds overrides
+
+# The literature behind each reaction a model of the system may contain,
+# gathered BEFORE construction by the knowledge module (`./run.sh knowledge`),
+# which runs before every run on a user's problem, and handed to construction
+# as prior knowledge. Each reaction (and each fact) is GRADED by the ENGINE
+# from what its sources are, under the rule table below. A case may declare
+# `grounding: {skip: true, why: …}` in testcase.yaml to run without it (the
+# benchmarks and fixtures do); an online module needs the case's
+# `research.max_publication_year`, the one literature horizon a case has. The
+# support floor (`support_floor`) and a case's `skip` are per case, never
+# defaults here; `mode` below chooses advisory (the default) or strict.
+# octomod/workflow_modules/knowledge/reaction_evidence.py.
+grounding:
+  # How the run holds what it builds to the dossier; a case overrides it in
+  # testcase.yaml (`grounding: {mode: strict}`).
+  #   advisory — the dossier is prior knowledge: construction may add any
+  #     reaction, every reaction is annotated, and whatever is unsupported or
+  #     below the floor is flagged to the person on the cards;
+  #   strict — the base is exactly the essential set, additions only through
+  #     the search ladder, expansions and axes below their floor refused.
+  mode: advisory
+  # Whether a run builds on the knowledge module is the case's: its staged
+  # `knowledge/` folder and its testcase.yaml `grounding:` block (the person's
+  # support floor, or a declared skip), never a workflow default.
+  # The grade is an ORDINAL BAND decided from these rules, never a number: no
+  # weight, no product, no sum over sources, no decimal on any card. Only an
+  # evidence item that passes the preconditions counts at all — its
+  # identifier is not unresolvable, it is inside the fence, its class is in
+  # the vocabulary — and a source cited twice counts once (independence is a
+  # proxy: a distinct DOI, PMID, URL or source string). Bands are tried
+  # strongest first; the first rule an entry satisfies decides its band, and
+  # the source(s) that satisfied it explain it. An entry no source counts for
+  # is `none`; offline, every entry is `not_applicable`. A rule is one of
+  #   {kind: <k>, context: <c or list>}              one counting source of that class
+  #   {at_least: n, kind: <k>, context: <c or list>} n independent such sources
+  #   {at_least: n, earning: <band>}                 n independent sources, each
+  #                                                  reaching that band on its own
+  #   {any: true}                                    any counting source
+  # (a rule without `context` holds in any context). Kinds: direct_experimental
+  # | mechanistic_model | curated_database | review | indirect. Contexts:
+  # same_system | related_system | different_system. Each line is one claim
+  # about what evidence is worth, disputable on its own.
+  grading:
+    high:
+      - {kind: direct_experimental, context: same_system}
+      - {kind: curated_database, context: [same_system, related_system]}
+      - {at_least: 2, earning: medium}
+    medium:
+      - {kind: direct_experimental, context: related_system}
+      - {kind: mechanistic_model, context: [same_system, related_system]}
+      - {at_least: 2, kind: review, context: [same_system, related_system]}
+    low:
+      - {kind: review, context: [same_system, related_system]}
+      - {kind: direct_experimental, context: different_system}
+      - {kind: mechanistic_model, context: different_system}
+      - {at_least: 2, kind: indirect}
+    weak:
+      - {any: true}
+  # a counting source classified as contradicting the reaction never earns a
+  # band: it flags the entry `contested`, shown beside the grade, and caps
+  # the band here (`none`: no cap)
+  contested_caps_at: medium
+  floor_step: 1                # bands each expansion round lowers the support floor by
+  variants_offset: 1           # bands below the base's floor at which a
+                               # discrimination round's expansions may add a reaction
+  search:                      # targeted knowledge searches the engine may spend
+    per_redraft: 1             # per construction redraft (so two per construction)
+    per_round: 1               # per round for the expansions, per expansion round
+  verify: true                 # online: one advisory call re-classifies every
+                               # counting item from its cached document; where it
+                               # disagrees, the lower grade stands
+
+assembly_defaults:
+  # bounds for parameters the assembly itself creates — workflow-owned
+  # exponents carry a SIGN: YAML 1.1 loads `1.0e3` as the string "1.0e3",
+  # which would declare these three as text; tests/spec_keys_unit.py reads
+  # them back as numbers
+  scaling_bounds: [1.0e-3, 1.0e+3]
+  offset_bounds: [-1.0e+3, 1.0e+3]
+  sigma_bounds: [1.0e-4, 1.0e+3]
+  # sigma symbols one noise formula may name: the three declared shapes
+  # need at most two, so three is headroom; above it the formula is re-asked
+  # by name, never rendered and never a dead run. No evidence behind the
+  # number beyond that — it is here so workflow_sha covers it.
+  max_noise_components: 3
+  # what `fallback: <name>` at the S3 failure-point gate REWRITES
+  # the attributed block to. Applied ONLY on a human- or policy-signed answer,
+  # ledgered as `assembly_fallback` naming who signed, the agent's original
+  # reply left untouched on disk and the rewritten block written beside it.
+  # Never applied unasked: a default substituted for an agent's value with
+  # nobody deciding makes the run's answer nobody's (a sigma can become 0 this way).
+  fallbacks:
+    additive-noise:
+      description: "every observable: normal noise, one constant sigma_<obs>, estimated"
+    scaling:
+      description: "every observable: mode factor, sc_<obs>, one factor shared across conditions"
+    no-scaling:
+      description: "every observable: mode none — the data are taken as calibrated"
+
+# Solver settings are CHOSEN here, not defaulted and not repaired later.
+# Without this block the only solver setting would be `apply_refit`'s, which
+# is reachable only AFTER a multistart has been paid for, and everything
+# upstream — including the T1 hard stops `model_simulates_nominal` and
+# `model_simulates_across_box` — would run on undeclared defaults. The rule applies
+# directly: a threshold a legitimate settings change can cross is not a
+# finding.
+simulation:
+  # EVERY NUMBER HERE IS MEASURED AGAINST THE LIBRARY DEFAULT, not copied from
+  # an illustrative value. An amici atol of 1.0e-10 looks tight, but AMICI's
+  # own default is 1.0e-16, so declaring it would LOOSEN the integrator by six
+  # orders of magnitude on every fit in the repo. Settings whose purpose is "a
+  # threshold a legitimate settings change can cross is not a finding" must
+  # not themselves move every threshold. So: defaults are the library's own unless there is a
+  # stated reason, and the reason is written next to the number.
+  roadrunner:
+    atol: 1.0e-12   # = roadrunner 2.10 default; no change
+    rtol: 1.0e-8    # TIGHTENED from its 1.0e-6 default, deliberately: the S1
+                    # ladder's simulate gates are T1 hard stops, and a loose
+                    # rtol is exactly how a quietly wrong trajectory passes one
+  amici:
+    atol: 1.0e-16   # = AMICI default
+    rtol: 1.0e-8    # = AMICI default
+    maxsteps: 100000  # RAISED from 10000. Only ever permits more work, so it
+                      # cannot make an answer less accurate — it converts a
+                      # "too many steps" failure into a slow success.
+    # null = follow the residual tolerances, which is AMICI's own behaviour.
+    # Declared as null rather than omitted so the key is visible: the usual
+    # failure is a gradient needing tighter tolerance than the trajectory.
+    sens_atol: null
+    sens_rtol: null
+    # forward | adjoint | null. null = the probe measures and PROPOSES, the
+    # human approves at the cost gate. Never agent-chosen.
+    sensi_method: null
+    steady_state:
+      # Every value here is AMICI's own default, so declaring this block
+      # changes nothing; they are the settings a pre-equilibrated condition's
+      # steady-state solve runs with, and choosing other values is a decision
+      # for a model that needs them, made on its measured behaviour.
+      newton_maxsteps: 0                        # = AMICI default
+      newton_damping_factor_lower_bound: 1.0e-8 # = AMICI default
+      steadystate_tol_factor: 100.0             # = AMICI default
+      sensitivity_mode: integrationOnly         # = AMICI default
+  # The probe simulates twice — at the declared tolerance and this much
+  # tighter — and reports the worst relative trajectory difference. This is
+  # INTEGRATOR convergence, a different question from the optimiser
+  # convergence at S6, and it belongs before the budget is approved rather
+  # than after 200 starts.
+  tighten_factor: 100
+  traj_rel_agree: 1.0e-3
+  # Forward sensitivities cost roughly one extra solve per estimated
+  # parameter; adjoint costs roughly one extra solve per objective. So the
+  # measured ratio (sensi time / residual time) is worth proposing adjoint on
+  # once it approaches the parameter count. Measured, stated on the card with
+  # the number that triggered it, approved by a human.
+  adjoint_when_ratio_over: 8.0
+
+estimation:
+  # `auto`: the engine picks from a cheap measured comparison at the cost
+  # probe, and falls back to fides whenever that is inconclusive — so a run
+  # that never compares behaves exactly as this workflow always has. Naming a
+  # concrete optimiser here is an EXPLICIT request and is obeyed without any
+  # measurement; `fides` and `scipy` still mean what they meant.
+  #
+  # This does not hand the choice to an agent. The objection is to
+  # an agent guessing a solver, and the selection rule here is deterministic,
+  # declared below, biased towards the default, and shown on the budget card
+  # before a human approves the spend.
+  optimizer: auto              # auto | fides | scipy | any optimizer_compare name
+  seed: 20260914
+  n_probe_starts: 5
+  # the budget gate is asked once per round, on
+  # the first candidate; a later candidate reuses that approval ONLY while its
+  # own probe looks like the approved one. A probe start that is non-finite
+  # refuses the reuse outright; a median start time more than this factor
+  # away from the approved candidate's (either way) refuses it too, and the
+  # gate is asked again for that candidate with the reasons on the card.
+  probe_reuse_max_ratio: 5
+  # Parallelism is workflow-owned too, for the same reason the optimizer is.
+  # Starts are independent and so are profiles, and pyPESTO ships the engines
+  # already — running them one at a time leaves the machine idle.
+  #   auto | multiprocess | singlecore
+  # `auto` decides from the cost probe's own measurement: parallel only when a
+  # single start is slow enough to dwarf the dispatch cost (spawning a fresh
+  # interpreter and pickling the objective into it is ~1 s on macOS, which is a
+  # loss on a toy whose start takes 50 ms — and the battery runs five suites at
+  # once, so an unconditional default would oversubscribe the machine).
+  # The cost probe applies the same rule as it goes: its starts run in-process
+  # until one has used `parallel_min_start_s` of CPU and is still running, and
+  # then the rest are dispatched (`make_probe_engine`, `start_engine.py`).
+  engine: auto
+  parallel_min_start_s: 2.0    # a start slower than this is worth dispatching
+  n_procs: null                # null = cpu_count - 1, leaving the machine usable
+  # Sized for convergence, not thrift: multistarts are deterministic CPU —
+  # the expensive resources are LLM tokens and human attention, and an
+  # unconverged fit wastes both. 20 is a probe, not an estimation; the budget
+  # gate shows measured projections and the human can still shrink for stiff
+  # models where a start costs minutes.
+  # what a REFIT may change when the human buys one at the convergence
+  # gate. Workflow-owned, never agent-settable — the same rule as the optimizer.
+  # A human may name a preset or give explicit keys from this vocabulary;
+  # anything else is refused with the legal keys listed.
+  refit_presets:
+    more_starts:   {n_starts_factor: 3}
+    # Every value here TIGHTENS AMICI's default: an atol of 1.0e-10 would be
+    # six orders of magnitude LOOSER than AMICI's 1.0e-16 default, under the
+    # name "robust", so the preset carries none.
+    robust_solver: {rtol: 1.0e-10, maxsteps: 1000000, sens_rtol: 1.0e-10}
+    optimizer:     {maxiter: 2000, fatol: 1.0e-10}
+  # The order to try presets in, shown on the `estimation_convergence` card as a
+  # RECOMMENDATION. Nothing auto-escalates and nothing will: the gate is
+  # judgment-shaped (copilot and strict ask a human, benchmark stops), so the
+  # engine computes the order and says why, and
+  # the person still chooses. `robust_solver` is moved to the front when the
+  # integration-failure check is among those that failed, because more starts
+  # over a field of crashes is survivorship, not convergence.
+  escalation: [more_starts, robust_solver]
+  n_starts_default: 100
+  # ---------------------------------------------------- optimiser comparison
+  # Optimiser comparison: run several optimisers on the SAME starts and report
+  # the optimality gap and overall efficiency (Grein & Penas 2026). This does
+  # NOT make the optimiser agent-settable — `optimizer` above is still
+  # workflow-owned. It measures, the card shows numbers, the human decides.
+  #
+  # The cost control is the trigger, not the size, and neither trigger fires
+  # on a healthy run. The ONE that is on by default is the estimation_convergence
+  # gate: already a pause, only reached when a post-fit check failed, and
+  # the card recommends `compare` there and a
+  # conclusive comparison refits with the winner at once. The cost probe can
+  # also compare (`select_when` below) but is off by default: five starts are
+  # too little evidence to choose an optimiser on.
+  optimizer_compare:
+    enabled: true
+    # The candidate set, ordered by how often each method reached the best
+    # known objective across the 30 problems of Grein & Penas (2026) —
+    # computed from their published per-run data, not read off a figure.
+    #
+    #   cmaes        26/30   the study's strongest single method
+    #   fides        25/30   the incumbent; a comparison without it is empty
+    #   nlopt_lbfgs  20/30   the strongest NLopt method that needs no
+    #                        sub-algorithm (AUGLAG at 21 and 20 do)
+    #   scipy_lbfgsb 19/30   the only one that runs with no extra dependency
+    #
+    # scipy_powell and scipy_de are legal names and deliberately absent:
+    # neither appears in the benchmark at all, and listing them while
+    # omitting NLopt methods that outrank scipy_lbfgsb would be availability
+    # mistaken for evidence.
+    candidates: [cmaes, fides, nlopt_lbfgs, scipy_lbfgsb]
+
+    # ONE budget concept, for both the probe-time selection and the
+    # comparison a human can buy at the convergence gate: a comparison may
+    # cost this fraction of the estimation it is advising on.
+    #
+    # The START COUNT IS DERIVED FROM IT (optimizer_compare.plan), not
+    # declared beside it. That is deliberate: a declared count and a declared
+    # allowance are two numbers that can contradict each other — a comparison
+    # sized larger than its own budget (so the gate answer is refused every
+    # time), or a minimum sample larger than the sample (so the rule it guards
+    # can never fire). A derived number cannot contradict
+    # the thing it is derived from.
+    max_budget_fraction: 0.35
+    # ...unless the budget cannot buy at least this many starts per method, in
+    # which case no comparison runs at all. Two starts is not evidence, and
+    # spending on it invites a switch on noise.
+    min_compare_starts: 3
+    # At most this many comparisons per RUN. A second measures the same thing.
+    max_per_run: 1
+
+    # WHEN a selection is attempted at the cost probe. OFF by default: five
+    # probe starts are too little
+    # evidence to choose an optimiser on, and the place to decide is the
+    # convergence gate, where a fit has actually failed a check and the card
+    # recommends `compare`. `probe_rate_low` selects at the probe when its
+    # success rate is low, for a run that wants it; `always` forces a
+    # comparison at every probe.
+    #
+    # The probe has already run starts with the default, so its per-start
+    # success RATE is evidence already paid for: above the floor the default
+    # is reaching its optimum often enough to rely on and nothing is bought by
+    # comparing.
+    #
+    # Rate, not agreement. A trigger on ANY disagreeing probe start fires on
+    # exactly the wrong cases (measured: it compares on an easy fixture, where
+    # one start of five lands badly, and skips the multimodal fixture where
+    # all five agree). A multistart is run BECAUSE
+    # some starts land badly.
+    #
+    # What this CANNOT catch: a default that converges reliably to the same
+    # WRONG basin scores 100% and is skipped — the very case another optimiser
+    # would fix. Detecting that needs a second optimiser, which is the cost
+    # the trigger exists to avoid. `always` is the setting for a problem where
+    # that matters and the compute is affordable.
+    #   always | probe_rate_low | never
+    select_when: never
+    select_probe_rate_below: 0.5
+    # How much better a method's per-start success rate must be before it
+    # displaces the default when BOTH found the same optimum: 25 points, not
+    # a ratio. Below this the difference is noise at these start counts.
+    select_min_success_gain: 0.25
+    # The likelihood-ratio level that defines a successful start:
+    # chi2.ppf(1-alpha, 1)/2, which is 1.92 at 0.05 — the same threshold the
+    # profile machinery uses for an interval.
+    success_alpha: 0.05
+  n_starts_bounds: [10, 1000]
+  md_max_candidates: 5         # mechanism discrimination: candidate-set ceiling
+
+  # Hierarchical estimation. OFF by default, and it stays off until the
+  # combination matrix is green for the shapes a run can actually produce.
+  # What it does when on: pyPESTO
+  # solves an observable's scaling and offset EXACTLY at every outer step
+  # instead of searching for them, which drops outer dimensions at no cost in
+  # accuracy (measured: the hierarchical optimum matches the plain one to 5e-7
+  # while dropping a dimension).
+  #
+  # The refusals matter more than the feature, because pyPESTO 0.6.0 does not
+  # make them: a laplace observable would be fitted GAUSSIAN with nothing
+  # raised, and a scaling solved inside while its offset stays outside is
+  # silently wrong (108.59 against a declared 4.66). `octomod/workflow_modules/assembly/hierarchical.py`
+  # refuses both, names the reason in the ledger, and leaves sigma outer.
+  #
+  # Inner parameters are still ESTIMATED parameters: they keep estimate=1 in
+  # parameters.tsv, so they still count in k for AIC/BIC and in the DOF gate.
+  # Selection must never reward hiding parameters in the inner problem.
+  hierarchical: false
+
+# Model-space search. Construction declares the structural axes it is unsure
+# about; the human chooses which to buy at the scope gate; the engine fits the
+# bought axes (one at a time on the base unless the human asks for every
+# combination) and a criterion selects, instead of guessing one structural move
+# per round (measured on a benchmark case: the greedy loop found nothing, a plain
+# comparison of the same axes selected the truth at dAIC 45).
+search:
+  enabled: true
+  criterion: AIC              # petab_select's Criterion vocabulary
+  max_models: 8               # the ceiling on models per round; each costs one
+                              # calibration (k axes = k+1 models one at a time,
+                              # 2^k as a lattice)
+  # the question is which specific mechanisms the data support, not every
+  # combination of them, and 2^k fits grow fast: false = the bought axes are
+  # searched one at a time on the base (k+1 models); `lattice` in a scope or
+  # expansion gate note buys every on/off combination (2^k) for that round.
+  lattice: false
+  method: brute_force         # the ONLY method implemented; anything else is
+                              # refused by name at run start (spec.validate)
+  expansion_redraft: 1        # re-ask the expansion agent once when axes were
+                              # dropped by the pre-gate validation tiers
+  use_tried_log: false        # read testcase/<case>/tried_models.json, the
+                              # archive of what earlier runs on this case already
+                              # fitted. OFF by default and deliberately: a run
+                              # that consumes it is not blind, records that
+                              # in run_meta.json, and the truth scorer refuses to
+                              # score it unless told otherwise. The engine still
+                              # never DROPS an axis for matching the archive — a
+                              # resemblance is a line on the human's card, because
+                              # a "tried" verdict is context-dependent (rejected in
+                              # WHICH space, against WHICH base, on WHAT data).
+  expand_on_misfit: true      # after a selection round, if the model-free misfit
+                              # evidence is still open, the agent says what the
+                              # space was MISSING and the human decides whether to
+                              # buy another round. A space that did not contain the
+                              # truth is not a failure; not correcting it is.
+
+# Engine-run diagnostics the expansion agent may request, and the statistics
+# they compute. These are SCREENS the agent reads, not gates: nothing here
+# decides a pass, and an axis a diagnostic motivated is still fitted in the
+# real likelihood and selected by the criterion. They live in the spec anyway,
+# because a number an agent could choose for itself has not been evaluated.
+# Data signals: what the measurements say before any model
+# exists, computed deterministically from the replicates — no agent.
+#
+#   off         nothing computed, nothing routed
+#   noise_only  DEFAULT. The artifact is written and its NOISE findings reach
+#               the observation-model agent and the interpreter. No noise
+#               finding reaches model construction in any mode: construction
+#               never sees measurement values, and that independence is what
+#               makes a blind run blind. Noise is observation-model evidence
+#               by nature — a modeller thinks of it when writing the
+#               observable, not the mechanism. (Construction is shown the
+#               curves in words, `data_phenomenology`, unless this is `off`.)
+#   full        would ALSO feed construction with structural hints, which needs
+#               data extraction to run before construction. That reorder
+#               touches the marker DAG and every suite and is declined for now,
+#               so `full` is accepted, recorded, and routes as noise_only
+#               rather than silently reordering anything.
+#
+# The knob is a benchmark axis: the same case at each mode, scored against
+# truth, measures whether data-priming helps or biases.
+data_signals: noise_only
+
+diagnostics:
+  # a second round lets an agent follow up on what the
+  # first returned; each round costs the one agent call that carries its answers back
+  rounds: 2                    # request rounds before the agent must propose
+  # null = no limit: requests are reads or quick simulations
+  max_requests: null              # whitelisted requests per round
+  # what a payload carries by DEFAULT, and what waits to be asked
+  # for. per_candidate_residuals scales with candidates x observables x
+  # conditions x timepoints, and the prompt cap is blocking, so an unbounded
+  # payload stops a run on a realistic problem rather than costing extra.
+  # Measured on a case of 10 observables x 20 conditions x 4 candidates
+  # (800 series): full curves for nobody at all is still 489,614
+  # bytes — twice the 250,000 cap — so BOTH tiers are needed, not just curves.
+  # With these two values that case lands at 131,148 bytes, 52% of the cap,
+  # and the fixtures (12 series per candidate) are untouched by either.
+  # null = no tier: with agents.max_prompt_bytes null the reason above is
+  # gone, so every series keeps its full summary, and the selected and base
+  # models keep every curve.
+  # Write 5 and 40 back to bound the payload again.
+  full_curves_top_n: null      # series with the point-by-point curve, per
+                               # curve-carrying model, worst first
+  full_summaries_top_n: null   # series with the full shape summary; below this
+                               # rank a series carries its rank statistic only
+                               # and is fetched with residual_curve(...)
+  form_fit:                    # the residual-form request: the curve_forms
+                               # library vs a white + AR(1) null
+    alpha: 0.05                # bootstrap p below this = a nameable trend
+    n_bootstrap: 100           # n=100 resolves p to ~0.01; raise it before this
+                               # statistic could ever gate anything, since a
+                               # bootstrap p is only as fine as its replicate count
+
+loop:
+  # null = no cap: the person can stop the run at any gate, so a fixed round
+  # count would only close it early; every further round is bought at a
+  # verdict or an expansion gate a person answers, and declining one ends the run.
+  max_rounds: null
+  # A run nobody answers those gates in — `--auto-approve`, or a policy that
+  # answers the expansion or revise gate — stops here instead; a policy's own
+  # `max_expansions` and `usd_cap` bound it further.
+  max_rounds_unattended: 3

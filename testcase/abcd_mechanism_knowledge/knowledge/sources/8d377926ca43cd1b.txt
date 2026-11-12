@@ -1,0 +1,3 @@
+Regulator sequestration by pathway products — a review of engineered modules (fixture document, 2021).
+
+Reviewing several engineered modules, the authors note that a pathway product may bind the active regulator and hold it in an inactive complex; they cite no experiment in any one module that shows the complex. Nothing here names a rate constant value.

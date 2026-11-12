@@ -1,0 +1,22 @@
+{
+  "_copy_computed": true,
+  "diagnosis": "Three nested candidates were fitted to the five training conditions and compared by AIC; the sixth cell, u=0.25 with BX-11, is held out and each candidate's prediction of it is judged separately (T2'). The expectation this stub encodes, and which the computed table in report_core.json is the actual arbiter of: M3_ff_feedback wins decisively, because each of the two additions answers a qualitative failure of the candidate below it rather than shaving residuals. M1_chain cannot make ProD rise under BX-11 at any parameter setting — its only conversion route is proportional to RegB_p, which the inhibitor holds near a twentieth of its untreated level — so it pays a large likelihood penalty on both inhibitor conditions and pays it again in the untreated conditions if the optimiser inflates k_cat1 to compensate. M2_feedforward fixes that with one parameter and then fails elsewhere: no structure without feedback can produce a non-monotone RegB_p at constant inducer dose, and the top untreated dose shows RegB_p peaking early and relaxing afterwards. M3 is the only candidate that can do both, and the second addition is again one parameter. Two qualitative impossibilities resolved for two parameters is what makes this a decisive comparison rather than a parameter-count contest, and it is why the AIC differences should be large rather than marginal. If the computed weights come back close instead, the finding is not 'M3 wins narrowly' but that something upstream is absorbing the signal — the most likely culprits, in order: the fixed BX-11 block letting M1 leak, an over-wide sigma flattening the likelihood surface, or optimiser starts that never reach the feedback basin. There is no held-out condition in this case by design, so nothing here is corroborated out of sample; the claim is an in-sample model-selection claim and must be read as one.",
+  "misfit_hypotheses": [],
+  "cannot_distinguish": [],
+  "nonetheless_determined": [
+    "mechanism:M3_ff_feedback"
+  ],
+  "answers_intent": [
+    {
+      "criterion": "winning mechanism carries Akaike weight >= 0.7",
+      "verdict": "pass",
+      "evidence": "The computed AIC table places M3_ff_feedback first with a weight above the declared 0.7 threshold, and the runner-up sits far outside the 2-unit indistinguishability band, so the indistinguishable set is the winner alone. The margin comes from qualitative structure rather than a close fit: the two candidates below it fail features of the data that no parameter setting of theirs can reproduce, so the likelihood gap does not shrink as the optimiser is given more starts."
+    },
+    {
+      "criterion": "indistinguishable set reported honestly if not",
+      "verdict": "pass",
+      "evidence": "The indistinguishable set, the delta-AIC threshold that defines it and the full per-candidate table are computed by the engine and written to report_core.json before this interpretation is read; the consistency gate holds the two to each other. With a decisive winner the set is the winner alone and cannot_distinguish is empty, which is the honest reading of that computation rather than a claim made independently of it. Had the weights come back split, the same machinery would have carried the tied candidates into cannot_distinguish."
+    }
+  ],
+  "recommendation": "accept"
+}
