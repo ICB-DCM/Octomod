@@ -1,0 +1,11 @@
+{
+  "conditions": [
+    {
+      "condition_id": "cond_main",
+      "maps_to_label": "main",
+      "overrides": {},
+      "preequilibration": false,
+      "rationale": "The single experimental condition. No overrides: nothing was varied between wells, so there is no condition-owned constant to set. No pre-equilibration — the pre-washout state is induced steady-state expression, which the model does not represent (synthesis is excluded by the intent); the experiment's t=0 is the model's initial state, with the induced level carried by the estimated parameter A0 instead."
+    }
+  ]
+}

@@ -1,0 +1,55 @@
+name: abcd_expansion_knowledge
+
+# Simulation horizon for the S1 gate ladder; matches the last sampled time.
+t_end: 120
+
+# Holdout fixed at staging time in the data's own column vocabulary
+# (synmod4_ms.csv: u, bx11); the agent never chooses what it is scored on.
+holdout:
+  condition_labels:
+    - u=4,bx11=1
+
+supplied: {}
+
+# The knowledge module ran before the intent was frozen (online, on stubbed
+# replies): its output is `knowledge/`, and this is the person's decision on its
+# floor card. The survey grades the six conversions of the designed module
+# high (the lab's own construction notes, a direct experiment in this system),
+# the required RegB-catalysed conversion among them, and one further conversion
+# that is not essential, the product inactivating active RegB, medium (a direct
+# experiment in a related module). The suggested floor is high and the person
+# took it.
+#
+# Inside the run, round 0's base is the designed module at high. At the
+# expansion card the floor of round 1 is the schedule's, medium: the axis that
+# adds the RegB inactivation is offered, the axis that adds a KinA inactivation
+# no source describes is refused (the expansion agent's own search finds it
+# graded weak), and an axis that removes the required conversion is refused by
+# name whatever the floor. The person answers `floor: low, step: 2`, so round 2's
+# schedule lowers low to none, where the KinA axis is offered.
+grounding:
+  # the strict mode is what this fixture tests: the base is exactly the essential set
+  mode: strict
+  support_floor: high
+  floor_step: 1
+  decided_by: human
+  note: "high: build the base from the designed module the construction notes document"
+
+# The case's one literature horizon: the knowledge module's searches obey it.
+research:
+  max_publication_year: 2025
+
+notes: >-
+  abcd_expansion's data, lab note and construction reply, built on the knowledge
+  module, for the support floor across expansion rounds. Every source the stubbed
+  replies cite is a fixture document under sources/, fetched over file:, and
+  names no DOI, PMID or URL, so the citation check reads each one as not
+  checkable without touching the network and every grade is deterministic
+  offline. The knowledge/ folder is the output of `./run.sh knowledge --testcase
+  testcase/abcd_expansion_knowledge --mode online --backend stub` on
+  stubs/knowledge.1.json and stubs/knowledge_verification.1.json. The expansion
+  stubs are a sequence: round 0's agent asks for a targeted search
+  (revision.1), proposes three axes (revision.2), keeps them when
+  the axis that removes the required conversion is dropped and it is asked once
+  more (revision.3); round 1's agent proposes the KinA inactivation again
+  (revision.4).

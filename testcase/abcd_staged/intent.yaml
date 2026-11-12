@@ -1,0 +1,44 @@
+# COPY of testcase/abcd_mechanism/intent.yaml for the staged-construction smoke:
+# same question, same data; only the stubs differ.
+# Frozen S0 intent for abcd_mechanism. Written at staging time and never edited
+# by an agent — the success criteria in particular are what the agent is judged
+# against, so it may not choose them (spec.py rule 1, applied to the intent).
+#
+# Same fictional system and same data as abcd_prediction; different question.
+# inference_target is mechanism_discrimination, so S1 must propose candidates and
+# S7 scores them by information criteria rather than by a held-out prediction.
+
+question: >-
+  Which wiring of SynMod-4 explains the data: RegB-only conversion, an additional
+  direct KinA route, product feedback, or both?
+
+system: SynMod-4 engineered module, S. cerevisiae (synthetic benchmark)
+
+required_entities:
+  - KinA_p
+  - RegB_p
+  - ProD
+
+required_predictions:
+  - mechanism class identified with decisive evidence
+
+perturbations:
+  - inducer dose u in {0.25,1,4}
+  - BX-11 RegB-activation inhibitor
+
+timescale: minutes, horizon 120 min
+
+scope_exclusions:
+  - gene expression changes
+  - growth dilution beyond first-order loss
+  - spatial effects
+
+success_criteria:
+  - winning mechanism carries Akaike weight >= 0.7
+  - indistinguishable set reported honestly if not
+
+inference_target: mechanism_discrimination
+
+domain_packs:
+  - general-dynamics
+  - measurement-tech

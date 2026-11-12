@@ -1,0 +1,50 @@
+name: toy_phos_knowledge
+
+# Holdout is fixed here at staging time and matched against the S2 condition
+# labels. The agent never chooses what it is scored on.
+holdout:
+  condition_labels:
+    - dose=3
+
+supplied: {}
+
+# The knowledge module ran before the intent was frozen (online, on stubbed
+# replies): its output is `knowledge/`, and this is the person's decision on
+# its floor card. The survey grades the required phosphorylation and the
+# dephosphorylation high and the degradation, which is not essential, weak;
+# the suggested floor is high, and the person took medium so that a
+# conversion a targeted search finds at medium can enter the base.
+#
+# Inside the run, construction's first draft writes the ligand as a species,
+# so the model does not implement the required R -> Rp and carries a
+# conversion outside the essential set: `model_essential_reactions` fails, and
+# the reply names L + R -> L + Rp in `missing`. The engine's targeted search
+# returns that conversion graded medium, it is admitted at the floor, and the
+# second draft holds the ligand as the dose parameter L, which implements both
+# the required reaction and the admitted one.
+grounding:
+  # the strict mode is what this fixture tests: the base is exactly the essential set
+  mode: strict
+  support_floor: medium
+  floor_step: 1
+  decided_by: human
+  note: "medium: a ligand step described in a related receptor line may enter the base"
+
+# The case's one literature horizon: the knowledge module's searches obey it.
+research:
+  max_publication_year: 2025
+
+notes: >-
+  toy_phos's synthetic data and generating model (make_data.py, which the
+  agents never see), built on the knowledge module. Every source the stubbed
+  replies cite is a fixture document under sources/, fetched over file:, and
+  names no DOI, PMID or URL, so the citation check reads each one as not
+  checkable without touching the network and every grade is deterministic
+  offline: the required phosphorylation high (a direct experiment in this
+  system), the dephosphorylation high (the same, beside a published model of
+  a related receptor), the degradation weak (one indirect source, unquoted),
+  and the ligand-driven phosphorylation the targeted search returns medium (a
+  direct experiment in a related receptor line). The knowledge/ folder is the
+  output of `./run.sh knowledge --testcase testcase/toy_phos_knowledge --mode
+  online --backend stub` on stubs/knowledge.1.json and
+  stubs/knowledge_verification.1.json.

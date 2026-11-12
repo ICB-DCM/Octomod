@@ -1,0 +1,148 @@
+{
+  "system": {
+    "summary": "A synthetic receptor module: the ligand drives phosphorylation of the receptor R to Rp within minutes, a constitutive phosphatase returns Rp to R, and total receptor stays near 10 normalised units over the first hour.",
+    "scope": "the receptor module in the lab's own cell line, one related receptor with a published two-state model, and a related receptor family observed over hours",
+    "unknowns": [
+      "whether the ligand phosphorylates the receptor directly or through a binding step",
+      "which phosphatase returns Rp to R"
+    ]
+  },
+  "species": [
+    {
+      "id": "R",
+      "name": "unphosphorylated receptor",
+      "represents": "R"
+    },
+    {
+      "id": "Rp",
+      "name": "phosphorylated receptor",
+      "represents": "Rp"
+    }
+  ],
+  "reactions": [
+    {
+      "equation": "R -> Rp",
+      "required": "req_1",
+      "essential": true,
+      "type": "phosphorylation",
+      "description": "ligand-driven phosphorylation of the receptor",
+      "evidence": [
+        {
+          "source": "Receptor module phosphorylation kinetics — a note (fixture, 2024)",
+          "title": "Receptor module phosphorylation kinetics",
+          "year": 2024,
+          "locator": "paragraph 2",
+          "supports": "ligand addition drives phosphorylation of R to Rp within minutes, in cells expressing the module",
+          "quote": "ligand addition drives phosphorylation of R to Rp within minutes",
+          "url": "file:./sources/receptor_note.txt",
+          "evidence_kind": "direct_experimental",
+          "context_match": "same_system",
+          "context_note": "the same receptor module in the same cells",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "Rp -> R",
+      "essential": true,
+      "type": "dephosphorylation",
+      "description": "constitutive dephosphorylation of the receptor",
+      "evidence": [
+        {
+          "source": "Receptor module phosphorylation kinetics — a note (fixture, 2024)",
+          "title": "Receptor module phosphorylation kinetics",
+          "year": 2024,
+          "locator": "paragraph 2",
+          "supports": "a constitutive phosphatase returns Rp to R",
+          "quote": "a constitutive phosphatase returns Rp to R",
+          "url": "file:./sources/receptor_note.txt",
+          "evidence_kind": "direct_experimental",
+          "context_match": "same_system",
+          "context_note": "the same receptor module in the same cells",
+          "stance": "supports"
+        },
+        {
+          "source": "A two-state model of receptor phosphorylation — a note (fixture, 2021)",
+          "title": "A two-state model of receptor phosphorylation",
+          "year": 2021,
+          "locator": "paragraph 2",
+          "supports": "a published model of a related receptor writes the dephosphorylation of Rp as first order in Rp",
+          "quote": "writes the dephosphorylation of Rp as first order in Rp",
+          "url": "file:./sources/phosphatase_model.txt",
+          "evidence_kind": "mechanistic_model",
+          "context_match": "related_system",
+          "context_note": "a related receptor, in another cell line",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "Rp ->",
+      "essential": false,
+      "type": "degradation",
+      "description": "degradation of the phosphorylated receptor after internalisation, over hours",
+      "evidence": [
+        {
+          "source": "Receptor turnover in a related receptor family — a note (fixture, 2018)",
+          "title": "Receptor turnover in a related receptor family",
+          "year": 2018,
+          "locator": "paragraph 2",
+          "supports": "phosphorylated receptors of a related family are internalised and degraded over several hours",
+          "quote": "",
+          "url": "file:./sources/receptor_turnover.txt",
+          "evidence_kind": "indirect",
+          "context_match": "related_system",
+          "context_note": "a related receptor family, over hours rather than the first hour",
+          "stance": "supports"
+        }
+      ]
+    }
+  ],
+  "facts": [
+    {
+      "kind": "abundance",
+      "statement": "total receptor stays near 10 normalised units over the first hour",
+      "value": 10,
+      "unit": "normalised units",
+      "applies_to": [
+        "R",
+        "Rp"
+      ],
+      "for": [
+        "construction"
+      ],
+      "evidence": [
+        {
+          "source": "Receptor module phosphorylation kinetics — a note (fixture, 2024)",
+          "title": "Receptor module phosphorylation kinetics",
+          "year": 2024,
+          "locator": "paragraph 2",
+          "supports": "total receptor stays near 10 normalised units over the first hour",
+          "quote": "Total receptor stays near 10 normalised units over the first hour",
+          "url": "file:./sources/receptor_note.txt",
+          "evidence_kind": "direct_experimental",
+          "context_match": "same_system",
+          "context_note": "the same receptor module in the same cells",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "kind": "assay",
+      "statement": "phospho-R is read by immunoblot densitometry in arbitrary units, background-subtracted and not calibrated against a standard",
+      "applies_to": [
+        "the pR_au readout"
+      ],
+      "for": [
+        "observation"
+      ],
+      "evidence": []
+    }
+  ],
+  "queries_run": [
+    "receptor phosphorylation ligand dose kinetics (fixture)",
+    "receptor dephosphorylation constitutive phosphatase (fixture)",
+    "phosphorylated receptor internalisation degradation (fixture)"
+  ],
+  "notes": "FIXTURE: the required phosphorylation has one direct source in this system; the dephosphorylation has the same and a published model of a related receptor; the degradation is described for a related family over hours, a process the intent's scope excludes over this window. The assay fact has no source beyond the lab note."
+}

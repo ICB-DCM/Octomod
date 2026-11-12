@@ -1,0 +1,16 @@
+{
+  "name": "knowledge.1",
+  "role": "knowledge",
+  "mode": "survey",
+  "search": "online",
+  "backend": "stub",
+  "at": "2026-09-28T20:31:33",
+  "model": "stub",
+  "model_resolved": null,
+  "effort": null,
+  "cost_usd": null,
+  "sha": "a71060c98889aa9a",
+  "prompt_bytes": 19823,
+  "attempts": 1,
+  "duration_s": 0.02
+}

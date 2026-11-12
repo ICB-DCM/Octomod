@@ -1,0 +1,5 @@
+Ligand-driven receptor activation in a related line — a note (fixture document, 2023).
+
+In a related receptor line, the bound ligand phosphorylates the receptor directly: the
+phosphorylation rate of the receptor rises in proportion to the ligand dose, and the ligand
+is not consumed. Nothing here names a rate constant value.

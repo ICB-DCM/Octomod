@@ -1,0 +1,44 @@
+name: toy_decay_params
+
+# Empty on purpose. There is exactly one experimental condition, so no condition
+# can be held out without deleting the dataset. The consequence must be stated
+# rather than papered over: this case produces NO held-out predictive check, the
+# T2' gate has nothing to run on, and the report must say that the parameter
+# estimate is supported by in-sample fit and profile likelihood alone. A pipeline
+# that quietly reports a predictive score here is overclaiming, and that is one of
+# the things this case exists to catch.
+holdout:
+  condition_labels: []
+
+supplied: {}
+
+notes: >-
+  Synthetic, known truth (see make_data.py, which the agents never see). Goal is
+  parameter_values, so this case exercises the profiling path rather than the
+  prediction path. Two deliberate features. First, the readout is calibrated and
+  near-absolute, so the correct scaling decision is 'none' — introducing a free
+  scale factor here would make it trade off against the estimated initial level
+  and widen or flatten the k1 profile for no reason, which is the failure mode the
+  case is designed to expose. Second, the initial level enters through the antimony
+  initial assignment A = A0 with A0 estimated, which tests whether the PEtab
+  assembly and the profiling machinery handle an estimated initial value rather
+  than only rate constants.
+
+  Staging note, verified with roadrunner 2.9.2 against this exact antimony: the
+  estimated initial value has a live trap in it. `A = A0` becomes an SBML
+  initialAssignment, and setting the global parameter A0 does NOT propagate to
+  the state unless `reset()` is called afterwards — the correct order is
+  resetAll(), set every global, then reset(). Set A0 without the trailing reset()
+  and the simulation silently keeps the previous initial value, which shows up as
+  a zero gradient in A0 and a badly biased k1 rather than as an error. The
+  alternative route, writing `init(A)` directly, is worse: it permanently
+  overrides the initial assignment for that RoadRunner instance (resetAll() does
+  not restore it) and it discards global parameter values set beforehand. Whether
+  the simulator wrapper gets this right is a real thing this case tests, and a
+  wrong answer here fails quietly, so it is worth an explicit check.
+
+# A token-free fixture: it runs without the knowledge module, on its
+# canned replies.
+grounding:
+  skip: true
+  why: fixture

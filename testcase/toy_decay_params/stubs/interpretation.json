@@ -1,0 +1,21 @@
+{
+  "diagnosis": "The single-state decay model fits both wells within replicate scatter across the full 10 h window, with no structure in the residuals in time. The likelihood profile for k1 is smooth, single-minimum and closes on both sides well inside the parameter bounds, so the rate constant is practically identifiable from this dataset. A0 and sigma are likewise bounded. The estimate is supported by in-sample fit and profile likelihood only: there is a single experimental condition, so no condition could be held out and no predictive check was run. The model is therefore untested out of sample, and the confidence in k1 rests on the noise model being right — if the well-to-well spread understates the true measurement error, the interval is too narrow.",
+  "misfit_hypotheses": [],
+  "cannot_distinguish": [
+    "degradation of the reporter from any other first-order loss process acting on it — growth dilution was excluded on the description's statement about stationary phase, not demonstrated from the data; with one condition the two would be exactly collinear and k1 should be read as a total first-order loss rate"
+  ],
+  "nonetheless_determined": [
+    "k1",
+    "A0",
+    "sigma_obs_A",
+    "k1 finite CI"
+  ],
+  "answers_intent": [
+    {
+      "criterion": "profile CI for k1 finite and narrower than one decade",
+      "verdict": "pass",
+      "evidence": "Profile likelihood 95% CI for k1 is [0.33, 0.37] 1/h, a factor of 1.14 end to end, or 0.06 decades — well inside the declared one-decade width. The profile closes on both sides at the likelihood-ratio threshold rather than running into the bounds at 0.001 and 10, so this is a real interval and not a bound artefact."
+    }
+  ],
+  "recommendation": "accept"
+}

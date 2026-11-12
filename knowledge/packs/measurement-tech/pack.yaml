@@ -1,0 +1,18 @@
+id: measurement-tech
+version: 0.1.0
+layer: measurement
+scope: >
+  Tacit knowledge about quantification technology and how it shapes an estimation problem: immunoblot
+  densitometry, plate-reader and fluorescence intensities, digitised figure data, and the reporting
+  conventions around replicates and error bars. Cuts across signalling, metabolism and any other domain that
+  uses these assays. Says nothing about which molecule is being measured — that is the domain layer.
+applies_to:
+  - data_extraction
+  - observation
+  - assembly_verification
+curation_status: draft-unreviewed
+provenance:
+  drafted_by: agent
+  drafted_on: 2026-08-31
+  method: LLM draft; no expert review yet
+  reviewed_by: null

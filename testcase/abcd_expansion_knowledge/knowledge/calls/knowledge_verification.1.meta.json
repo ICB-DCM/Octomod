@@ -1,0 +1,16 @@
+{
+  "name": "knowledge_verification.1",
+  "role": "knowledge_verification",
+  "mode": "",
+  "search": "offline",
+  "backend": "stub",
+  "at": "2026-09-28T21:32:08",
+  "model": "stub",
+  "model_resolved": null,
+  "effort": null,
+  "cost_usd": null,
+  "sha": "2fb3a96341b22d38",
+  "prompt_bytes": 11669,
+  "attempts": 1,
+  "duration_s": 0.0
+}

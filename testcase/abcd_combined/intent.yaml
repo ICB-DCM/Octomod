@@ -1,0 +1,57 @@
+# Frozen S0 intent for abcd_combined (amended). Written at
+# staging time and never edited by an agent — the success criteria are what the
+# agent is judged against, so it may not choose them (spec.py rule 1, applied to
+# the intent).
+#
+# THE BLIND QUESTION, PLUS THE PREDICTION. The question below is abcd_blind's,
+# verbatim: it names no candidate wiring, because a listed candidate is
+# transcribed, not found. One sentence is added, and only one: the
+# held-out cell (u = 0.25 with BX-11) is the prediction asked for. description.md
+# is abcd_blind's verbatim as well — the lab note without the "open questions"
+# section. inference_target stays mechanism_discrimination: the criterion picks
+# among the candidates the agent proposes, and the held-out prediction is judged
+# per candidate (T2'). Residual hint, stated rather than pretended away: the
+# perturbations name BX-11, so the agent knows the inhibitor arm exists — it is in
+# the data.
+
+question: >-
+  Find the mechanism that best explains the SynMod-4 data. The module as we
+  built it is described in the experiment notes; work out whether that wiring
+  actually accounts for what was measured, and if it does not, what wiring
+  does. Report what the data can and cannot distinguish. We also ask for one
+  prediction: ProD over time at the low inducer dose u=0.25 with BX-11, a cell
+  we did not measure.
+
+system: SynMod-4 engineered module, S. cerevisiae (synthetic benchmark)
+
+required_entities:
+  - KinA_p
+  - RegB_p
+  - ProD
+
+required_predictions:
+  # phrased as tasks, not as answers: WHAT must be delivered, no candidate named
+  - the mechanism that best explains the data, identified and defended
+  - ProD_uM time course at u=0.25 with BX-11 (held out)
+
+perturbations:
+  - inducer dose u in {0.25,1,4}
+  - BX-11 RegB-activation inhibitor
+
+timescale: minutes, horizon 120 min
+
+scope_exclusions:
+  - gene expression changes
+  - growth dilution beyond first-order loss
+  - spatial effects
+
+success_criteria:
+  - winning mechanism carries Akaike weight >= 0.7
+  - indistinguishable set reported honestly if not
+  - the winner's held-out (u=0.25, BX-11) prediction is within the assay's replicate noise
+
+inference_target: mechanism_discrimination
+
+domain_packs:
+  - general-dynamics
+  - measurement-tech

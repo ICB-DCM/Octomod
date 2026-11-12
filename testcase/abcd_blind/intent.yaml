@@ -1,0 +1,66 @@
+# Frozen S0 intent for abcd_blind. Written at staging time and never edited by
+# an agent — the success criteria in particular are what the agent is judged
+# against, so it may not choose them (spec.py rule 1, applied to the intent).
+#
+# THE BLIND CASE. Same invented system, byte-identical data and truth as
+# abcd_prediction / abcd_mechanism. Two things are deliberately withheld that
+# both of those cases gave away:
+#
+#   1. description.md drops the "Open questions on our side" section, which
+#      listed all three structural axes the agent then "discovered" in
+#      live_abcd_4 — in the same order.
+#   2. The question below does NOT enumerate candidate wirings. The
+#      abcd_mechanism question did ("RegB-only conversion, an additional direct
+#      KinA route, product feedback, or both?"), which is the entire M1..M4 set
+#      handed over in the prompt.
+#
+# So this is the first case that actually asks the thesis question: given data
+# and an honest description of the module as built, can the system find a
+# mechanism nobody pointed at? The task is stated plainly as mechanism finding,
+# which means the scoring is unforgiving by design: "the
+# prompt should say that the idea is to find the best mechanism that describes
+# the data, so I would see it as a failure if it doesn't find the true model."
+# Returning the module as designed is a FAILURE here, not a neutral outcome.
+#
+# Residual hint we could not remove without changing the task: the perturbations
+# below name BX-11, so the agent knows the inhibitor arm exists. That is
+# unavoidable — it is in the data — and is stated rather than pretended away.
+
+question: >-
+  Find the mechanism that best explains the SynMod-4 data. The module as we
+  built it is described in the experiment notes; work out whether that wiring
+  actually accounts for what was measured, and if it does not, what wiring
+  does. Report what the data can and cannot distinguish.
+
+system: SynMod-4 engineered module, S. cerevisiae (synthetic benchmark)
+
+required_entities:
+  - KinA_p
+  - RegB_p
+  - ProD
+
+required_predictions:
+  # deliberately phrased as a task, not as an answer: it names WHAT must be
+  # delivered (a defended mechanism) without naming any candidate wiring
+  - the mechanism that best explains the data, identified and defended
+
+perturbations:
+  - inducer dose u in {0.25,1,4}
+  - BX-11 RegB-activation inhibitor
+
+timescale: minutes, horizon 120 min
+
+scope_exclusions:
+  - gene expression changes
+
+success_criteria:
+  - the selected mechanism is reported with its Akaike weight and the
+    indistinguishable set, honestly, whatever they turn out to be
+  - every structural ingredient in the selected mechanism is defended against
+    the data that supports it, not against the module's design intent
+
+inference_target: mechanism_discrimination
+
+domain_packs:
+  - general-dynamics
+  - measurement-tech

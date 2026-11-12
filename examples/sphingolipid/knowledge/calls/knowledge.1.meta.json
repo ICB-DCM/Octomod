@@ -1,0 +1,16 @@
+{
+  "name": "knowledge.1",
+  "role": "knowledge",
+  "mode": "survey",
+  "search": "online",
+  "backend": "llm",
+  "at": "2026-09-29T10:35:26",
+  "model": "opus",
+  "model_resolved": "claude-opus-5",
+  "effort": "max",
+  "cost_usd": 4.7339082,
+  "sha": "32b69ad6e84f9adf",
+  "prompt_bytes": 28940,
+  "attempts": 1,
+  "duration_s": 1356.16
+}

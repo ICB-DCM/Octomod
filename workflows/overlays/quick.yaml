@@ -1,0 +1,30 @@
+# Reduced-effort overlay for the battery's plumbing suites.
+#
+# Deep-merged over whichever workflow spec a run loads, and hashed into that
+# run's workflow_sha — a run under this overlay is never recorded as a run of
+# the base spec. Applied by setting OCTOMOD_SPEC_OVERLAY; tests/run_all.py
+# sets it for every suite not in its FULL_EFFORT set.
+#
+# WHAT MAY BE REDUCED HERE: effort — how many optimisation starts, probe
+# starts and uncertainty samples the plumbing suites spend. Those suites assert
+# PROTOCOL (gate sequences, resume idempotency, entry validation, dossiers),
+# and protocol does not get truer with more starts.
+#
+# WHAT MAY NOT: any pass criterion. No threshold, no alpha, no gate tier, no
+# criterion, no cap that decides an outcome appears in this file. The suites
+# whose assertions are scientific — parameter recovery, CI coverage, held-out
+# prediction, which model wins a selection — are in run_all.FULL_EFFORT and
+# never run under this file.
+estimation:
+  n_starts_default: 20         # 100 in default.yaml; still >> the waterfall k of 3
+  n_probe_starts: 2            # 5 in default.yaml
+
+uncertainty:
+  n_box_samples: 80            # 400 in default.yaml; the band is exercised, not measured
+
+# NOT reduced here, on purpose: diagnostics.form_fit.n_bootstrap sets the
+# resolution of a bootstrap p-value, and no reduced-effort suite reads it from
+# the spec anyway (the form-fit unit test passes its own count; the executor
+# runs only in the full-effort expansion suite). An overlay entry that buys nothing and
+# could coarsen a statistic does not belong in the file.
+

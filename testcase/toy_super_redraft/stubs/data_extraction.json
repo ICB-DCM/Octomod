@@ -1,0 +1,50 @@
+{
+  "mappings": [
+    {
+      "file": "sensor_ts.csv",
+      "observable_label": "A_frac",
+      "time_column": "time_min",
+      "value_column": "A_frac",
+      "condition_columns": [
+        "u"
+      ],
+      "condition_label_template": "u={u}",
+      "replicate_column": "replicate",
+      "units": "fraction of total sensor (total normalised to 1)",
+      "error_type": "replicates"
+    },
+    {
+      "file": "sensor_ts.csv",
+      "observable_label": "P_uM",
+      "time_column": "time_min",
+      "value_column": "P_uM",
+      "condition_columns": [
+        "u"
+      ],
+      "condition_label_template": "u={u}",
+      "replicate_column": "replicate",
+      "units": "uM (LC-MS against standards)",
+      "error_type": "replicates"
+    }
+  ],
+  "observable_labels": [
+    {
+      "label": "A_frac",
+      "description": "active sensor fraction by FRET",
+      "units": "fraction of total sensor (total normalised to 1)",
+      "error_type": "replicates",
+      "n": 2
+    },
+    {
+      "label": "P_uM",
+      "description": "product by LC-MS against standards",
+      "units": "uM (calibrated)",
+      "error_type": "replicates",
+      "n": 2
+    }
+  ],
+  "flags": [
+    "Sub-zero values at t = 0 in both channels. The note attributes them to additive noise around a signal that is genuinely zero and says they are not clipped, so they are kept: dropping them would censor the dataset while the noise model still claims to be Gaussian."
+  ],
+  "notes": "Two independent extract preparations per dose, marked by `replicate`, so the replicate spread gives a model-free noise floor per observable. Only `u` varies between conditions."
+}

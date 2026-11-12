@@ -1,0 +1,11 @@
+# Sources the research agent must never use for these cases, engine-enforced.
+# The target paper and everything that restates its conclusion.
+10.1371/journal.pcbi.1014531
+journal.pcbi.1014531
+Quantitative modelling of P-TEFb mediated CTD phosphorylation identifies local cooperativity
+Quantitative modeling of P-TEFb mediated CTD phosphorylation identifies local cooperativity
+Callenbach
+biorxiv.org/content/10.1101/2025
+# NOT blocked, and deliberately: Czudnochowski, Boesken & Geyer (2012),
+# doi 10.1038/ncomms1846 — the SOURCE of the measurements. Finding it is
+# legitimate and is what a modeller would do.

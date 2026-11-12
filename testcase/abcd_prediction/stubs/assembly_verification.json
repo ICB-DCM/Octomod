@@ -1,0 +1,25 @@
+{
+  "verdicts": [
+    {
+      "aspect": "noise model vs readout physics",
+      "ok": true,
+      "note": "Additive normal noise with an estimated constant sigma per observable matches a calibrated MS readout whose replicate spread does not scale with concentration, and it is the only family consistent with the sub-zero early-time values, which a multiplicative or log-normal model assigns zero likelihood. Separate sigmas per peptide rather than one pooled sigma is the right call given three different standards."
+    },
+    {
+      "aspect": "scaling and offset",
+      "ok": true,
+      "note": "Mode 'none' on all three observables is correct and load-bearing. The description states absolute calibration in uM and the model's totals are normalised on that same calibration, so a free scale factor would be collinear with Atot, Btot or the precursor pool. Declining a scaling parameter here is a decision, not an omission, and the magnitude-reconciliation gate is the check that it was the right one."
+    },
+    {
+      "aspect": "condition encoding",
+      "ok": true,
+      "note": "All five condition labels present in the measurement table are encoded; the (u, bx11) pair maps onto two condition-owned model constants with the values the columns actually take, and neither appears in the parameter table. Pre-equilibration off throughout is consistent with t=0 being an uninduced sample rather than a resting steady state."
+    },
+    {
+      "aspect": "observable mapping completeness",
+      "ok": false,
+      "note": "The three observables map one-to-one onto the three measured columns and the formulas (Aa, Ba, D) are individually right. The concern is not the mapping but what any RegB-only structure can put behind obs_ProD: if the sole conversion route has a rate proportional to Ba, then under BX-11, where Ba is held near a twentieth of its untreated value, predicted ProD is close to flat in c_u1_bx and c_u4_bx at any parameter setting. The measured ProD in those conditions is not flat. That gap is structural, and no observable, noise or scaling choice at this stage can absorb it — ProD dynamics under BX-11 may involve a RegB-independent route the model lacks. Flagged here rather than at S1 because it is only visible once the measurements and the model are placed side by side."
+    }
+  ],
+  "overall": "concerns"
+}

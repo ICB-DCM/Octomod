@@ -1,0 +1,5 @@
+# strict — every human gate pauses for a live human; the policy answers nothing.
+profile: strict
+caps: {}
+answers: {}
+uncovered: pause

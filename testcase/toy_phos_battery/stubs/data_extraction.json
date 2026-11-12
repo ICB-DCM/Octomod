@@ -1,0 +1,28 @@
+{
+  "mappings": [
+    {
+      "file": "timecourse.csv",
+      "observable_label": "pR_au",
+      "time_column": "time_min",
+      "value_column": "pR_au",
+      "condition_columns": ["dose"],
+      "condition_label_template": "dose={dose}",
+      "replicate_column": "replicate",
+      "units": "arbitrary",
+      "error_type": "replicates"
+    }
+  ],
+  "observable_labels": [
+    {
+      "label": "pR_au",
+      "description": "phospho-R immunoblot densitometry",
+      "units": "arbitrary",
+      "error_type": "replicates",
+      "n": 2
+    }
+  ],
+  "flags": [
+    "small negative values at early times are noise realisations around zero — kept"
+  ],
+  "notes": "Single file, single observable. The description states the densitometry is background-subtracted and uncalibrated, so units are declared arbitrary rather than concentration-like; that declaration is what forces an observable scaling parameter downstream. No error column is supplied and the two lanes per point are described as biological replicates from separate wells, so error_type is 'replicates' and sigma must be estimated rather than read from the table. Time is in minutes throughout, matching the 60 min horizon in the intent."
+}

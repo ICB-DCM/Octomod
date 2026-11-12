@@ -1,0 +1,105 @@
+{
+  "network": {
+    "species": [
+      {
+        "id": "A",
+        "name": "fluorescent reporter A",
+        "compartment": "cell"
+      }
+    ],
+    "interactions": [
+      {
+        "id": "J1",
+        "type": "degradation",
+        "participants": [
+          {
+            "species": "A",
+            "role": "substrate",
+            "stoichiometry": 1
+          }
+        ],
+        "evidence_tier": "default",
+        "note": "First-order loss to nothing. No product species: the degradation products are not observed and tracking them would add an unidentifiable state. Synthesis is deliberately absent per the intent's scope_exclusions \u2014 the experiment starts at washout."
+      }
+    ]
+  },
+  "antimony": "model toy_decay\n  compartment cell = 1;\n  species A in cell;\n  A = A0;\n  A0 = 8;\n  k1 = 0.1;\n  J1: A -> ; k1 * A;\nend\n",
+  "parameters": [
+    {
+      "id": "k1",
+      "nominal_value": 0.1,
+      "unit": "1/h",
+      "evidence_tier": "default",
+      "source": "no reporter-specific value supplied; placeholder chosen so that the nominal half-life sits inside the 10 h observation window",
+      "estimate": true,
+      "lb": 0.001,
+      "ub": 10
+    },
+    {
+      "id": "A0",
+      "nominal_value": 8,
+      "unit": "calibrated a.u.",
+      "evidence_tier": "reported",
+      "source": "description states starting levels sit around 8 to 12 on the calibrated scale; the low end of that range is taken as the nominal",
+      "estimate": true,
+      "lb": 1,
+      "ub": 100
+    }
+  ],
+  "build_report": {
+    "decisions": [
+      {
+        "decision": "First-order (mass-action) degradation of A with no synthesis term.",
+        "alternatives_considered": [
+          "zero-order (saturated, Michaelis-Menten-limited) degradation",
+          "retain a synthesis term with a washout-time step"
+        ],
+        "evidence_tier": "default",
+        "confidence": 0.85,
+        "user_decision_required": false,
+        "question": null
+      },
+      {
+        "decision": "The initial level is an estimated parameter A0 entering through the antimony initial assignment A = A0, rather than a fixed number read off the t=0 measurements.",
+        "alternatives_considered": [
+          "fix A(0) to the mean of the two t=0 readings",
+          "fix A(0) to 10 as the midpoint of the stated 8-12 range"
+        ],
+        "evidence_tier": "reported",
+        "confidence": 0.8,
+        "user_decision_required": false,
+        "question": null
+      },
+      {
+        "decision": "No growth-dilution term, following the description's statement that cells were held at low density in stationary phase and the intent's scope_exclusions.",
+        "alternatives_considered": [
+          "add a dilution rate constant and let it absorb part of the observed loss"
+        ],
+        "evidence_tier": "reported",
+        "confidence": 0.9,
+        "user_decision_required": false,
+        "question": "A dilution term would be exactly collinear with k1 under a single condition \u2014 the data cannot separate them, so adding it would convert a finite CI into an unbounded one. If the intent ever requires degradation as distinct from total loss, a second condition varying growth rate is needed."
+      }
+    ]
+  },
+  "consulted_sources": [
+    "supplied experiment description only (synthetic case)"
+  ],
+  "entity_glossary": {
+    "species": [
+      {
+        "id": "A",
+        "denotes": "the fluorescent reporter A, measured as A_conc on an approximately absolute concentration scale",
+        "unit_convention": "absolute concentration units of the calibrated reader; no scale factor expected",
+        "lump_membership": "A is the single reporter state"
+      }
+    ],
+    "parameters": [
+      {
+        "id": "A0",
+        "role": "reporter level at washout (t = 0), estimated",
+        "convention": "same concentration units as A; the lab note puts it around 8-12"
+      }
+    ]
+  }
+}

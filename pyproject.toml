@@ -1,0 +1,146 @@
+# Octomod prototype — uv-managed environment.
+# Setup:   uv sync          (creates .venv/ here + uv.lock; commit uv.lock)
+# Run:     uv run python -m octomod run --testcase testcase/toy_phos ...
+# The engine resolves .venv/ automatically (config.py); requirements.txt is
+# kept as the pip fallback and must mirror these pins.
+
+[project]
+name = "octomod"
+version = "0.1.0"
+description = "Octomod: LLM agents and a checked workflow for mechanistic model construction and refinement (SBML, PEtab, AMICI, pyPESTO)"
+authors = [{ name = "Domagoj Dorešić" }, { name = "Yuhong Liu" }, { name = "Vincent Wieland" }, { name = "Paul Jonas Jost" }, { name = "Manuel Huth" }, { name = "Dilan Pathirana" }, { name = "Jan Hasenauer" }]
+license = { file = "LICENSE" }
+readme = "README.md"
+requires-python = ">=3.12,<3.14"
+dependencies = [
+    "pypesto==0.6.0",
+    "amici==1.0.1",
+    "petab==0.8.2",
+    "python-libsbml==5.21.1",
+    "antimony==3.1.3",
+    "libroadrunner==2.10.0",
+    "fides==0.8.0",
+    "numpy==2.5.2",
+    "scipy==1.18.1",
+    "pandas==3.0.5",
+    "pyyaml==6.0.3",
+    "h5py==3.16.0",
+    "matplotlib==3.11.1",
+    "petab-select>=0.4.0",
+    # the result record: pydantic models,
+    # written as one HDF5 file through mkstd. Both were already in the tree as
+    # dependencies of petab-select; declared here because the engine now
+    # imports them directly.
+    "pydantic==2.13.5",
+    "mkstd==0.0.13",
+    # Optimiser comparison. Both are needed for the comparison to say
+    # anything: without them the two strongest candidates in the shipped list
+    # report UNAVAILABLE and the bake-off degrades to fides against SciPy —
+    # which is the "availability mistaken for evidence" problem the candidate
+    # list was re-derived to avoid. Scores are from Grein & Penas (2026),
+    # problems on which the method reached the best known objective.
+    "cma>=3.2",      # CMA-ES, 26/30 — the study's strongest single method
+    "nlopt>=2.7",    # LD_LBFGS, 20/30 — strongest needing no sub-algorithm
+]
+
+# ---------------------------------------------------------------- style
+# pyPESTO-shape: one line length, one import order, one formatter, all declared
+# here so no reader has to infer the house style from the surrounding lines.
+# Both tools are PINNED dev
+# dependencies, so the check runs from the lockfile and not from whatever the
+# machine happens to have on PATH:
+#   uv run black --check .
+#   uv run ruff check .
+# Pinned rather than floating because a formatter's output is only reproducible
+# at a fixed version, and this tree's formatting is a committed artifact.
+#
+# Neither tool declares target-version. Both infer it from requires-python
+# above, which is the single source of truth for the syntax this code may use.
+# Naming a version here duplicates that floor and drifts from it; naming the
+# interpreter in .python-version would be worse still, because that is the
+# version we DEVELOP on while requires-python admits an older one, and
+# pyupgrade would then rewrite code into syntax the floor cannot parse.
+
+# Both tools declare the SAME scope on purpose: a config where `black .` and
+# the documented command disagree is the very ambiguity this section removes.
+#
+# testcase/ is INSIDE the scope. It was excluded on the
+# reasoning that a style pass must never appear in a diff next to benchmark
+# ground truth — but `truth/` holds `true_model.md` and `true_parameters.json`
+# and no Python at all, so a formatter could not touch it either way. The only
+# Python under testcase/ is five `make_data.py` generators, and there is no
+# reason for those to be the one corner of the repo with no house style.
+
+[project.urls]
+Repository = "https://github.com/ICB-DCM/Octomod"
+
+[tool.black]
+line-length = 88
+# notebooks/: marimo rewrites the notebook file in its own layout on every save
+# in the editor; letting black fight it would dirty the tree after each session.
+extend-exclude = "/(runs|docs|notebooks|\\.venv)/"
+
+[tool.ruff]
+line-length = 88
+extend-exclude = ["runs", ".venv", "docs"]
+
+[tool.ruff.lint]
+# E,F: pycodestyle + pyflakes · I: import order · B: bugbear · UP: pyupgrade.
+# D (numpydoc) is deliberately NOT selected yet: turning it on before the
+# public-API docstrings are written would report a few hundred
+# findings and drown the ones that mean something.
+select = ["E", "F", "I", "B", "UP"]
+ignore = [
+    # A gate's evidence line, a skill's contract text and an agent's prompt are
+    # written to be read by a human or a model at a fixed width; wrapping them
+    # to satisfy a linter makes them worse. Long lines are reported by the
+    # formatter's own reflow, not policed here.
+    "E501",
+    # UP038 rewrites isinstance(x, (A, B)) into isinstance(x, A | B). ruff
+    # itself deprecates the rule: the union form is slower and wrongly implies
+    # that other typing syntax works in isinstance. The tuple form stays.
+    "UP038",
+]
+
+# No per-file-ignores. The three deliberate E402 exceptions (the agents
+# package's two backend imports below AgentCallError, and one suite's engine
+# import after it extends sys.path) carry an inline `noqa` on the exact line,
+# next to the constraint that forces it. A file-glob exception would hide any
+# future violation in the same file.
+#
+# BLE (blind-except) is deliberately NOT selected, and there are no `noqa:
+# BLE001` markers either: 49 of them named a rule this
+# config does not switch on, so they suppressed nothing and read as if they
+# did. Where the reason for a catch-all mattered it is now a plain comment on
+# the same line. Selecting BLE later is a real decision — every broad except
+# in the engine is there so a diagnostic, a record or an attribution can never
+# end a run — and it should be made once, not implied by a marker.
+
+[tool.ruff.lint.isort]
+known-first-party = ["octomod"]
+
+[tool.ruff.lint.per-file-ignores]
+# a marimo cell's last bare expression IS its output
+"notebooks/*.py" = ["B018"]
+
+[tool.uv]
+# This repo is a runnable workspace, not an installable package: agents,
+# gates and modules are executed in place via `python -m octomod`.
+package = false
+
+[dependency-groups]
+dev = [
+    "black==24.10.0",
+    "ruff==0.11.5",
+]
+docs = [
+    "ipykernel>=6",
+    "myst-nb>=1.2",
+    "sphinx>=8",
+    "sphinx-book-theme>=1.1",
+    "sphinx-design>=0.6",
+]
+notebook = [
+    "claude-agent-sdk>=0.2",
+    "marimo>=0.25",
+]

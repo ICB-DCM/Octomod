@@ -1,0 +1,41 @@
+{
+  "observables": [
+    {
+      "observable_id": "obs_A_frac",
+      "maps_to_label": "A_frac",
+      "formula": "A",
+      "transformation": "lin",
+      "noise": {
+        "distribution": "normal",
+        "formula": "sigma_obs_A_frac",
+        "estimate_sigma": true
+      },
+      "scaling": {
+        "mode": "none",
+        "scale_parameter": null,
+        "offset_parameter": null,
+        "shared_across_conditions": true
+      },
+      "rationale": "MAPPING: the readout is A_frac and the state is A, with no conversion \u2014 the note gives the FRET channel already normalised to the sensor total and the LC-MS channel in absolute uM against standards, so a scaling factor or an offset would be a fit device rather than a measurement model. NOISE: additive normal with one estimated sigma per observable. Additive because the note quotes a single absolute precision per channel from the replicate spread on standards, not a percentage; normal because the negative values at t = 0 have zero likelihood under a multiplicative or log-normal model."
+    },
+    {
+      "observable_id": "obs_P_uM",
+      "maps_to_label": "P_uM",
+      "formula": "P",
+      "transformation": "lin",
+      "noise": {
+        "distribution": "normal",
+        "formula": "sigma_obs_P_uM",
+        "estimate_sigma": true
+      },
+      "scaling": {
+        "mode": "none",
+        "scale_parameter": null,
+        "offset_parameter": null,
+        "shared_across_conditions": true
+      },
+      "rationale": "MAPPING: the readout is P_uM and the state is P, with no conversion \u2014 the note gives the FRET channel already normalised to the sensor total and the LC-MS channel in absolute uM against standards, so a scaling factor or an offset would be a fit device rather than a measurement model. NOISE: additive normal with one estimated sigma per observable. Additive because the note quotes a single absolute precision per channel from the replicate spread on standards, not a percentage; normal because the negative values at t = 0 have zero likelihood under a multiplicative or log-normal model."
+    }
+  ],
+  "_fixture_note": "No scaling and no offset on either channel, so every axis in this case is a MODEL axis. That is deliberate: an observation axis is not neutralizable by construction (it never touches the model), and this case exists to exercise the axes that are."
+}

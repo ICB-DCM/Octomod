@@ -1,0 +1,42 @@
+{
+  "mappings": [
+    {
+      "file": "timecourse.csv",
+      "observable_label": "pR_au",
+      "time_column": "time_min",
+      "value_column": "pR_au",
+      "condition_columns": [
+        "dose"
+      ],
+      "condition_label_template": "dose={dose}",
+      "replicate_column": "replicate",
+      "units": "arbitrary",
+      "error_type": "replicates"
+    }
+  ],
+  "observable_labels": [
+    {
+      "label": "pR_au",
+      "description": "phospho-R immunoblot densitometry",
+      "units": "arbitrary",
+      "error_type": "replicates",
+      "n": 2
+    }
+  ],
+  "flags": [
+    "background of ~0.5 AU present in every lane before subtraction \u2014 the dose=0 blank lanes are the reference, declared under processing"
+  ],
+  "notes": "Single file, single observable. The description states the densitometry is raw and the blank lanes carry the background and uncalibrated, so units are declared arbitrary rather than concentration-like; that declaration is what forces an observable scaling parameter downstream. No error column is supplied and the two lanes per point are described as biological replicates from separate wells, so error_type is 'replicates' and sigma must be estimated rather than read from the table. Time is in minutes throughout, matching the 60 min horizon in the intent.",
+  "processing": [
+    {
+      "kind": "subtract_reference",
+      "labels": [
+        "pR_au"
+      ],
+      "reference": {
+        "condition_label": "dose=0"
+      },
+      "rationale": "the note supplies blank lanes at dose 0 (no ligand) carrying the membrane background and says the values were not background-subtracted; subtracting the matching blank lane (same time, same replicate) removes it"
+    }
+  ]
+}

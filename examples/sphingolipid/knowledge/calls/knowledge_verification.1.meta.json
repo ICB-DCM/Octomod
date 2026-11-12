@@ -1,0 +1,16 @@
+{
+  "name": "knowledge_verification.1",
+  "role": "knowledge_verification",
+  "mode": "",
+  "search": "offline",
+  "backend": "llm",
+  "at": "2026-09-29T10:58:41",
+  "model": "opus",
+  "model_resolved": "claude-opus-5",
+  "effort": "max",
+  "cost_usd": 1.0499596,
+  "sha": "7bf2f421e4424d8b",
+  "prompt_bytes": 68653,
+  "attempts": 1,
+  "duration_s": 127.18
+}

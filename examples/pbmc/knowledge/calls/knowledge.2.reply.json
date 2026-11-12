@@ -1,0 +1,3706 @@
+{
+  "system": {
+    "summary": "The source study's own reading of this plate already names the phenomenon: monocytes, which carry TLR4, respond to LPS first, while B, T and NK cells - which have little or no LPS receptor - respond only at later time points, attributed by the authors to inter-cellular communication through IL-6 or other monocyte-released factors. The literature fixes a receptor asymmetry a base model can use: TLR4 and the GM-CSF, G-CSF and IL-3 receptors are restricted to myelomonocytic cells among PBMC, so LPS and the three colony-stimulating factors have no direct receptor on the staged lymphocyte gates, whereas IFNAR2 is on essentially all monocytes, B cells and CD4/CD8 T cells, and the IFN-gamma transducing chain IFNGR2 is high on myeloid, moderate on B and poor on T cells - the exact rank order of the direct IFN-gamma responses here. Two secreted candidates have human support: LPS induces IFN-beta transcription and secretion with STAT1 phosphorylation and ISGs in primary human PBMC (and an IFNAR2-blocking antibody abolishes the late type I IFN-dependent arm in human myeloid cells), and LPS, GM-CSF and IL-3 all induce IL-6 gene expression in purified human monocytes, with IL-6R on most CD4 T cells but only a small, variable fraction of CD8 T and B cells - the population signature the late STAT3 rise follows. The main tension is timing: bulk monocyte IL-6/TNF protein release (mRNA 2-4 h, protein 4-6 h) and autocrine type I IFN loops (ISGF3 far stronger at 4 h than 1 h) are slower than the 60-120 min onset seen here. Known STAT kinetics (nuclear pY-STAT1 maximal at 20-30 min, cleared within ~60 min once receptor input stops) set the deactivation half of every cycle.",
+    "scope": "Human peripheral blood leukocytes: primary CD14+ monocytes, monocyte-derived macrophages and dendritic cells, CD4+ and CD8+ T cells, B cells, NK cells, whole blood and PBMC, ex vivo at 37 C, stimulated with LPS, IFN-alpha/beta, IFN-gamma, IL-6, GM-CSF, G-CSF or IL-3, minutes to 48 h. Mechanistic JAK/STAT models and several LPS-to-IFN-beta loop experiments come from mouse macrophages, mouse dendritic cells or human hepatoma/erythroid cells and are marked as such.",
+    "unknowns": [
+      "The identity of the factor(s) reaching the lymphocytes is not measured here; two factors with the same STAT signature and receptor distribution are indistinguishable in these data.",
+      "Whether human monocytes secrete enough type I interferon protein within 60-120 min at 30 ng/ml LPS to phosphorylate lymphocyte STATs: published autocrine-loop and cytokine-release kinetics are slower.",
+      "Whether human T cells express a functional G-CSF receptor is disputed (Boneberg 2000: absent from lymphocytes; Franzke 2003: present in class I- and II-restricted T cells).",
+      "Whether G-CSF induces IL-6 in human monocytes is untested in the study showing IL-3 and GM-CSF do; G-CSF is reported to suppress rather than augment monokine release.",
+      "IL-6R and gp130 on human NK cells are essentially undocumented; the subset studies report CD4 T, CD8 T, B cells and monocytes but not NK cells.",
+      "Whether the unstimulated wells' slow rise is basal secretion: plating/adherence induces monokine mRNA within 30-90 min but secretion required a second signal (Haskill 1988).",
+      "Whether a secreted factor is well mixed in a 200 ul well: diffusion competing with receptor consumption produces niches of 80-120 um in dense cell populations.",
+      "No measurement was found of type I IFN or IL-6 protein in the medium of an LPS-stimulated human PBMC well at 1, 2 and 4 h at 30 ng/ml - the quantity that would settle the question."
+    ]
+  },
+  "species": [
+    {
+      "id": "IFNa",
+      "name": "interferon alpha-2 in the shared medium (added stimulus)",
+      "represents": "",
+      "identifiers": {
+        "uniprot": "uniprot:P01563",
+        "go_compartment": "go:0005615"
+      }
+    },
+    {
+      "id": "IFNg",
+      "name": "interferon gamma in the shared medium (added stimulus and any produced in the well)",
+      "represents": "",
+      "identifiers": {
+        "uniprot": "uniprot:P01579",
+        "go_compartment": "go:0005615"
+      }
+    },
+    {
+      "id": "LPS",
+      "name": "lipopolysaccharide in the shared medium",
+      "represents": "",
+      "identifiers": {
+        "chebi": "chebi:16412",
+        "go_compartment": "go:0005615"
+      }
+    },
+    {
+      "id": "GMCSF",
+      "name": "GM-CSF (CSF2) in the shared medium",
+      "represents": "",
+      "identifiers": {
+        "uniprot": "uniprot:P04141",
+        "go_compartment": "go:0005615"
+      }
+    },
+    {
+      "id": "GCSF",
+      "name": "G-CSF (CSF3) in the shared medium",
+      "represents": "",
+      "identifiers": {
+        "uniprot": "uniprot:P09919",
+        "go_compartment": "go:0005615"
+      }
+    },
+    {
+      "id": "IL3",
+      "name": "interleukin-3 in the shared medium",
+      "represents": "",
+      "identifiers": {
+        "uniprot": "uniprot:P08700",
+        "go_compartment": "go:0005615"
+      }
+    },
+    {
+      "id": "sIFN1",
+      "name": "unmeasured secreted type I interferon-like factor (candidate IFN-beta)",
+      "represents": "",
+      "identifiers": {
+        "uniprot": "uniprot:P01574",
+        "go_compartment": "go:0005615"
+      }
+    },
+    {
+      "id": "sIL6",
+      "name": "unmeasured secreted IL-6-like factor",
+      "represents": "",
+      "identifiers": {
+        "uniprot": "uniprot:P05231",
+        "go_compartment": "go:0005615"
+      }
+    },
+    {
+      "id": "sIL10",
+      "name": "unmeasured secreted IL-10",
+      "represents": "",
+      "identifiers": {
+        "uniprot": "uniprot:P22301",
+        "go_compartment": "go:0005615"
+      }
+    },
+    {
+      "id": "sIL27",
+      "name": "unmeasured secreted IL-27 (p28 subunit)",
+      "represents": "",
+      "identifiers": {
+        "uniprot": "uniprot:Q8NEV9",
+        "go_compartment": "go:0005615"
+      }
+    },
+    {
+      "id": "STAT1_Tcell_CD4",
+      "name": "unphosphorylated STAT1 in CD4 T cells",
+      "represents": "",
+      "identifiers": {
+        "uniprot": "uniprot:P42224",
+        "go_compartment": "go:0005829"
+      }
+    },
+    {
+      "id": "pSTAT1_Tcell_CD4",
+      "name": "STAT1 pY701 in CD4 T cells",
+      "represents": "pSTAT1 in Tcell_CD4",
+      "identifiers": {
+        "uniprot": "uniprot:P42224"
+      }
+    },
+    {
+      "id": "STAT3_Tcell_CD4",
+      "name": "unphosphorylated STAT3 in CD4 T cells",
+      "represents": "",
+      "identifiers": {
+        "uniprot": "uniprot:P40763",
+        "go_compartment": "go:0005829"
+      }
+    },
+    {
+      "id": "pSTAT3_Tcell_CD4",
+      "name": "STAT3 pY705 in CD4 T cells",
+      "represents": "pSTAT3 in Tcell_CD4",
+      "identifiers": {
+        "uniprot": "uniprot:P40763"
+      }
+    },
+    {
+      "id": "STAT5_Tcell_CD4",
+      "name": "unphosphorylated STAT5 in CD4 T cells",
+      "represents": "",
+      "identifiers": {
+        "uniprot": "uniprot:P42229",
+        "go_compartment": "go:0005829"
+      }
+    },
+    {
+      "id": "pSTAT5_Tcell_CD4",
+      "name": "STAT5 pY694 in CD4 T cells",
+      "represents": "pSTAT5 in Tcell_CD4",
+      "identifiers": {
+        "uniprot": "uniprot:P42229"
+      }
+    },
+    {
+      "id": "STAT1_Tcell_CD4neg",
+      "name": "unphosphorylated STAT1 in CD4-negative T cells",
+      "represents": "",
+      "identifiers": {
+        "uniprot": "uniprot:P42224",
+        "go_compartment": "go:0005829"
+      }
+    },
+    {
+      "id": "pSTAT1_Tcell_CD4neg",
+      "name": "STAT1 pY701 in CD4-negative T cells",
+      "represents": "pSTAT1 in Tcell_CD4neg",
+      "identifiers": {
+        "uniprot": "uniprot:P42224"
+      }
+    },
+    {
+      "id": "STAT3_Tcell_CD4neg",
+      "name": "unphosphorylated STAT3 in CD4-negative T cells",
+      "represents": "",
+      "identifiers": {
+        "uniprot": "uniprot:P40763",
+        "go_compartment": "go:0005829"
+      }
+    },
+    {
+      "id": "pSTAT3_Tcell_CD4neg",
+      "name": "STAT3 pY705 in CD4-negative T cells",
+      "represents": "pSTAT3 in Tcell_CD4neg",
+      "identifiers": {
+        "uniprot": "uniprot:P40763"
+      }
+    },
+    {
+      "id": "STAT5_Tcell_CD4neg",
+      "name": "unphosphorylated STAT5 in CD4-negative T cells",
+      "represents": "",
+      "identifiers": {
+        "uniprot": "uniprot:P42229",
+        "go_compartment": "go:0005829"
+      }
+    },
+    {
+      "id": "pSTAT5_Tcell_CD4neg",
+      "name": "STAT5 pY694 in CD4-negative T cells",
+      "represents": "pSTAT5 in Tcell_CD4neg",
+      "identifiers": {
+        "uniprot": "uniprot:P42229"
+      }
+    },
+    {
+      "id": "STAT1_Bcell",
+      "name": "unphosphorylated STAT1 in B cells",
+      "represents": "",
+      "identifiers": {
+        "uniprot": "uniprot:P42224",
+        "go_compartment": "go:0005829"
+      }
+    },
+    {
+      "id": "pSTAT1_Bcell",
+      "name": "STAT1 pY701 in B cells",
+      "represents": "pSTAT1 in Bcell",
+      "identifiers": {
+        "uniprot": "uniprot:P42224"
+      }
+    },
+    {
+      "id": "STAT3_Bcell",
+      "name": "unphosphorylated STAT3 in B cells",
+      "represents": "",
+      "identifiers": {
+        "uniprot": "uniprot:P40763",
+        "go_compartment": "go:0005829"
+      }
+    },
+    {
+      "id": "pSTAT3_Bcell",
+      "name": "STAT3 pY705 in B cells",
+      "represents": "pSTAT3 in Bcell",
+      "identifiers": {
+        "uniprot": "uniprot:P40763"
+      }
+    },
+    {
+      "id": "STAT5_Bcell",
+      "name": "unphosphorylated STAT5 in B cells",
+      "represents": "",
+      "identifiers": {
+        "uniprot": "uniprot:P42229",
+        "go_compartment": "go:0005829"
+      }
+    },
+    {
+      "id": "pSTAT5_Bcell",
+      "name": "STAT5 pY694 in B cells",
+      "represents": "pSTAT5 in Bcell",
+      "identifiers": {
+        "uniprot": "uniprot:P42229"
+      }
+    },
+    {
+      "id": "STAT1_NKcell",
+      "name": "unphosphorylated STAT1 in NK cells",
+      "represents": "",
+      "identifiers": {
+        "uniprot": "uniprot:P42224",
+        "go_compartment": "go:0005829"
+      }
+    },
+    {
+      "id": "pSTAT1_NKcell",
+      "name": "STAT1 pY701 in NK cells",
+      "represents": "pSTAT1 in NKcell",
+      "identifiers": {
+        "uniprot": "uniprot:P42224"
+      }
+    },
+    {
+      "id": "STAT3_NKcell",
+      "name": "unphosphorylated STAT3 in NK cells",
+      "represents": "",
+      "identifiers": {
+        "uniprot": "uniprot:P40763",
+        "go_compartment": "go:0005829"
+      }
+    },
+    {
+      "id": "pSTAT3_NKcell",
+      "name": "STAT3 pY705 in NK cells",
+      "represents": "pSTAT3 in NKcell",
+      "identifiers": {
+        "uniprot": "uniprot:P40763"
+      }
+    },
+    {
+      "id": "STAT5_NKcell",
+      "name": "unphosphorylated STAT5 in NK cells",
+      "represents": "",
+      "identifiers": {
+        "uniprot": "uniprot:P42229",
+        "go_compartment": "go:0005829"
+      }
+    },
+    {
+      "id": "pSTAT5_NKcell",
+      "name": "STAT5 pY694 in NK cells",
+      "represents": "pSTAT5 in NKcell",
+      "identifiers": {
+        "uniprot": "uniprot:P42229"
+      }
+    },
+    {
+      "id": "STAT1_Monocyte",
+      "name": "unphosphorylated STAT1 in CD14+ monocytes",
+      "represents": "",
+      "identifiers": {
+        "uniprot": "uniprot:P42224",
+        "go_compartment": "go:0005829"
+      }
+    },
+    {
+      "id": "pSTAT1_Monocyte",
+      "name": "STAT1 pY701 in CD14+ monocytes",
+      "represents": "pSTAT1 in Monocyte",
+      "identifiers": {
+        "uniprot": "uniprot:P42224"
+      }
+    },
+    {
+      "id": "STAT3_Monocyte",
+      "name": "unphosphorylated STAT3 in CD14+ monocytes",
+      "represents": "",
+      "identifiers": {
+        "uniprot": "uniprot:P40763",
+        "go_compartment": "go:0005829"
+      }
+    },
+    {
+      "id": "pSTAT3_Monocyte",
+      "name": "STAT3 pY705 in CD14+ monocytes",
+      "represents": "pSTAT3 in Monocyte",
+      "identifiers": {
+        "uniprot": "uniprot:P40763"
+      }
+    },
+    {
+      "id": "STAT5_Monocyte",
+      "name": "unphosphorylated STAT5 in CD14+ monocytes",
+      "represents": "",
+      "identifiers": {
+        "uniprot": "uniprot:P42229",
+        "go_compartment": "go:0005829"
+      }
+    },
+    {
+      "id": "pSTAT5_Monocyte",
+      "name": "STAT5 pY694 in CD14+ monocytes",
+      "represents": "pSTAT5 in Monocyte",
+      "identifiers": {
+        "uniprot": "uniprot:P42229"
+      }
+    },
+    {
+      "id": "IFNAR_Tcell_CD4",
+      "name": "resting type I IFN receptor with JAKs (IFNAR1/2:JAK1:TYK2, lumped) on CD4 T cells",
+      "represents": "",
+      "identifiers": {
+        "go_compartment": "go:0005886"
+      }
+    },
+    {
+      "id": "IFNAR_act_Tcell_CD4",
+      "name": "signalling type I IFN receptor-JAK complex on CD4 T cells",
+      "represents": "",
+      "identifiers": {
+        "go_compartment": "go:0005886"
+      }
+    },
+    {
+      "id": "IFNAR_Tcell_CD4neg",
+      "name": "resting type I IFN receptor-JAK complex on CD4-negative T cells",
+      "represents": "",
+      "identifiers": {
+        "go_compartment": "go:0005886"
+      }
+    },
+    {
+      "id": "IFNAR_act_Tcell_CD4neg",
+      "name": "signalling type I IFN receptor-JAK complex on CD4-negative T cells",
+      "represents": "",
+      "identifiers": {
+        "go_compartment": "go:0005886"
+      }
+    },
+    {
+      "id": "IFNAR_Bcell",
+      "name": "resting type I IFN receptor-JAK complex on B cells",
+      "represents": "",
+      "identifiers": {
+        "go_compartment": "go:0005886"
+      }
+    },
+    {
+      "id": "IFNAR_act_Bcell",
+      "name": "signalling type I IFN receptor-JAK complex on B cells",
+      "represents": "",
+      "identifiers": {
+        "go_compartment": "go:0005886"
+      }
+    },
+    {
+      "id": "IFNAR_NKcell",
+      "name": "resting type I IFN receptor-JAK complex on NK cells",
+      "represents": "",
+      "identifiers": {
+        "go_compartment": "go:0005886"
+      }
+    },
+    {
+      "id": "IFNAR_act_NKcell",
+      "name": "signalling type I IFN receptor-JAK complex on NK cells",
+      "represents": "",
+      "identifiers": {
+        "go_compartment": "go:0005886"
+      }
+    },
+    {
+      "id": "IFNAR_Monocyte",
+      "name": "resting type I IFN receptor-JAK complex on monocytes",
+      "represents": "",
+      "identifiers": {
+        "go_compartment": "go:0005886"
+      }
+    },
+    {
+      "id": "IFNAR_act_Monocyte",
+      "name": "signalling type I IFN receptor-JAK complex on monocytes",
+      "represents": "",
+      "identifiers": {
+        "go_compartment": "go:0005886"
+      }
+    },
+    {
+      "id": "IFNGR_Monocyte",
+      "name": "resting IFN-gamma receptor with JAKs (IFNGR1/2:JAK1:JAK2, lumped) on monocytes",
+      "represents": "",
+      "identifiers": {
+        "go_compartment": "go:0005886"
+      }
+    },
+    {
+      "id": "IFNGR_act_Monocyte",
+      "name": "signalling IFN-gamma receptor-JAK complex on monocytes",
+      "represents": "",
+      "identifiers": {
+        "go_compartment": "go:0005886"
+      }
+    },
+    {
+      "id": "IFNGR_Bcell",
+      "name": "resting IFN-gamma receptor-JAK complex on B cells",
+      "represents": "",
+      "identifiers": {
+        "go_compartment": "go:0005886"
+      }
+    },
+    {
+      "id": "IFNGR_act_Bcell",
+      "name": "signalling IFN-gamma receptor-JAK complex on B cells",
+      "represents": "",
+      "identifiers": {
+        "go_compartment": "go:0005886"
+      }
+    },
+    {
+      "id": "IFNGR_Tcell_CD4",
+      "name": "resting IFN-gamma receptor-JAK complex on CD4 T cells (low surface IFNGR2)",
+      "represents": "",
+      "identifiers": {
+        "go_compartment": "go:0005886"
+      }
+    },
+    {
+      "id": "IFNGR_act_Tcell_CD4",
+      "name": "signalling IFN-gamma receptor-JAK complex on CD4 T cells",
+      "represents": "",
+      "identifiers": {
+        "go_compartment": "go:0005886"
+      }
+    },
+    {
+      "id": "IL6R_Tcell_CD4",
+      "name": "resting IL-6R:gp130:JAK1 complex on CD4 T cells",
+      "represents": "",
+      "identifiers": {
+        "go_compartment": "go:0005886"
+      }
+    },
+    {
+      "id": "IL6R_act_Tcell_CD4",
+      "name": "signalling IL-6R-gp130-JAK complex on CD4 T cells",
+      "represents": "",
+      "identifiers": {
+        "go_compartment": "go:0005886"
+      }
+    },
+    {
+      "id": "IL6R_Tcell_CD4neg",
+      "name": "resting IL-6R-gp130-JAK complex on CD4-negative T cells",
+      "represents": "",
+      "identifiers": {
+        "go_compartment": "go:0005886"
+      }
+    },
+    {
+      "id": "IL6R_act_Tcell_CD4neg",
+      "name": "signalling IL-6R-gp130-JAK complex on CD4-negative T cells",
+      "represents": "",
+      "identifiers": {
+        "go_compartment": "go:0005886"
+      }
+    },
+    {
+      "id": "IL6R_Monocyte",
+      "name": "resting IL-6R-gp130-JAK complex on monocytes",
+      "represents": "",
+      "identifiers": {
+        "go_compartment": "go:0005886"
+      }
+    },
+    {
+      "id": "IL6R_act_Monocyte",
+      "name": "signalling IL-6R-gp130-JAK complex on monocytes",
+      "represents": "",
+      "identifiers": {
+        "go_compartment": "go:0005886"
+      }
+    },
+    {
+      "id": "TLR4_Monocyte",
+      "name": "resting TLR4:CD14:MD-2 complex on monocytes",
+      "represents": "",
+      "identifiers": {
+        "go_compartment": "go:0005886"
+      }
+    },
+    {
+      "id": "TLR4_act_Monocyte",
+      "name": "LPS-engaged signalling TLR4 complex on monocytes",
+      "represents": "",
+      "identifiers": {
+        "go_compartment": "go:0005886"
+      }
+    },
+    {
+      "id": "TLR4_Bcell",
+      "name": "resting TLR4 complex on B cells (very low in healthy donors)",
+      "represents": "",
+      "identifiers": {
+        "go_compartment": "go:0005886"
+      }
+    },
+    {
+      "id": "TLR4_act_Bcell",
+      "name": "LPS-engaged TLR4 complex on B cells",
+      "represents": "",
+      "identifiers": {
+        "go_compartment": "go:0005886"
+      }
+    },
+    {
+      "id": "GMR_Monocyte",
+      "name": "resting GM-CSF receptor (CSF2RA:CSF2RB:JAK2, lumped) on monocytes",
+      "represents": "",
+      "identifiers": {
+        "go_compartment": "go:0005886"
+      }
+    },
+    {
+      "id": "GMR_act_Monocyte",
+      "name": "signalling GM-CSF receptor-JAK complex on monocytes",
+      "represents": "",
+      "identifiers": {
+        "go_compartment": "go:0005886"
+      }
+    },
+    {
+      "id": "GCSFR_Monocyte",
+      "name": "resting G-CSF receptor (CSF3R:JAK, lumped) on monocytes",
+      "represents": "",
+      "identifiers": {
+        "go_compartment": "go:0005886"
+      }
+    },
+    {
+      "id": "GCSFR_act_Monocyte",
+      "name": "signalling G-CSF receptor-JAK complex on monocytes",
+      "represents": "",
+      "identifiers": {
+        "go_compartment": "go:0005886"
+      }
+    },
+    {
+      "id": "IL3R_Monocyte",
+      "name": "resting IL-3 receptor (IL3RA:CSF2RB:JAK2, lumped) on monocytes",
+      "represents": "",
+      "identifiers": {
+        "go_compartment": "go:0005886"
+      }
+    },
+    {
+      "id": "IL3R_act_Monocyte",
+      "name": "signalling IL-3 receptor-JAK complex on monocytes",
+      "represents": "",
+      "identifiers": {
+        "go_compartment": "go:0005886"
+      }
+    }
+  ],
+  "reactions": [
+    {
+      "equation": "IFNa + IFNAR_Tcell_CD4 -> IFNAR_act_Tcell_CD4",
+      "required": null,
+      "essential": true,
+      "modifiers": [],
+      "type": "binding",
+      "description": "Added IFN-alpha engages the type I IFN receptor-JAK complex on CD4 T cells.",
+      "identifiers": {
+        "reactome": "reactome:R-HSA-909733"
+      },
+      "evidence": [
+        {
+          "source": "10.4049/jimmunol.0902314",
+          "title": "Major differences in the responses of primary human leukocyte subsets to IFN-beta",
+          "year": 2010,
+          "locator": "Figure 8A, 8C",
+          "supports": "IFNAR2 was found on essentially all CD4+ T cells as well as monocytes, B cells and CD8+ T cells in fresh human blood.",
+          "quote": "100% of monocytes, B cells, CD4+ and CD8+ T cells expressed IFNAR2",
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3244975",
+          "evidence_kind": "direct_experimental",
+          "context_match": "same_system",
+          "context_note": "Primary human blood leukocyte subsets with type I IFN; intent uses IFN-alpha on human PBMC.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "IFNa + IFNAR_Tcell_CD4neg -> IFNAR_act_Tcell_CD4neg",
+      "required": null,
+      "essential": true,
+      "modifiers": [],
+      "type": "binding",
+      "description": "Added IFN-alpha engages the type I IFN receptor on CD4-negative T cells.",
+      "identifiers": {
+        "reactome": "reactome:R-HSA-909733"
+      },
+      "evidence": [
+        {
+          "source": "10.4049/jimmunol.0902314",
+          "title": "Major differences in the responses of primary human leukocyte subsets to IFN-beta",
+          "year": 2010,
+          "locator": "Figures 3, 8A",
+          "supports": "CD8+ T cells express IFNAR2 and phosphorylate STAT1/3/5 after type I IFN.",
+          "evidence_kind": "direct_experimental",
+          "context_match": "same_system",
+          "context_note": "Primary human blood CD8+ T cells; the intent's CD4-negative T gate.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "IFNa + IFNAR_Bcell -> IFNAR_act_Bcell",
+      "required": null,
+      "essential": true,
+      "modifiers": [],
+      "type": "binding",
+      "description": "Added IFN-alpha engages the type I IFN receptor on B cells.",
+      "identifiers": {
+        "reactome": "reactome:R-HSA-909733"
+      },
+      "evidence": [
+        {
+          "source": "10.4049/jimmunol.0902314",
+          "title": "Major differences in the responses of primary human leukocyte subsets to IFN-beta",
+          "year": 2010,
+          "locator": "Figures 3A-3C, 8A",
+          "supports": "B cells carry IFNAR2 and respond to type I IFN, with a smaller STAT1-positive fraction than monocytes.",
+          "evidence_kind": "direct_experimental",
+          "context_match": "same_system",
+          "context_note": "Primary human blood B cells.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "IFNa + IFNAR_NKcell -> IFNAR_act_NKcell",
+      "required": null,
+      "essential": true,
+      "modifiers": [],
+      "type": "binding",
+      "description": "Added IFN-alpha engages the type I IFN receptor on NK cells.",
+      "identifiers": {
+        "reactome": "reactome:R-HSA-909733"
+      },
+      "evidence": [
+        {
+          "source": "reactome:R-HSA-909733",
+          "title": "Interferon alpha/beta signaling",
+          "year": 2024,
+          "locator": "pathway R-HSA-909733",
+          "supports": "Curated human pathway: type I IFN binds IFNAR1/IFNAR2 and activates receptor-associated JAK1/TYK2.",
+          "evidence_kind": "curated_database",
+          "context_match": "related_system",
+          "context_note": "Human curated pathway, not NK-specific; no NK IFNAR quantification found.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "IFNa + IFNAR_Monocyte -> IFNAR_act_Monocyte",
+      "required": null,
+      "essential": true,
+      "modifiers": [],
+      "type": "binding",
+      "description": "Added IFN-alpha engages the type I IFN receptor on monocytes.",
+      "identifiers": {
+        "reactome": "reactome:R-HSA-909733"
+      },
+      "evidence": [
+        {
+          "source": "10.4049/jimmunol.0902314",
+          "title": "Major differences in the responses of primary human leukocyte subsets to IFN-beta",
+          "year": 2010,
+          "locator": "Figures 3A-3C",
+          "supports": "Monocytes express IFNAR2 and show the highest fraction of PY-STAT1 and PY-STAT3 positive cells after type I IFN.",
+          "evidence_kind": "direct_experimental",
+          "context_match": "same_system",
+          "context_note": "Primary human blood monocytes.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "IFNAR_act_Tcell_CD4 -> IFNAR_Tcell_CD4",
+      "required": null,
+      "essential": true,
+      "modifiers": [],
+      "type": "dissociation",
+      "description": "Loss of the signalling type I IFN receptor complex on CD4 T cells (ligand release, ubiquitination, endocytosis, down-regulation).",
+      "identifiers": {},
+      "evidence": [
+        {
+          "source": "10.1093/emboj/cdg524",
+          "title": "SCF(HOS) ubiquitin ligase mediates the ligand-induced down-regulation of the interferon-alpha receptor",
+          "year": 2003,
+          "locator": "Abstract",
+          "supports": "IFN-alpha drives ubiquitination, endocytosis and proteolysis of IFNAR1, and this modulates the extent of STAT1 phosphorylation.",
+          "quote": "HOS expression and activities are required for IFNalpha-stimulated ubiquitination of IFNAR1, endocytosis of the type I interferon receptor, down-regulation of IFNAR1 levels, and IFNAR1 proteolysis via the lysosomal pathway.",
+          "evidence_kind": "direct_experimental",
+          "context_match": "different_system",
+          "context_note": "Human cell lines, not primary leukocytes; generic type I IFN receptor cycle.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "IFNAR_act_Tcell_CD4neg -> IFNAR_Tcell_CD4neg",
+      "required": null,
+      "essential": true,
+      "modifiers": [],
+      "type": "dissociation",
+      "description": "Loss of the signalling type I IFN receptor complex on CD4-negative T cells.",
+      "identifiers": {},
+      "evidence": [
+        {
+          "source": "10.1093/emboj/cdg524",
+          "title": "SCF(HOS) ubiquitin ligase mediates the ligand-induced down-regulation of the interferon-alpha receptor",
+          "year": 2003,
+          "locator": "Abstract",
+          "supports": "Ligand-induced internalisation and degradation of IFNAR1 terminates type I IFN signalling.",
+          "evidence_kind": "direct_experimental",
+          "context_match": "different_system",
+          "context_note": "Human cell lines; generic receptor cycle.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "IFNAR_act_Bcell -> IFNAR_Bcell",
+      "required": null,
+      "essential": true,
+      "modifiers": [],
+      "type": "dissociation",
+      "description": "Loss of the signalling type I IFN receptor complex on B cells.",
+      "identifiers": {},
+      "evidence": [
+        {
+          "source": "10.1093/emboj/cdg524",
+          "title": "SCF(HOS) ubiquitin ligase mediates the ligand-induced down-regulation of the interferon-alpha receptor",
+          "year": 2003,
+          "locator": "Abstract",
+          "supports": "Ligand-induced down-regulation removes the active IFNAR complex.",
+          "evidence_kind": "direct_experimental",
+          "context_match": "different_system",
+          "context_note": "Human cell lines; generic receptor cycle.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "IFNAR_act_NKcell -> IFNAR_NKcell",
+      "required": null,
+      "essential": true,
+      "modifiers": [],
+      "type": "dissociation",
+      "description": "Loss of the signalling type I IFN receptor complex on NK cells.",
+      "identifiers": {},
+      "evidence": [
+        {
+          "source": "10.1093/emboj/cdg524",
+          "title": "SCF(HOS) ubiquitin ligase mediates the ligand-induced down-regulation of the interferon-alpha receptor",
+          "year": 2003,
+          "locator": "Abstract",
+          "supports": "Ligand-induced down-regulation removes the active IFNAR complex.",
+          "evidence_kind": "direct_experimental",
+          "context_match": "different_system",
+          "context_note": "Human cell lines; generic receptor cycle.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "IFNAR_act_Monocyte -> IFNAR_Monocyte",
+      "required": null,
+      "essential": true,
+      "modifiers": [],
+      "type": "dissociation",
+      "description": "Loss of the signalling type I IFN receptor complex on monocytes - must be fast enough for monocyte STATs to return to or below Reference by 60-240 min under IFN-alpha.",
+      "identifiers": {},
+      "evidence": [
+        {
+          "source": "10.1093/emboj/cdg524",
+          "title": "SCF(HOS) ubiquitin ligase mediates the ligand-induced down-regulation of the interferon-alpha receptor",
+          "year": 2003,
+          "locator": "Abstract",
+          "supports": "Ligand-induced IFNAR1 down-regulation limits the extent and duration of STAT phosphorylation.",
+          "evidence_kind": "direct_experimental",
+          "context_match": "different_system",
+          "context_note": "Human cell lines; generic receptor cycle.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "STAT1_Tcell_CD4 -> pSTAT1_Tcell_CD4",
+      "required": null,
+      "essential": true,
+      "modifiers": [
+        "IFNAR_act_Tcell_CD4"
+      ],
+      "type": "phosphorylation",
+      "description": "Type I IFN receptor JAKs phosphorylate STAT1 Y701 in CD4 T cells.",
+      "identifiers": {
+        "reactome": "reactome:R-HSA-909733"
+      },
+      "evidence": [
+        {
+          "source": "10.4049/jimmunol.0902314",
+          "title": "Major differences in the responses of primary human leukocyte subsets to IFN-beta",
+          "year": 2010,
+          "locator": "Figures 3, 4",
+          "supports": "Type I IFN induces PY-STAT1 in primary human CD4+ T cells, in fewer cells than in monocytes.",
+          "evidence_kind": "direct_experimental",
+          "context_match": "same_system",
+          "context_note": "Primary human blood CD4+ T cells.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "STAT3_Tcell_CD4 -> pSTAT3_Tcell_CD4",
+      "required": null,
+      "essential": true,
+      "modifiers": [
+        "IFNAR_act_Tcell_CD4"
+      ],
+      "type": "phosphorylation",
+      "description": "Type I IFN receptor JAKs phosphorylate STAT3 Y705 in CD4 T cells.",
+      "identifiers": {
+        "reactome": "reactome:R-HSA-909733"
+      },
+      "evidence": [
+        {
+          "source": "10.4049/jimmunol.0902314",
+          "title": "Major differences in the responses of primary human leukocyte subsets to IFN-beta",
+          "year": 2010,
+          "locator": "Figure 4",
+          "supports": "STAT3 activation by type I IFN occurs in all blood subsets, peaking near 45 min.",
+          "quote": "The highest activation of STAT3 and STAT5 was detected in all blood cell subsets after 45 min of exposure to IFN-\u03b2, declining gradually thereafter.",
+          "evidence_kind": "direct_experimental",
+          "context_match": "same_system",
+          "context_note": "Primary human blood leukocytes with IFN-beta; intent's IFN-alpha peaks at 15-30 min.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "STAT5_Tcell_CD4 -> pSTAT5_Tcell_CD4",
+      "required": null,
+      "essential": true,
+      "modifiers": [
+        "IFNAR_act_Tcell_CD4"
+      ],
+      "type": "phosphorylation",
+      "description": "Type I IFN receptor JAKs phosphorylate STAT5 Y694 in CD4 T cells - the largest lymphocyte pSTAT5 peak in these data.",
+      "identifiers": {
+        "reactome": "reactome:R-HSA-909733"
+      },
+      "evidence": [
+        {
+          "source": "10.4049/jimmunol.0902314",
+          "title": "Major differences in the responses of primary human leukocyte subsets to IFN-beta",
+          "year": 2010,
+          "locator": "Figure 3",
+          "supports": "Type I IFN activates STAT5 in addition to STAT3 in CD4+ T cells, the subset with the highest STAT5 activation.",
+          "evidence_kind": "direct_experimental",
+          "context_match": "same_system",
+          "context_note": "Primary human blood CD4+ T cells.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "STAT1_Tcell_CD4neg -> pSTAT1_Tcell_CD4neg",
+      "required": null,
+      "essential": true,
+      "modifiers": [
+        "IFNAR_act_Tcell_CD4neg"
+      ],
+      "type": "phosphorylation",
+      "description": "Type I IFN receptor JAKs phosphorylate STAT1 Y701 in CD4-negative T cells.",
+      "identifiers": {
+        "reactome": "reactome:R-HSA-909733"
+      },
+      "evidence": [
+        {
+          "source": "10.4049/jimmunol.0902314",
+          "title": "Major differences in the responses of primary human leukocyte subsets to IFN-beta",
+          "year": 2010,
+          "locator": "Figure 4",
+          "supports": "Optimal STAT1 activation in CD8+ T cells occurred 45 min after type I IFN.",
+          "quote": "Optimal activation of STAT1 in CD8+ T cells and monocytes was also found after 45 min.",
+          "evidence_kind": "direct_experimental",
+          "context_match": "same_system",
+          "context_note": "Primary human blood CD8+ T cells.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "STAT3_Tcell_CD4neg -> pSTAT3_Tcell_CD4neg",
+      "required": null,
+      "essential": true,
+      "modifiers": [
+        "IFNAR_act_Tcell_CD4neg"
+      ],
+      "type": "phosphorylation",
+      "description": "Type I IFN receptor JAKs phosphorylate STAT3 Y705 in CD4-negative T cells.",
+      "identifiers": {
+        "reactome": "reactome:R-HSA-909733"
+      },
+      "evidence": [
+        {
+          "source": "10.4049/jimmunol.0902314",
+          "title": "Major differences in the responses of primary human leukocyte subsets to IFN-beta",
+          "year": 2010,
+          "locator": "Figure 4",
+          "supports": "STAT3 is activated by type I IFN in all blood subsets including CD8+ T cells.",
+          "evidence_kind": "direct_experimental",
+          "context_match": "same_system",
+          "context_note": "Primary human blood CD8+ T cells.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "STAT5_Tcell_CD4neg -> pSTAT5_Tcell_CD4neg",
+      "required": null,
+      "essential": true,
+      "modifiers": [
+        "IFNAR_act_Tcell_CD4neg"
+      ],
+      "type": "phosphorylation",
+      "description": "Type I IFN receptor JAKs phosphorylate STAT5 Y694 in CD4-negative T cells.",
+      "identifiers": {
+        "reactome": "reactome:R-HSA-909733"
+      },
+      "evidence": [
+        {
+          "source": "10.4049/jimmunol.0902314",
+          "title": "Major differences in the responses of primary human leukocyte subsets to IFN-beta",
+          "year": 2010,
+          "locator": "Figure 4",
+          "supports": "STAT5 activation by type I IFN was detected in all blood subsets.",
+          "evidence_kind": "direct_experimental",
+          "context_match": "same_system",
+          "context_note": "Primary human blood CD8+ T cells.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "STAT1_Bcell -> pSTAT1_Bcell",
+      "required": null,
+      "essential": true,
+      "modifiers": [
+        "IFNAR_act_Bcell"
+      ],
+      "type": "phosphorylation",
+      "description": "Type I IFN receptor JAKs phosphorylate STAT1 Y701 in B cells - persists 4 h under IFN-alpha and is the late LPS response of this gate.",
+      "identifiers": {
+        "reactome": "reactome:R-HSA-909733"
+      },
+      "evidence": [
+        {
+          "source": "10.4049/jimmunol.0902314",
+          "title": "Major differences in the responses of primary human leukocyte subsets to IFN-beta",
+          "year": 2010,
+          "locator": "Figures 3A-3C",
+          "supports": "Type I IFN phosphorylates STAT1 in B cells but in far fewer cells than monocytes, a difference not explained by IFNAR2, STAT1, SOCS1 or phosphatase levels.",
+          "evidence_kind": "direct_experimental",
+          "context_match": "same_system",
+          "context_note": "Primary human blood B cells.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "STAT3_Bcell -> pSTAT3_Bcell",
+      "required": null,
+      "essential": true,
+      "modifiers": [
+        "IFNAR_act_Bcell"
+      ],
+      "type": "phosphorylation",
+      "description": "Type I IFN receptor JAKs phosphorylate STAT3 Y705 in B cells.",
+      "identifiers": {
+        "reactome": "reactome:R-HSA-909733"
+      },
+      "evidence": [
+        {
+          "source": "10.4049/jimmunol.0902314",
+          "title": "Major differences in the responses of primary human leukocyte subsets to IFN-beta",
+          "year": 2010,
+          "locator": "Figures 3, 4",
+          "supports": "Type I IFN activates STAT3 in B cells among all blood subsets.",
+          "evidence_kind": "direct_experimental",
+          "context_match": "same_system",
+          "context_note": "Primary human blood B cells.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "STAT5_Bcell -> pSTAT5_Bcell",
+      "required": null,
+      "essential": true,
+      "modifiers": [
+        "IFNAR_act_Bcell"
+      ],
+      "type": "phosphorylation",
+      "description": "Type I IFN receptor JAKs phosphorylate STAT5 Y694 in B cells.",
+      "identifiers": {
+        "reactome": "reactome:R-HSA-909733"
+      },
+      "evidence": [
+        {
+          "source": "10.4049/jimmunol.0902314",
+          "title": "Major differences in the responses of primary human leukocyte subsets to IFN-beta",
+          "year": 2010,
+          "locator": "Figure 3",
+          "supports": "Type I IFN activated STAT5 in B cells and, more strongly, in CD4+ T cells.",
+          "evidence_kind": "direct_experimental",
+          "context_match": "same_system",
+          "context_note": "Primary human blood B cells; matches the small B-cell pSTAT5 peak here.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "STAT1_NKcell -> pSTAT1_NKcell",
+      "required": null,
+      "essential": true,
+      "modifiers": [
+        "IFNAR_act_NKcell"
+      ],
+      "type": "phosphorylation",
+      "description": "Type I IFN receptor JAKs phosphorylate STAT1 Y701 in NK cells.",
+      "identifiers": {
+        "reactome": "reactome:R-HSA-909733"
+      },
+      "evidence": [
+        {
+          "source": "reactome:R-HSA-909733",
+          "title": "Interferon alpha/beta signaling",
+          "year": 2024,
+          "locator": "pathway R-HSA-909733",
+          "supports": "Curated human pathway: receptor-associated JAK1/TYK2 phosphorylate STAT1 after type I IFN binding.",
+          "evidence_kind": "curated_database",
+          "context_match": "related_system",
+          "context_note": "Human curated pathway, not NK-specific.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "STAT3_NKcell -> pSTAT3_NKcell",
+      "required": null,
+      "essential": true,
+      "modifiers": [
+        "IFNAR_act_NKcell"
+      ],
+      "type": "phosphorylation",
+      "description": "Type I IFN receptor JAKs phosphorylate STAT3 Y705 in NK cells.",
+      "identifiers": {
+        "reactome": "reactome:R-HSA-909733"
+      },
+      "evidence": [
+        {
+          "source": "reactome:R-HSA-909733",
+          "title": "Interferon alpha/beta signaling",
+          "year": 2024,
+          "locator": "pathway R-HSA-909733",
+          "supports": "Curated human type I IFN pathway includes JAK-mediated STAT3 phosphorylation.",
+          "evidence_kind": "curated_database",
+          "context_match": "related_system",
+          "context_note": "Human curated pathway, not NK-specific.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "STAT5_NKcell -> pSTAT5_NKcell",
+      "required": null,
+      "essential": true,
+      "modifiers": [
+        "IFNAR_act_NKcell"
+      ],
+      "type": "phosphorylation",
+      "description": "Type I IFN receptor JAKs phosphorylate STAT5 Y694 in NK cells.",
+      "identifiers": {
+        "reactome": "reactome:R-HSA-909733"
+      },
+      "evidence": [
+        {
+          "source": "10.4049/jimmunol.0902314",
+          "title": "Major differences in the responses of primary human leukocyte subsets to IFN-beta",
+          "year": 2010,
+          "locator": "Figure 4",
+          "supports": "Type I IFN activates STAT5 in blood leukocyte subsets; NK cells were not among those measured.",
+          "evidence_kind": "direct_experimental",
+          "context_match": "related_system",
+          "context_note": "Human blood monocytes, B, CD4 T, CD8 T with IFN-beta; NK not measured.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "STAT1_Monocyte -> pSTAT1_Monocyte",
+      "required": null,
+      "essential": true,
+      "modifiers": [
+        "IFNAR_act_Monocyte"
+      ],
+      "type": "phosphorylation",
+      "description": "Type I IFN receptor JAKs phosphorylate STAT1 Y701 in monocytes.",
+      "identifiers": {
+        "reactome": "reactome:R-HSA-909733"
+      },
+      "evidence": [
+        {
+          "source": "10.4049/jimmunol.0902314",
+          "title": "Major differences in the responses of primary human leukocyte subsets to IFN-beta",
+          "year": 2010,
+          "locator": "Figures 3A-3C, 4",
+          "supports": "Monocytes show the highest percentage of PY-STAT1 positive cells after type I IFN, optimal at 45 min.",
+          "evidence_kind": "direct_experimental",
+          "context_match": "same_system",
+          "context_note": "Primary human blood monocytes.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "STAT3_Monocyte -> pSTAT3_Monocyte",
+      "required": null,
+      "essential": true,
+      "modifiers": [
+        "IFNAR_act_Monocyte"
+      ],
+      "type": "phosphorylation",
+      "description": "Type I IFN receptor JAKs phosphorylate STAT3 Y705 in monocytes.",
+      "identifiers": {
+        "reactome": "reactome:R-HSA-909733"
+      },
+      "evidence": [
+        {
+          "source": "10.4049/jimmunol.0902314",
+          "title": "Major differences in the responses of primary human leukocyte subsets to IFN-beta",
+          "year": 2010,
+          "locator": "Figure 3B",
+          "supports": "Monocytes show the highest fraction of PY-STAT3 positive cells after type I IFN.",
+          "evidence_kind": "direct_experimental",
+          "context_match": "same_system",
+          "context_note": "Primary human blood monocytes.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "STAT5_Monocyte -> pSTAT5_Monocyte",
+      "required": null,
+      "essential": true,
+      "modifiers": [
+        "IFNAR_act_Monocyte"
+      ],
+      "type": "phosphorylation",
+      "description": "Type I IFN receptor JAKs phosphorylate STAT5 Y694 in monocytes.",
+      "identifiers": {
+        "reactome": "reactome:R-HSA-909733"
+      },
+      "evidence": [
+        {
+          "source": "10.4049/jimmunol.0902314",
+          "title": "Major differences in the responses of primary human leukocyte subsets to IFN-beta",
+          "year": 2010,
+          "locator": "Figure 4",
+          "supports": "STAT5 activation by type I IFN was detected in all blood subsets including monocytes.",
+          "evidence_kind": "direct_experimental",
+          "context_match": "same_system",
+          "context_note": "Primary human blood monocytes.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "pSTAT1_Tcell_CD4 -> STAT1_Tcell_CD4",
+      "required": null,
+      "essential": true,
+      "modifiers": [],
+      "type": "dephosphorylation",
+      "description": "Phosphatase-mediated removal of STAT1 pY701 in CD4 T cells.",
+      "identifiers": {},
+      "evidence": [
+        {
+          "source": "10.1002/j.1460-2075.1996.tb01016.x",
+          "title": "The rapid inactivation of nuclear tyrosine phosphorylated Stat1 depends upon a protein tyrosine phosphatase",
+          "year": 1996,
+          "locator": "Abstract",
+          "supports": "Once receptor signalling stops, activated STAT1 is cleared by a tyrosine phosphatase within 60 min.",
+          "quote": "In the absence of continued signaling from the receptor (imposed by staurosporine treatment) previously activated Stat1 disappeared completely within 60 min, implying continuous generation and removal of active molecules during extended IFN-gamma treatment.",
+          "evidence_kind": "direct_experimental",
+          "context_match": "different_system",
+          "context_note": "Cell lines with IFN-gamma; needed here for primary leukocytes.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "pSTAT3_Tcell_CD4 -> STAT3_Tcell_CD4",
+      "required": null,
+      "essential": true,
+      "modifiers": [],
+      "type": "dephosphorylation",
+      "description": "Phosphatase-mediated removal of STAT3 pY705 in CD4 T cells.",
+      "identifiers": {},
+      "evidence": [
+        {
+          "source": "10.1016/s0014-5793(02)03842-5",
+          "title": "Control mechanism of JAK/STAT signal transduction pathway",
+          "year": 2003,
+          "locator": "Model description",
+          "supports": "Published JAK/STAT model with cytoplasmic and nuclear phosphatases dephosphorylating STAT.",
+          "evidence_kind": "mechanistic_model",
+          "context_match": "different_system",
+          "context_note": "Generic simulation; supplies deactivation structure.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "pSTAT5_Tcell_CD4 -> STAT5_Tcell_CD4",
+      "required": null,
+      "essential": true,
+      "modifiers": [],
+      "type": "dephosphorylation",
+      "description": "Phosphatase-mediated removal of STAT5 pY694 in CD4 T cells.",
+      "identifiers": {},
+      "evidence": [
+        {
+          "source": "10.1038/msb.2011.50",
+          "title": "Division of labor by dual feedback regulators controls JAK2/STAT5 signaling over broad ligand range",
+          "year": 2011,
+          "locator": "Model structure",
+          "supports": "Calibrated STAT5 model with an explicit dephosphorylation step closing the cycle.",
+          "evidence_kind": "mechanistic_model",
+          "context_match": "different_system",
+          "context_note": "Murine primary erythroid progenitors with Epo.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "pSTAT1_Tcell_CD4neg -> STAT1_Tcell_CD4neg",
+      "required": null,
+      "essential": true,
+      "modifiers": [],
+      "type": "dephosphorylation",
+      "description": "Phosphatase-mediated removal of STAT1 pY701 in CD4-negative T cells.",
+      "identifiers": {},
+      "evidence": [
+        {
+          "source": "10.1002/j.1460-2075.1996.tb01016.x",
+          "title": "The rapid inactivation of nuclear tyrosine phosphorylated Stat1 depends upon a protein tyrosine phosphatase",
+          "year": 1996,
+          "locator": "Abstract",
+          "supports": "Activated STAT1 is removed by a phosphatase within about an hour of signal termination.",
+          "evidence_kind": "direct_experimental",
+          "context_match": "different_system",
+          "context_note": "Cell lines; generic step.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "pSTAT3_Tcell_CD4neg -> STAT3_Tcell_CD4neg",
+      "required": null,
+      "essential": true,
+      "modifiers": [],
+      "type": "dephosphorylation",
+      "description": "Phosphatase-mediated removal of STAT3 pY705 in CD4-negative T cells.",
+      "identifiers": {},
+      "evidence": [
+        {
+          "source": "10.1016/s0014-5793(02)03842-5",
+          "title": "Control mechanism of JAK/STAT signal transduction pathway",
+          "year": 2003,
+          "locator": "Model description",
+          "supports": "Mechanistic JAK/STAT model containing STAT dephosphorylation.",
+          "evidence_kind": "mechanistic_model",
+          "context_match": "different_system",
+          "context_note": "Generic simulation.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "pSTAT5_Tcell_CD4neg -> STAT5_Tcell_CD4neg",
+      "required": null,
+      "essential": true,
+      "modifiers": [],
+      "type": "dephosphorylation",
+      "description": "Phosphatase-mediated removal of STAT5 pY694 in CD4-negative T cells.",
+      "identifiers": {},
+      "evidence": [
+        {
+          "source": "10.1038/msb.2011.50",
+          "title": "Division of labor by dual feedback regulators controls JAK2/STAT5 signaling over broad ligand range",
+          "year": 2011,
+          "locator": "Model structure",
+          "supports": "STAT5 model with explicit dephosphorylation.",
+          "evidence_kind": "mechanistic_model",
+          "context_match": "different_system",
+          "context_note": "Murine erythroid progenitors.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "pSTAT1_Bcell -> STAT1_Bcell",
+      "required": null,
+      "essential": true,
+      "modifiers": [],
+      "type": "dephosphorylation",
+      "description": "Phosphatase-mediated removal of STAT1 pY701 in B cells; the 4 h persistence here therefore requires sustained receptor input, not slow dephosphorylation.",
+      "identifiers": {},
+      "evidence": [
+        {
+          "source": "10.1002/j.1460-2075.1996.tb01016.x",
+          "title": "The rapid inactivation of nuclear tyrosine phosphorylated Stat1 depends upon a protein tyrosine phosphatase",
+          "year": 1996,
+          "locator": "Abstract",
+          "supports": "Removal of activated STAT1 is phosphatase-dependent and complete within ~60 min of signal termination.",
+          "evidence_kind": "direct_experimental",
+          "context_match": "different_system",
+          "context_note": "Cell lines; generic step.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "pSTAT3_Bcell -> STAT3_Bcell",
+      "required": null,
+      "essential": true,
+      "modifiers": [],
+      "type": "dephosphorylation",
+      "description": "Phosphatase-mediated removal of STAT3 pY705 in B cells.",
+      "identifiers": {},
+      "evidence": [
+        {
+          "source": "10.1016/s0014-5793(02)03842-5",
+          "title": "Control mechanism of JAK/STAT signal transduction pathway",
+          "year": 2003,
+          "locator": "Model description",
+          "supports": "Mechanistic JAK/STAT model with STAT dephosphorylation.",
+          "evidence_kind": "mechanistic_model",
+          "context_match": "different_system",
+          "context_note": "Generic simulation.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "pSTAT5_Bcell -> STAT5_Bcell",
+      "required": null,
+      "essential": true,
+      "modifiers": [],
+      "type": "dephosphorylation",
+      "description": "Phosphatase-mediated removal of STAT5 pY694 in B cells.",
+      "identifiers": {},
+      "evidence": [
+        {
+          "source": "10.1038/msb.2011.50",
+          "title": "Division of labor by dual feedback regulators controls JAK2/STAT5 signaling over broad ligand range",
+          "year": 2011,
+          "locator": "Model structure",
+          "supports": "STAT5 model with explicit dephosphorylation.",
+          "evidence_kind": "mechanistic_model",
+          "context_match": "different_system",
+          "context_note": "Murine erythroid progenitors.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "pSTAT1_NKcell -> STAT1_NKcell",
+      "required": null,
+      "essential": true,
+      "modifiers": [],
+      "type": "dephosphorylation",
+      "description": "Phosphatase-mediated removal of STAT1 pY701 in NK cells.",
+      "identifiers": {},
+      "evidence": [
+        {
+          "source": "10.1002/j.1460-2075.1996.tb01016.x",
+          "title": "The rapid inactivation of nuclear tyrosine phosphorylated Stat1 depends upon a protein tyrosine phosphatase",
+          "year": 1996,
+          "locator": "Abstract",
+          "supports": "Phosphatase-dependent clearance of activated STAT1 within about an hour.",
+          "evidence_kind": "direct_experimental",
+          "context_match": "different_system",
+          "context_note": "Cell lines; generic step.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "pSTAT3_NKcell -> STAT3_NKcell",
+      "required": null,
+      "essential": true,
+      "modifiers": [],
+      "type": "dephosphorylation",
+      "description": "Phosphatase-mediated removal of STAT3 pY705 in NK cells.",
+      "identifiers": {},
+      "evidence": [
+        {
+          "source": "10.1016/s0014-5793(02)03842-5",
+          "title": "Control mechanism of JAK/STAT signal transduction pathway",
+          "year": 2003,
+          "locator": "Model description",
+          "supports": "Mechanistic JAK/STAT model with STAT dephosphorylation.",
+          "evidence_kind": "mechanistic_model",
+          "context_match": "different_system",
+          "context_note": "Generic simulation.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "pSTAT5_NKcell -> STAT5_NKcell",
+      "required": null,
+      "essential": true,
+      "modifiers": [],
+      "type": "dephosphorylation",
+      "description": "Phosphatase-mediated removal of STAT5 pY694 in NK cells.",
+      "identifiers": {},
+      "evidence": [
+        {
+          "source": "10.1038/msb.2011.50",
+          "title": "Division of labor by dual feedback regulators controls JAK2/STAT5 signaling over broad ligand range",
+          "year": 2011,
+          "locator": "Model structure",
+          "supports": "STAT5 model with explicit dephosphorylation.",
+          "evidence_kind": "mechanistic_model",
+          "context_match": "different_system",
+          "context_note": "Murine erythroid progenitors.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "pSTAT1_Monocyte -> STAT1_Monocyte",
+      "required": null,
+      "essential": true,
+      "modifiers": [],
+      "type": "dephosphorylation",
+      "description": "Phosphatase-mediated removal of STAT1 pY701 in monocytes.",
+      "identifiers": {},
+      "evidence": [
+        {
+          "source": "10.1002/j.1460-2075.1996.tb01016.x",
+          "title": "The rapid inactivation of nuclear tyrosine phosphorylated Stat1 depends upon a protein tyrosine phosphatase",
+          "year": 1996,
+          "locator": "Abstract",
+          "supports": "Under continuous IFN-gamma, nuclear pY-STAT1 is maximal at 20-30 min, persists 2-2.5 h and is gone by 4 h.",
+          "quote": "After interferon-gamma (IFN-gamma) treatment of cells the appearance of tyrosine phosphorylated Stat1 in the nucleus was maximal within 20-30 min, remained for 2-2.5 h and activated molecules disappeared by 4 h.",
+          "evidence_kind": "direct_experimental",
+          "context_match": "different_system",
+          "context_note": "Cell lines with IFN-gamma; comparable to monocyte IFN-gamma decay here.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "pSTAT3_Monocyte -> STAT3_Monocyte",
+      "required": null,
+      "essential": true,
+      "modifiers": [],
+      "type": "dephosphorylation",
+      "description": "Phosphatase-mediated removal of STAT3 pY705 in monocytes.",
+      "identifiers": {},
+      "evidence": [
+        {
+          "source": "10.1016/s0014-5793(02)03842-5",
+          "title": "Control mechanism of JAK/STAT signal transduction pathway",
+          "year": 2003,
+          "locator": "Model description",
+          "supports": "Mechanistic JAK/STAT model with STAT dephosphorylation.",
+          "evidence_kind": "mechanistic_model",
+          "context_match": "different_system",
+          "context_note": "Generic simulation.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "pSTAT5_Monocyte -> STAT5_Monocyte",
+      "required": null,
+      "essential": true,
+      "modifiers": [],
+      "type": "dephosphorylation",
+      "description": "Phosphatase-mediated removal of STAT5 pY694 in monocytes - must reproduce the steep fall of the CSF-driven pSTAT5 peak between 30 and 60 min.",
+      "identifiers": {},
+      "evidence": [
+        {
+          "source": "10.1038/msb.2011.50",
+          "title": "Division of labor by dual feedback regulators controls JAK2/STAT5 signaling over broad ligand range",
+          "year": 2011,
+          "locator": "Model structure; feedback analysis",
+          "supports": "Mechanistic model in which dephosphorylation plus feedback inhibitors shape the decay of a STAT5 response.",
+          "evidence_kind": "mechanistic_model",
+          "context_match": "different_system",
+          "context_note": "Murine erythroid progenitors with Epo.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "IFNg + IFNGR_Monocyte -> IFNGR_act_Monocyte",
+      "required": null,
+      "essential": true,
+      "modifiers": [],
+      "type": "binding",
+      "description": "IFN-gamma engages the IFN-gamma receptor-JAK complex on monocytes.",
+      "identifiers": {
+        "reactome": "reactome:R-HSA-877300"
+      },
+      "evidence": [
+        {
+          "source": "10.1172/jci112228",
+          "title": "Demonstration and partial characterization of the interferon-gamma receptor on human mononuclear phagocytes",
+          "year": 1985,
+          "locator": "Abstract",
+          "supports": "Labelled IFN-gamma binds human monocytes specifically and saturably, 3,000-7,000 sites/cell, Ka 4-12 x 10^8 M^-1.",
+          "quote": "At 4 degrees C, the different cell types bound 3,000-7,000 molecules of IFN gamma, and binding was of comparable affinity (Ka = 4-12 X 10(8) M-1).",
+          "evidence_kind": "direct_experimental",
+          "context_match": "same_system",
+          "context_note": "Primary human blood monocytes.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "IFNg + IFNGR_Bcell -> IFNGR_act_Bcell",
+      "required": null,
+      "essential": true,
+      "modifiers": [],
+      "type": "binding",
+      "description": "IFN-gamma engages the receptor on B cells, which carry intermediate IFNGR2.",
+      "identifiers": {
+        "reactome": "reactome:R-HSA-877300"
+      },
+      "evidence": [
+        {
+          "source": "https://pubmed.ncbi.nlm.nih.gov/11739558/",
+          "title": "Interferon-gamma receptor 2 expression as the deciding factor in human T, B, and myeloid cell proliferation or death",
+          "year": 2001,
+          "locator": "Abstract",
+          "supports": "IFN-gammaR2 is high on myeloid, moderate on B and poor on T cells, and the level sets the number of signalling complexes.",
+          "quote": "Conversely, the transducing chain (IFN-gammaR2) was highly expressed on the surfaces of myeloid cells, moderately expressed on B cells, and poorly expressed on the surfaces of T cells.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/11739558/",
+          "evidence_kind": "direct_experimental",
+          "context_match": "same_system",
+          "context_note": "Primary human T, B and myeloid cells; matches the monocyte > B > T ranking here.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "IFNg + IFNGR_Tcell_CD4 -> IFNGR_act_Tcell_CD4",
+      "required": null,
+      "essential": true,
+      "modifiers": [],
+      "type": "binding",
+      "description": "IFN-gamma engages the receptor on CD4 T cells, where surface IFNGR2 is low.",
+      "identifiers": {
+        "reactome": "reactome:R-HSA-877300"
+      },
+      "evidence": [
+        {
+          "source": "10.4049/jimmunol.164.1.201",
+          "title": "Surface expression of the IFN-gamma R2 chain is regulated by intracellular trafficking in human T lymphocytes",
+          "year": 2000,
+          "locator": "Abstract",
+          "supports": "Human T lymphocytes keep surface IFN-gammaR2 low by recycling with an intracellular store, yet still respond to IFN-gamma.",
+          "quote": "We show that its surface expression is low, whereas high cytoplasmic levels are found in both resting and PHA-activated T lymphocytes.",
+          "evidence_kind": "direct_experimental",
+          "context_match": "same_system",
+          "context_note": "Primary human T lymphocytes; matches the weak CD4 T pSTAT1 response to IFN-gamma here.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "IFNGR_act_Monocyte -> IFNGR_Monocyte",
+      "required": null,
+      "essential": true,
+      "modifiers": [],
+      "type": "dissociation",
+      "description": "Loss of the signalling IFN-gamma receptor complex on monocytes, including ligand internalisation and degradation.",
+      "identifiers": {},
+      "evidence": [
+        {
+          "source": "10.1172/jci112228",
+          "title": "Demonstration and partial characterization of the interferon-gamma receptor on human mononuclear phagocytes",
+          "year": 1985,
+          "locator": "Abstract",
+          "supports": "At 37 C ligand is internalised and monocytes degrade IFN-gamma at about 5,000 molecules per cell per hour.",
+          "quote": "Monocytes degraded 125I-IFN gamma into trichloroacetic acid-soluble counts at 37 degrees C but not at 4 degrees C, at an approximate rate of 5,000 molecules/cell per h.",
+          "evidence_kind": "direct_experimental",
+          "context_match": "same_system",
+          "context_note": "Primary human monocytes at 37 C.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "IFNGR_act_Bcell -> IFNGR_Bcell",
+      "required": null,
+      "essential": true,
+      "modifiers": [],
+      "type": "dissociation",
+      "description": "Loss of the signalling IFN-gamma receptor complex on B cells.",
+      "identifiers": {},
+      "evidence": [
+        {
+          "source": "reactome:R-HSA-877300",
+          "title": "Interferon gamma signaling",
+          "year": 2024,
+          "locator": "pathway R-HSA-877300",
+          "supports": "Curated human IFN-gamma pathway includes receptor turnover and negative regulation terminating the signal.",
+          "evidence_kind": "curated_database",
+          "context_match": "related_system",
+          "context_note": "Human curated pathway, not B-cell specific.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "IFNGR_act_Tcell_CD4 -> IFNGR_Tcell_CD4",
+      "required": null,
+      "essential": true,
+      "modifiers": [],
+      "type": "dissociation",
+      "description": "Loss of the signalling IFN-gamma receptor complex on CD4 T cells.",
+      "identifiers": {},
+      "evidence": [
+        {
+          "source": "10.4049/jimmunol.164.1.201",
+          "title": "Surface expression of the IFN-gamma R2 chain is regulated by intracellular trafficking in human T lymphocytes",
+          "year": 2000,
+          "locator": "Abstract",
+          "supports": "Constitutive, ligand-independent internalisation of IFN-gammaR2 in human T cells removes signalling-competent receptor.",
+          "evidence_kind": "direct_experimental",
+          "context_match": "same_system",
+          "context_note": "Primary human T lymphocytes.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "STAT1_Monocyte -> pSTAT1_Monocyte",
+      "required": null,
+      "essential": true,
+      "modifiers": [
+        "IFNGR_act_Monocyte"
+      ],
+      "type": "phosphorylation",
+      "description": "IFN-gamma receptor JAKs phosphorylate STAT1 Y701 in monocytes - the strongest, most sustained direct IFN-gamma response here.",
+      "identifiers": {
+        "reactome": "reactome:R-HSA-877300"
+      },
+      "evidence": [
+        {
+          "source": "https://pubmed.ncbi.nlm.nih.gov/11739558/",
+          "title": "Interferon-gamma receptor 2 expression as the deciding factor in human T, B, and myeloid cell proliferation or death",
+          "year": 2001,
+          "locator": "Abstract",
+          "supports": "High surface IFN-gammaR2, as on myeloid cells, gives rapid STAT-1 activation after IFN-gamma.",
+          "quote": "After IFN-gamma stimulation, high IFN-gammaR2 membrane expression induced rapid activation of signal transducer and activator of transcription-1 (STAT-1) and high levels of interferon regulatory factor-1 (IRF-1), which then triggered the apoptotic program.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/11739558/",
+          "evidence_kind": "direct_experimental",
+          "context_match": "same_system",
+          "context_note": "Primary human myeloid cells.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "STAT1_Bcell -> pSTAT1_Bcell",
+      "required": null,
+      "essential": true,
+      "modifiers": [
+        "IFNGR_act_Bcell"
+      ],
+      "type": "phosphorylation",
+      "description": "IFN-gamma receptor JAKs phosphorylate STAT1 Y701 in B cells - matches the sustained, STAT1-only B-cell response to IFN-gamma here.",
+      "identifiers": {
+        "reactome": "reactome:R-HSA-877300"
+      },
+      "evidence": [
+        {
+          "source": "https://pubmed.ncbi.nlm.nih.gov/11739558/",
+          "title": "Interferon-gamma receptor 2 expression as the deciding factor in human T, B, and myeloid cell proliferation or death",
+          "year": 2001,
+          "locator": "Abstract",
+          "supports": "B cells carry intermediate IFN-gammaR2 and activate STAT-1 at a rate set by that level.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/11739558/",
+          "evidence_kind": "direct_experimental",
+          "context_match": "same_system",
+          "context_note": "Primary human B cells.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "STAT1_Tcell_CD4 -> pSTAT1_Tcell_CD4",
+      "required": null,
+      "essential": true,
+      "modifiers": [
+        "IFNGR_act_Tcell_CD4"
+      ],
+      "type": "phosphorylation",
+      "description": "IFN-gamma receptor JAKs weakly phosphorylate STAT1 Y701 in CD4 T cells.",
+      "identifiers": {
+        "reactome": "reactome:R-HSA-877300"
+      },
+      "evidence": [
+        {
+          "source": "https://pubmed.ncbi.nlm.nih.gov/11739558/",
+          "title": "Interferon-gamma receptor 2 expression as the deciding factor in human T, B, and myeloid cell proliferation or death",
+          "year": 2001,
+          "locator": "Abstract",
+          "supports": "Low surface IFN-gammaR2 on T cells gives slow, weak STAT-1 activation.",
+          "quote": "By contrast, low cell membrane expression resulted in slow activation of STAT-1, lower levels of IRF-1, and induction of proliferation.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/11739558/",
+          "evidence_kind": "direct_experimental",
+          "context_match": "same_system",
+          "context_note": "Primary human T cells.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "STAT3_Monocyte -> pSTAT3_Monocyte",
+      "required": null,
+      "essential": true,
+      "modifiers": [
+        "IFNGR_act_Monocyte"
+      ],
+      "type": "phosphorylation",
+      "description": "IFN-gamma receptor JAKs phosphorylate STAT3 Y705 in monocytes.",
+      "identifiers": {
+        "reactome": "reactome:R-HSA-877300"
+      },
+      "evidence": [
+        {
+          "source": "reactome:R-HSA-877300",
+          "title": "Interferon gamma signaling",
+          "year": 2024,
+          "locator": "pathway R-HSA-877300",
+          "supports": "Curated human pathway includes JAK-mediated phosphorylation of STAT3 alongside STAT1 after IFN-gamma.",
+          "evidence_kind": "curated_database",
+          "context_match": "related_system",
+          "context_note": "Human curated pathway; monocytes here respond on all three STATs.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "STAT5_Monocyte -> pSTAT5_Monocyte",
+      "required": null,
+      "essential": true,
+      "modifiers": [
+        "IFNGR_act_Monocyte"
+      ],
+      "type": "phosphorylation",
+      "description": "IFN-gamma receptor JAKs phosphorylate STAT5 Y694 in monocytes.",
+      "identifiers": {
+        "reactome": "reactome:R-HSA-877300"
+      },
+      "evidence": [
+        {
+          "source": "reactome:R-HSA-877300",
+          "title": "Interferon gamma signaling",
+          "year": 2024,
+          "locator": "pathway R-HSA-877300",
+          "supports": "Curated human IFN-gamma pathway includes activation of STATs beyond STAT1 by receptor-associated JAKs.",
+          "evidence_kind": "curated_database",
+          "context_match": "related_system",
+          "context_note": "Human curated pathway.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "LPS + TLR4_Monocyte -> TLR4_act_Monocyte",
+      "required": null,
+      "essential": true,
+      "modifiers": [],
+      "type": "binding",
+      "description": "LPS engages the TLR4/CD14/MD-2 complex on monocytes - the only population in these gates with a direct LPS receptor.",
+      "identifiers": {
+        "reactome": "reactome:R-HSA-166016"
+      },
+      "evidence": [
+        {
+          "source": "10.4049/jimmunol.164.11.5998",
+          "title": "Differential expression and regulation of toll-like receptors (TLR) in human leukocytes",
+          "year": 2000,
+          "locator": "Abstract; expression by population",
+          "supports": "TLR4 transcripts are confined to myelomonocytic cells among purified human leukocytes; T, B and NK cells express TLR1 but not TLR4.",
+          "quote": "In contrast TLR2, TLR4, and TLR5 were expressed in myelomonocytic elements.",
+          "evidence_kind": "direct_experimental",
+          "context_match": "same_system",
+          "context_note": "Purified primary human monocytes, PMN, T, B and NK cells - the intent's population structure.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "TLR4_act_Monocyte -> TLR4_Monocyte",
+      "required": null,
+      "essential": true,
+      "modifiers": [],
+      "type": "dissociation",
+      "description": "Termination of TLR4 signalling on monocytes (endocytosis and down-regulation of the surface signalling complex).",
+      "identifiers": {
+        "reactome": "reactome:R-HSA-937061"
+      },
+      "evidence": [
+        {
+          "source": "reactome:R-HSA-937061",
+          "title": "TRIF (TICAM1)-mediated TLR4 signaling",
+          "year": 2024,
+          "locator": "pathway R-HSA-937061",
+          "supports": "Curated human pathway in which the LPS-engaged TLR4 complex is endocytosed and signals through TRIF, consuming the surface complex.",
+          "evidence_kind": "curated_database",
+          "context_match": "related_system",
+          "context_note": "Human curated pathway; applies to monocytes.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "GMCSF + GMR_Monocyte -> GMR_act_Monocyte",
+      "required": null,
+      "essential": true,
+      "modifiers": [],
+      "type": "binding",
+      "description": "GM-CSF engages its receptor-JAK2 complex on monocytes.",
+      "identifiers": {
+        "reactome": "reactome:R-HSA-512988"
+      },
+      "evidence": [
+        {
+          "source": "10.1084/jem.164.1.251",
+          "title": "Characterization of the cell surface receptor for human granulocyte/macrophage colony-stimulating factor",
+          "year": 1986,
+          "locator": "Abstract",
+          "supports": "Labelled GM-CSF bound human monocytes and myeloid cells at 100-500 high-affinity sites per cell; T-lineage lines did not bind it.",
+          "evidence_kind": "direct_experimental",
+          "context_match": "related_system",
+          "context_note": "Primary human monocytes and human cell lines.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "GMR_act_Monocyte -> GMR_Monocyte",
+      "required": null,
+      "essential": true,
+      "modifiers": [],
+      "type": "dissociation",
+      "description": "Termination of GM-CSF receptor signalling on monocytes.",
+      "identifiers": {
+        "reactome": "reactome:R-HSA-512988"
+      },
+      "evidence": [
+        {
+          "source": "reactome:R-HSA-512988",
+          "title": "Interleukin-3, Interleukin-5 and GM-CSF signaling",
+          "year": 2024,
+          "locator": "pathway R-HSA-512988",
+          "supports": "Curated human beta-common receptor pathway including receptor turnover and negative regulation.",
+          "evidence_kind": "curated_database",
+          "context_match": "related_system",
+          "context_note": "Human curated pathway.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "IL3 + IL3R_Monocyte -> IL3R_act_Monocyte",
+      "required": null,
+      "essential": true,
+      "modifiers": [],
+      "type": "binding",
+      "description": "IL-3 engages its IL3RA/CSF2RB-JAK2 complex on monocytes.",
+      "identifiers": {
+        "reactome": "reactome:R-HSA-512988"
+      },
+      "evidence": [
+        {
+          "source": "https://pubmed.ncbi.nlm.nih.gov/8123762/",
+          "title": "Regulatory effects of T cell lymphokines on cytokine gene expression in monocytes",
+          "year": 1993,
+          "locator": "Abstract",
+          "supports": "IL-3 acts directly on purified human monocytes, inducing cytokine gene expression, so its receptor is functional on this population.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/8123762/",
+          "evidence_kind": "direct_experimental",
+          "context_match": "same_system",
+          "context_note": "Elutriated primary human monocytes, serum-free and LPS-free.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "IL3R_act_Monocyte -> IL3R_Monocyte",
+      "required": null,
+      "essential": true,
+      "modifiers": [],
+      "type": "dissociation",
+      "description": "Termination of IL-3 receptor signalling on monocytes.",
+      "identifiers": {
+        "reactome": "reactome:R-HSA-512988"
+      },
+      "evidence": [
+        {
+          "source": "reactome:R-HSA-512988",
+          "title": "Interleukin-3, Interleukin-5 and GM-CSF signaling",
+          "year": 2024,
+          "locator": "pathway R-HSA-512988",
+          "supports": "Curated human pathway including termination of beta-common receptor signalling.",
+          "evidence_kind": "curated_database",
+          "context_match": "related_system",
+          "context_note": "Human curated pathway.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "GCSF + GCSFR_Monocyte -> GCSFR_act_Monocyte",
+      "required": null,
+      "essential": true,
+      "modifiers": [],
+      "type": "binding",
+      "description": "G-CSF engages the CSF3R-JAK complex on monocytes.",
+      "identifiers": {
+        "reactome": "reactome:R-HSA-9674555"
+      },
+      "evidence": [
+        {
+          "source": "10.1182/blood.v95.1.270",
+          "title": "Human monocytes express functional receptors for granulocyte colony-stimulating factor",
+          "year": 2000,
+          "locator": "Abstract",
+          "supports": "G-CSF receptor was detected on human neutrophils and monocytes but not lymphocytes, and G-CSF acted functionally on purified monocytes.",
+          "quote": "G-CSF receptor expression was detected in human neutrophils and monocytes but not in lymphocytes by means of RT-PCR as well as flow cytometry.",
+          "evidence_kind": "direct_experimental",
+          "context_match": "same_system",
+          "context_note": "Primary human blood leukocytes from healthy volunteers.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "GCSFR_act_Monocyte -> GCSFR_Monocyte",
+      "required": null,
+      "essential": true,
+      "modifiers": [],
+      "type": "dissociation",
+      "description": "Termination of G-CSF receptor signalling on monocytes.",
+      "identifiers": {
+        "reactome": "reactome:R-HSA-9674555"
+      },
+      "evidence": [
+        {
+          "source": "reactome:R-HSA-9674555",
+          "title": "Signaling by CSF3 (G-CSF)",
+          "year": 2024,
+          "locator": "pathway R-HSA-9674555",
+          "supports": "Curated human CSF3R pathway including its negative regulation and receptor inactivation.",
+          "evidence_kind": "curated_database",
+          "context_match": "related_system",
+          "context_note": "Human curated pathway.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "STAT5_Monocyte -> pSTAT5_Monocyte",
+      "required": null,
+      "essential": true,
+      "modifiers": [
+        "GMR_act_Monocyte"
+      ],
+      "type": "phosphorylation",
+      "description": "GM-CSF receptor JAK2 phosphorylates STAT5 Y694 in monocytes - the largest response in these data.",
+      "identifiers": {
+        "reactome": "reactome:R-HSA-512988"
+      },
+      "evidence": [
+        {
+          "source": "reactome:R-HSA-512988",
+          "title": "Interleukin-3, Interleukin-5 and GM-CSF signaling",
+          "year": 2024,
+          "locator": "pathway R-HSA-512988",
+          "supports": "Curated human pathway: the GM-CSF receptor activates JAK2 and phosphorylates STAT5.",
+          "evidence_kind": "curated_database",
+          "context_match": "related_system",
+          "context_note": "Human curated pathway.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "STAT5_Monocyte -> pSTAT5_Monocyte",
+      "required": null,
+      "essential": true,
+      "modifiers": [
+        "IL3R_act_Monocyte"
+      ],
+      "type": "phosphorylation",
+      "description": "IL-3 receptor JAK2 phosphorylates STAT5 Y694 in monocytes.",
+      "identifiers": {
+        "reactome": "reactome:R-HSA-512988"
+      },
+      "evidence": [
+        {
+          "source": "reactome:R-HSA-512988",
+          "title": "Interleukin-3, Interleukin-5 and GM-CSF signaling",
+          "year": 2024,
+          "locator": "pathway R-HSA-512988",
+          "supports": "Curated human pathway: IL-3 signalling through the common beta chain activates JAK2 and STAT5.",
+          "evidence_kind": "curated_database",
+          "context_match": "related_system",
+          "context_note": "Human curated pathway.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "STAT5_Monocyte -> pSTAT5_Monocyte",
+      "required": null,
+      "essential": true,
+      "modifiers": [
+        "GCSFR_act_Monocyte"
+      ],
+      "type": "phosphorylation",
+      "description": "G-CSF receptor JAKs phosphorylate STAT5 Y694 in monocytes.",
+      "identifiers": {
+        "reactome": "reactome:R-HSA-9674555"
+      },
+      "evidence": [
+        {
+          "source": "reactome:R-HSA-9674555",
+          "title": "Signaling by CSF3 (G-CSF)",
+          "year": 2024,
+          "locator": "pathway R-HSA-9674555",
+          "supports": "Curated human pathway: activated CSF3R recruits JAKs that phosphorylate STAT1, STAT3 and STAT5.",
+          "evidence_kind": "curated_database",
+          "context_match": "related_system",
+          "context_note": "Human curated pathway.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "STAT3_Monocyte -> pSTAT3_Monocyte",
+      "required": null,
+      "essential": true,
+      "modifiers": [
+        "GCSFR_act_Monocyte"
+      ],
+      "type": "phosphorylation",
+      "description": "G-CSF receptor JAKs phosphorylate STAT3 Y705 in monocytes - the direct STAT3 response seen only in the G-CSF well.",
+      "identifiers": {
+        "reactome": "reactome:R-HSA-9674555"
+      },
+      "evidence": [
+        {
+          "source": "reactome:R-HSA-9674555",
+          "title": "Signaling by CSF3 (G-CSF)",
+          "year": 2024,
+          "locator": "pathway R-HSA-9674555",
+          "supports": "Curated human pathway: CSF3R-associated JAKs phosphorylate STAT3 among other STATs.",
+          "evidence_kind": "curated_database",
+          "context_match": "related_system",
+          "context_note": "Human curated pathway.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "-> sIFN1",
+      "required": null,
+      "essential": false,
+      "modifiers": [
+        "TLR4_act_Monocyte"
+      ],
+      "type": "synthesis",
+      "description": "Hypothesis 1: LPS-activated monocytes secrete a type I interferon-like factor into the shared medium.",
+      "identifiers": {
+        "reactome": "reactome:R-HSA-937061"
+      },
+      "evidence": [
+        {
+          "source": "10.4049/jimmunol.178.11.7344",
+          "title": "The MyD88-independent pathway is not mobilized in human neutrophils stimulated via TLR4",
+          "year": 2007,
+          "locator": "Abstract",
+          "supports": "IFN-beta and IFN-beta-dependent genes are inducible by LPS in human monocytes (unlike neutrophils), so TLR4 engagement drives type I IFN production in this cell type.",
+          "quote": "Indeed, microarray and real-time PCR experiments showed that neither IFNbeta nor IFNbeta-dependent genes (including CXCL10) are inducible in LPS-treated neutrophils, in contrast to monocytes.",
+          "evidence_kind": "direct_experimental",
+          "context_match": "same_system",
+          "context_note": "Primary human monocytes and neutrophils with LPS.",
+          "stance": "supports"
+        },
+        {
+          "source": "10.1093/jleuko/qiad058",
+          "title": "Long-chain polyphosphates inhibit type I interferon signaling and augment LPS-induced cytokine secretion in human leukocytes",
+          "year": 2023,
+          "locator": "Abstract; PBMC experiments",
+          "supports": "In primary human PBMC, LPS induces IFN-beta transcription and secretion together with STAT1 phosphorylation and ISG expression, all reduced together by an inhibitor.",
+          "quote": "P700 treatment decreased lipopolysaccharide-induced IFN\u03b2 transcription and secretion, reduced STAT1 phosphorylation, and downregulated subsequent interferon-stimulated gene expression in primary human peripheral blood mononuclear cells.",
+          "evidence_kind": "direct_experimental",
+          "context_match": "same_system",
+          "context_note": "Primary human PBMC with LPS - the intent's cell mixture; producing population not resolved.",
+          "stance": "supports"
+        },
+        {
+          "source": "10.1371/journal.pone.0030166",
+          "title": "LPS regulates SOCS2 transcription in a type I interferon dependent autocrine-paracrine loop",
+          "year": 2012,
+          "locator": "Abstract; IFNAR2 neutralisation",
+          "supports": "Neutralising IFNAR2 abolished the late TLR4-driven response in human myeloid cells, establishing an autocrine-paracrine type I IFN loop and naming the discriminating blocking experiment.",
+          "quote": "Blocking endogenous type I IFN signaling, by neutralizing antibodies to the receptor IFNAR2, abolished SOCS2 mRNA expression after TLR4 stimulation.",
+          "evidence_kind": "direct_experimental",
+          "context_match": "related_system",
+          "context_note": "Human monocyte-derived dendritic cells; dendritic cells are not staged in the intent's gating.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "sIFN1 ->",
+      "required": null,
+      "essential": false,
+      "modifiers": [],
+      "type": "degradation",
+      "description": "Clearance of the secreted type I interferon-like factor from the medium (decay plus receptor-mediated consumption).",
+      "identifiers": {},
+      "evidence": [
+        {
+          "source": "10.1016/j.immuni.2017.03.011",
+          "title": "A Tunable Diffusion-Consumption Mechanism of Cytokine Propagation Enables Plasticity in Cell-to-Cell Communication in the Immune System",
+          "year": 2017,
+          "locator": "Abstract",
+          "supports": "Cytokine fields are set by diffusion competing with consumption by receptor-bearing cells, scaling with consumer density - a sink term belongs to any secreted-factor mechanism.",
+          "quote": "We established that competition between cytokine diffusion and consumption generated spatial niches of high cytokine concentrations with sharp boundaries.",
+          "evidence_kind": "direct_experimental",
+          "context_match": "related_system",
+          "context_note": "Mouse and in vitro immune systems; the intent's setting is a 200 ul suspension well.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "sIFN1 + IFNAR_Tcell_CD4 -> IFNAR_act_Tcell_CD4",
+      "required": null,
+      "essential": false,
+      "modifiers": [],
+      "type": "binding",
+      "description": "Hypothesis 1 action: the monocyte-derived type I IFN-like factor engages the same IFNAR complex on CD4 T cells that the IFN-alpha wells stimulate.",
+      "identifiers": {
+        "reactome": "reactome:R-HSA-909733"
+      },
+      "evidence": [
+        {
+          "source": "10.4049/jimmunol.0902314",
+          "title": "Major differences in the responses of primary human leukocyte subsets to IFN-beta",
+          "year": 2010,
+          "locator": "Figures 3, 4",
+          "supports": "IFN-beta, the candidate factor, acts on primary human CD4 T cells through IFNAR to phosphorylate STAT1, STAT3 and STAT5 - the same receptor and STAT set as added IFN-alpha.",
+          "evidence_kind": "direct_experimental",
+          "context_match": "same_system",
+          "context_note": "Primary human blood CD4 T cells with IFN-beta.",
+          "stance": "supports"
+        },
+        {
+          "source": "10.1016/j.jmb.2006.11.053",
+          "title": "Differential receptor subunit affinities of type I interferons govern differential signal activation",
+          "year": 2007,
+          "locator": "Abstract",
+          "supports": "Type I IFNs differ by orders of magnitude in IFNAR1 and IFNAR2 affinity, so a secreted IFN-beta-like factor is not quantitatively calibrated by the IFN-alpha wells despite sharing the receptor.",
+          "quote": "However, differences in rate and affinity constants over several orders of magnitude were observed for both the interactions with ifnar1-EC and ifnar2-EC.",
+          "evidence_kind": "direct_experimental",
+          "context_match": "different_system",
+          "context_note": "Purified receptor ectodomains and 2fTGH cells; a caveat on transferring the IFN-alpha calibration.",
+          "stance": "contradicts"
+        }
+      ]
+    },
+    {
+      "equation": "sIFN1 + IFNAR_Tcell_CD4neg -> IFNAR_act_Tcell_CD4neg",
+      "required": null,
+      "essential": false,
+      "modifiers": [],
+      "type": "binding",
+      "description": "Hypothesis 1 action on CD4-negative T cells.",
+      "identifiers": {
+        "reactome": "reactome:R-HSA-909733"
+      },
+      "evidence": [
+        {
+          "source": "10.4049/jimmunol.0902314",
+          "title": "Major differences in the responses of primary human leukocyte subsets to IFN-beta",
+          "year": 2010,
+          "locator": "Figures 3, 8A",
+          "supports": "CD8+ T cells express IFNAR2 and phosphorylate STAT1/3/5 in response to IFN-beta.",
+          "evidence_kind": "direct_experimental",
+          "context_match": "same_system",
+          "context_note": "Primary human blood CD8+ T cells.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "sIFN1 + IFNAR_Bcell -> IFNAR_act_Bcell",
+      "required": null,
+      "essential": false,
+      "modifiers": [],
+      "type": "binding",
+      "description": "Hypothesis 1 action on B cells - the population whose late LPS response is more STAT1-only than its own IFN-alpha response.",
+      "identifiers": {
+        "reactome": "reactome:R-HSA-909733"
+      },
+      "evidence": [
+        {
+          "source": "10.4049/jimmunol.0902314",
+          "title": "Major differences in the responses of primary human leukocyte subsets to IFN-beta",
+          "year": 2010,
+          "locator": "Figures 3A-3C",
+          "supports": "B cells respond to type I IFN with a distinctly smaller STAT1-positive fraction than monocytes, so the per-population effect of a type I IFN is not uniform.",
+          "evidence_kind": "direct_experimental",
+          "context_match": "same_system",
+          "context_note": "Primary human blood B cells.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "sIFN1 + IFNAR_NKcell -> IFNAR_act_NKcell",
+      "required": null,
+      "essential": false,
+      "modifiers": [],
+      "type": "binding",
+      "description": "Hypothesis 1 action on NK cells - the population that rises on STAT1 late under LPS yet does not respond to added IFN-gamma.",
+      "identifiers": {
+        "reactome": "reactome:R-HSA-909733"
+      },
+      "evidence": [
+        {
+          "source": "reactome:R-HSA-909733",
+          "title": "Interferon alpha/beta signaling",
+          "year": 2024,
+          "locator": "pathway R-HSA-909733",
+          "supports": "Curated human pathway for type I IFN acting through IFNAR on IFNAR-bearing cells.",
+          "evidence_kind": "curated_database",
+          "context_match": "related_system",
+          "context_note": "Human curated pathway, not NK-specific.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "sIFN1 + IFNAR_Monocyte -> IFNAR_act_Monocyte",
+      "required": null,
+      "essential": false,
+      "modifiers": [],
+      "type": "binding",
+      "description": "Hypothesis 1, autocrine arm: the secreted factor acts back on the monocytes that produced it.",
+      "identifiers": {
+        "reactome": "reactome:R-HSA-909733"
+      },
+      "evidence": [
+        {
+          "source": "10.1371/journal.pone.0030166",
+          "title": "LPS regulates SOCS2 transcription in a type I interferon dependent autocrine-paracrine loop",
+          "year": 2012,
+          "locator": "Abstract",
+          "supports": "The late LPS response in human myeloid cells is driven by endogenous type I IFN acting back through its own receptor.",
+          "evidence_kind": "direct_experimental",
+          "context_match": "related_system",
+          "context_note": "Human monocyte-derived DC; here monocyte pSTAT1 under LPS rises only +0.12/+0.18 at 120/240 min.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "-> sIL6",
+      "required": null,
+      "essential": false,
+      "modifiers": [
+        "TLR4_act_Monocyte"
+      ],
+      "type": "synthesis",
+      "description": "Hypothesis 2: LPS-activated monocytes secrete an IL-6-like factor into the shared medium.",
+      "identifiers": {
+        "reactome": "reactome:R-HSA-166016"
+      },
+      "evidence": [
+        {
+          "source": "10.1016/0006-291x(91)90478-p",
+          "title": "Kinetics of TNF, IL-6, and IL-8 gene expression in LPS-stimulated human whole blood",
+          "year": 1991,
+          "locator": "Abstract",
+          "supports": "LPS induces IL-6 with TNF in a first wave, mRNA peaking at 2-4 h and protein at 4-6 h - production is real but slower than the 60-120 min onset here.",
+          "quote": "TNF and IL-6 were induced in the first wave with mRNA levels peaking between 2-4 hours and then rapidly declining. TNF and IL-6 protein peaked at 4-6 hours and then stabilized.",
+          "evidence_kind": "direct_experimental",
+          "context_match": "related_system",
+          "context_note": "Ex vivo human whole blood with LPS; the intent uses PBMC over 4 h.",
+          "stance": "supports"
+        },
+        {
+          "source": "10.1084/jem.174.5.1209",
+          "title": "Interleukin 10 (IL-10) inhibits cytokine synthesis by human monocytes",
+          "year": 1991,
+          "locator": "Abstract",
+          "supports": "LPS-activated human monocytes secrete IL-6, IL-1, IL-8, TNF and G-CSF at high levels 4-8 h after activation.",
+          "quote": "These kinetics indicated that the production of IL-10 by human monocytes was relatively late as compared to the production of IL-1 alpha, IL-1 beta, IL-6, IL-8, tumor necrosis factor alpha (TNF alpha), and granulocyte colony-stimulating factor (G-CSF), which were all secreted at high levels 4-8 h after activation.",
+          "evidence_kind": "direct_experimental",
+          "context_match": "same_system",
+          "context_note": "Purified primary human monocytes with LPS.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "-> sIL6",
+      "required": null,
+      "essential": false,
+      "modifiers": [
+        "GMR_act_Monocyte"
+      ],
+      "type": "synthesis",
+      "description": "Hypothesis 2 under GM-CSF: GM-CSF-stimulated monocytes produce an IL-6-like factor - the candidate for the late CD4 T pSTAT3 rise in the GM-CSF well.",
+      "identifiers": {},
+      "evidence": [
+        {
+          "source": "https://pubmed.ncbi.nlm.nih.gov/8123762/",
+          "title": "Regulatory effects of T cell lymphokines on cytokine gene expression in monocytes",
+          "year": 1993,
+          "locator": "Abstract",
+          "supports": "GM-CSF, like LPS and IL-3, induced IL-6 gene expression in purified human monocytes with different amounts and kinetics from LPS.",
+          "quote": "Similar to LPS, IL-2, IL-3, and GM-CSF induced the expression of IL-1 beta, IL-6, IL-8, TNF-alpha, and IL-1-RA genes in monocytes, but with some differences in the amount and kinetics of cytokine mRNA accumulation.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/8123762/",
+          "evidence_kind": "direct_experimental",
+          "context_match": "same_system",
+          "context_note": "Elutriated primary human monocytes, serum-free and LPS-free.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "-> sIL6",
+      "required": null,
+      "essential": false,
+      "modifiers": [
+        "IL3R_act_Monocyte"
+      ],
+      "type": "synthesis",
+      "description": "Hypothesis 2 under IL-3: IL-3-stimulated monocytes produce an IL-6-like factor.",
+      "identifiers": {},
+      "evidence": [
+        {
+          "source": "https://pubmed.ncbi.nlm.nih.gov/8123762/",
+          "title": "Regulatory effects of T cell lymphokines on cytokine gene expression in monocytes",
+          "year": 1993,
+          "locator": "Abstract",
+          "supports": "IL-3 induced IL-6, IL-1beta, IL-8 and TNF-alpha gene expression in purified human monocytes.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/8123762/",
+          "evidence_kind": "direct_experimental",
+          "context_match": "same_system",
+          "context_note": "Elutriated primary human monocytes.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "-> sIL6",
+      "required": null,
+      "essential": false,
+      "modifiers": [
+        "GCSFR_act_Monocyte"
+      ],
+      "type": "synthesis",
+      "description": "Hypothesis 2 under G-CSF: G-CSF-stimulated monocytes produce an IL-6-like factor - the least supported arm, since the G-CSF well shows the largest late T-cell STAT3 rise while G-CSF is reported to suppress monokine release.",
+      "identifiers": {},
+      "evidence": [
+        {
+          "source": "10.1182/blood.v95.1.270",
+          "title": "Human monocytes express functional receptors for granulocyte colony-stimulating factor",
+          "year": 2000,
+          "locator": "Abstract",
+          "supports": "G-CSF attenuated, not increased, LPS-induced TNF-alpha, IL-12, IL-1beta and IFN-gamma release, and attenuated TNF-alpha release from purified monocytes.",
+          "quote": "G-CSF in vitro also attenuated TNF-alpha release from elutriation-purified monocytes.",
+          "evidence_kind": "direct_experimental",
+          "context_match": "same_system",
+          "context_note": "Primary human monocytes and whole blood; IL-6 without LPS was not measured there.",
+          "stance": "contradicts"
+        }
+      ]
+    },
+    {
+      "equation": "sIL6 ->",
+      "required": null,
+      "essential": false,
+      "modifiers": [],
+      "type": "degradation",
+      "description": "Clearance of the secreted IL-6-like factor from the medium (decay and receptor-mediated consumption).",
+      "identifiers": {},
+      "evidence": [
+        {
+          "source": "10.1016/j.immuni.2017.03.011",
+          "title": "A Tunable Diffusion-Consumption Mechanism of Cytokine Propagation Enables Plasticity in Cell-to-Cell Communication in the Immune System",
+          "year": 2017,
+          "locator": "Abstract",
+          "supports": "Consumption by receptor-bearing cells is a quantitatively important sink scaling with consumer density.",
+          "evidence_kind": "direct_experimental",
+          "context_match": "related_system",
+          "context_note": "Mouse/in vitro immune systems; generic sink.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "sIL6 + IL6R_Tcell_CD4 -> IL6R_act_Tcell_CD4",
+      "required": null,
+      "essential": false,
+      "modifiers": [],
+      "type": "binding",
+      "description": "Hypothesis 2 action: the IL-6-like factor engages IL-6R/gp130 on CD4 T cells, the population with the most membrane IL-6R and the largest late STAT3 rise.",
+      "identifiers": {
+        "reactome": "reactome:R-HSA-1059683"
+      },
+      "evidence": [
+        {
+          "source": "https://pubmed.ncbi.nlm.nih.gov/1353064/",
+          "title": "Expression of interleukin-6 receptor on blood lymphocytes without in vitro activation",
+          "year": 1992,
+          "locator": "Abstract",
+          "supports": "Most resting CD4 T cells carry surface IL-6R, at higher levels than CD8 T cells, while only a small variable fraction of CD8 and B cells is positive.",
+          "quote": "Most CD4 cells express IL-6 receptor, whilst a small and variable proportion of CD8 and B cells are positive. CD4+ cells express higher levels of receptor than CD8+ T cells, and CD45RO+ cells express higher levels than CD45RA cells.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/1353064/",
+          "evidence_kind": "direct_experimental",
+          "context_match": "same_system",
+          "context_note": "Unstimulated primary human blood lymphocytes - exactly the intent's populations; NK cells not reported.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "sIL6 + IL6R_Tcell_CD4neg -> IL6R_act_Tcell_CD4neg",
+      "required": null,
+      "essential": false,
+      "modifiers": [],
+      "type": "binding",
+      "description": "Hypothesis 2 action on CD4-negative T cells, predicted weaker than on CD4 T cells.",
+      "identifiers": {
+        "reactome": "reactome:R-HSA-1059683"
+      },
+      "evidence": [
+        {
+          "source": "10.3389/fimmu.2022.935394",
+          "title": "IL-6-Driven pSTAT1 Response Is Linked to T Cell Features Implicated in Early Immune Dysregulation",
+          "year": 2022,
+          "locator": "Results",
+          "supports": "More cells carried membrane IL-6R in CD4+ than CD8+ T-cell subsets, predicting a smaller response in the CD4-negative gate - as observed here.",
+          "quote": "There were more mbIL-6R+ cells in the CD4+ T cell subsets compared to the CD8+ T cell subsets",
+          "evidence_kind": "direct_experimental",
+          "context_match": "same_system",
+          "context_note": "Primary human T-cell subsets, IL-6 20 ng/ml, 30 min.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "sIL6 + IL6R_Monocyte -> IL6R_act_Monocyte",
+      "required": null,
+      "essential": false,
+      "modifiers": [],
+      "type": "binding",
+      "description": "Hypothesis 2, autocrine arm on monocytes, which express IL-6R.",
+      "identifiers": {
+        "reactome": "reactome:R-HSA-1059683"
+      },
+      "evidence": [
+        {
+          "source": "10.1371/journal.pgen.1003444",
+          "title": "Functional IL6R 358Ala allele impairs classical IL-6 receptor signaling and influences risk of diverse inflammatory diseases",
+          "year": 2013,
+          "locator": "Figures 3, 4",
+          "supports": "Monocytes were among the subsets expressing surface IL-6R and responding to IL-6 with STAT phosphorylation.",
+          "evidence_kind": "direct_experimental",
+          "context_match": "same_system",
+          "context_note": "Primary human PBMC subsets.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "IL6R_act_Tcell_CD4 -> IL6R_Tcell_CD4",
+      "required": null,
+      "essential": false,
+      "modifiers": [],
+      "type": "dissociation",
+      "description": "Termination of IL-6 receptor signalling in CD4 T cells.",
+      "identifiers": {
+        "reactome": "reactome:R-HSA-1059683"
+      },
+      "evidence": [
+        {
+          "source": "reactome:R-HSA-1059683",
+          "title": "Interleukin-6 signaling",
+          "year": 2024,
+          "locator": "pathway R-HSA-1059683",
+          "supports": "Curated human IL-6 pathway includes termination of gp130 signalling, including SOCS3 recruitment.",
+          "evidence_kind": "curated_database",
+          "context_match": "related_system",
+          "context_note": "Human curated pathway.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "IL6R_act_Tcell_CD4neg -> IL6R_Tcell_CD4neg",
+      "required": null,
+      "essential": false,
+      "modifiers": [],
+      "type": "dissociation",
+      "description": "Termination of IL-6 receptor signalling in CD4-negative T cells.",
+      "identifiers": {
+        "reactome": "reactome:R-HSA-1059683"
+      },
+      "evidence": [
+        {
+          "source": "reactome:R-HSA-1059683",
+          "title": "Interleukin-6 signaling",
+          "year": 2024,
+          "locator": "pathway R-HSA-1059683",
+          "supports": "Curated human IL-6 pathway includes signal termination at gp130.",
+          "evidence_kind": "curated_database",
+          "context_match": "related_system",
+          "context_note": "Human curated pathway.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "IL6R_act_Monocyte -> IL6R_Monocyte",
+      "required": null,
+      "essential": false,
+      "modifiers": [],
+      "type": "dissociation",
+      "description": "Termination of IL-6 receptor signalling in monocytes.",
+      "identifiers": {
+        "reactome": "reactome:R-HSA-1059683"
+      },
+      "evidence": [
+        {
+          "source": "reactome:R-HSA-1059683",
+          "title": "Interleukin-6 signaling",
+          "year": 2024,
+          "locator": "pathway R-HSA-1059683",
+          "supports": "Curated human IL-6 pathway includes signal termination at gp130.",
+          "evidence_kind": "curated_database",
+          "context_match": "related_system",
+          "context_note": "Human curated pathway.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "IL6R_act_Monocyte -> IL6R_Monocyte",
+      "required": null,
+      "essential": false,
+      "modifiers": [
+        "TLR4_act_Monocyte"
+      ],
+      "type": "dissociation",
+      "description": "LPS-driven loss of IL-6 responsiveness in monocytes - a candidate explanation for monocyte pSTAT3 ending below Reference under LPS while the lymphocytes rise.",
+      "identifiers": {},
+      "evidence": [
+        {
+          "source": "10.4049/jimmunol.170.6.3263",
+          "title": "Activation of STAT3 by IL-6 and IL-10 in primary human macrophages is differentially modulated by SOCS3",
+          "year": 2003,
+          "locator": "Abstract",
+          "supports": "LPS pretreatment blocks IL-6-induced STAT3 activation in primary human macrophages rapidly and without requiring transcription, while IL-10-induced STAT3 is unaffected.",
+          "quote": "Pretreatment of macrophages with PMA or the proinflammatory mediators LPS and TNF-alpha blocks IL-6-induced STAT3 activation, whereas IL-10-induced activation of STAT3 remains largely unaffected.",
+          "evidence_kind": "direct_experimental",
+          "context_match": "related_system",
+          "context_note": "Blood-monocyte-derived macrophages, not freshly rested monocytes.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "STAT3_Tcell_CD4 -> pSTAT3_Tcell_CD4",
+      "required": null,
+      "essential": false,
+      "modifiers": [
+        "IL6R_act_Tcell_CD4"
+      ],
+      "type": "phosphorylation",
+      "description": "Hypothesis 2 readout: the IL-6-like factor phosphorylates STAT3 Y705 in CD4 T cells.",
+      "identifiers": {
+        "reactome": "reactome:R-HSA-1059683"
+      },
+      "evidence": [
+        {
+          "source": "10.1371/journal.pgen.1003444",
+          "title": "Functional IL6R 358Ala allele impairs classical IL-6 receptor signaling and influences risk of diverse inflammatory diseases",
+          "year": 2013,
+          "locator": "Figure 4; methods",
+          "supports": "IL-6 induced pSTAT3 and pSTAT1 in CD4 naive and memory T cells within 10 min, scaling with surface IL-6R.",
+          "quote": "Following stimulation with 0, 0.1, 1 or 10 ng/ml of IL-6 for 10 min (37\u00b0C, 5% CO2), cells were immediately fixed",
+          "evidence_kind": "direct_experimental",
+          "context_match": "same_system",
+          "context_note": "Primary human PBMC subsets.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "STAT3_Tcell_CD4neg -> pSTAT3_Tcell_CD4neg",
+      "required": null,
+      "essential": false,
+      "modifiers": [
+        "IL6R_act_Tcell_CD4neg"
+      ],
+      "type": "phosphorylation",
+      "description": "Hypothesis 2 readout in CD4-negative T cells.",
+      "identifiers": {
+        "reactome": "reactome:R-HSA-1059683"
+      },
+      "evidence": [
+        {
+          "source": "10.3389/fimmu.2022.935394",
+          "title": "IL-6-Driven pSTAT1 Response Is Linked to T Cell Features Implicated in Early Immune Dysregulation",
+          "year": 2022,
+          "locator": "Results",
+          "supports": "IL-6 elicits pSTAT3 in CD8+ as well as CD4+ T-cell subsets, at lower frequencies in the CD8 compartment.",
+          "evidence_kind": "direct_experimental",
+          "context_match": "same_system",
+          "context_note": "Primary human T-cell subsets.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "STAT3_Monocyte -> pSTAT3_Monocyte",
+      "required": null,
+      "essential": false,
+      "modifiers": [
+        "IL6R_act_Monocyte"
+      ],
+      "type": "phosphorylation",
+      "description": "Hypothesis 2 autocrine readout in monocytes.",
+      "identifiers": {
+        "reactome": "reactome:R-HSA-1059683"
+      },
+      "evidence": [
+        {
+          "source": "10.4049/jimmunol.170.6.3263",
+          "title": "Activation of STAT3 by IL-6 and IL-10 in primary human macrophages is differentially modulated by SOCS3",
+          "year": 2003,
+          "locator": "Abstract",
+          "supports": "IL-6 signals mainly via STAT3 activation in primary human macrophages derived from blood monocytes.",
+          "evidence_kind": "direct_experimental",
+          "context_match": "related_system",
+          "context_note": "Monocyte-derived macrophages.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "STAT1_Tcell_CD4 -> pSTAT1_Tcell_CD4",
+      "required": null,
+      "essential": false,
+      "modifiers": [
+        "IL6R_act_Tcell_CD4"
+      ],
+      "type": "phosphorylation",
+      "description": "IL-6-driven STAT1 phosphorylation in CD4 T cells - central to discrimination, because an IL-6-like factor is not STAT3-only.",
+      "identifiers": {
+        "reactome": "reactome:R-HSA-1059683"
+      },
+      "evidence": [
+        {
+          "source": "10.3389/fimmu.2022.935394",
+          "title": "IL-6-Driven pSTAT1 Response Is Linked to T Cell Features Implicated in Early Immune Dysregulation",
+          "year": 2022,
+          "locator": "Results",
+          "supports": "IL-6 induces pSTAT1 as well as pSTAT3 in human T cells, with naive CD4+ T cells showing the highest pSTAT1 single-positive frequency.",
+          "quote": "na\u00efve CD4+ T cells had the highest frequency of pSTAT1 single positive cells whereas memory CD4+ T cells had the highest frequency of single positive pSTAT3 cells",
+          "evidence_kind": "direct_experimental",
+          "context_match": "same_system",
+          "context_note": "Primary human T-cell subsets with IL-6; means a STAT3-plus-STAT1 late signature does not by itself identify a type I interferon.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "-> IFNg",
+      "required": null,
+      "essential": false,
+      "modifiers": [
+        "IFNAR_act_NKcell"
+      ],
+      "type": "synthesis",
+      "description": "Hypothesis 3: NK cells secrete IFN-gamma into the shared medium after monocyte-derived signals; written as driven by the NK cell's own activated receptor because the monocyte IL-12/IL-18 axis is outside the measured panel.",
+      "identifiers": {},
+      "evidence": [
+        {
+          "source": "10.1182/blood.v95.1.270",
+          "title": "Human monocytes express functional receptors for granulocyte colony-stimulating factor",
+          "year": 2000,
+          "locator": "Abstract",
+          "supports": "In LPS-stimulated human blood, lymphocyte IFN-gamma release is controlled indirectly through monocyte-derived IL-12 and TNF-alpha, not by direct action on the lymphocytes - the relay structure this hypothesis assumes.",
+          "quote": "We conclude that the attenuation of IFN-gamma release from lymphocytes is not a direct effect of G-CSF on these cells but is rather due to the inhibition of monocytic IL-12 and TNF-alpha release by G-CSF.",
+          "evidence_kind": "direct_experimental",
+          "context_match": "same_system",
+          "context_note": "Primary human whole blood and isolated leukocytes with LPS.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "LPS + TLR4_Bcell -> TLR4_act_Bcell",
+      "required": null,
+      "essential": false,
+      "modifiers": [],
+      "type": "binding",
+      "description": "Hypothesis 4 (the null): LPS acts directly on B cells through their own low-level TLR4, the delay arising inside the cell rather than from a secreted factor.",
+      "identifiers": {
+        "reactome": "reactome:R-HSA-166016"
+      },
+      "evidence": [
+        {
+          "source": "10.1016/j.molimm.2010.09.008",
+          "title": "Differential regulation of TLR4 expression in human B cells and monocytes",
+          "year": 2010,
+          "locator": "Abstract",
+          "supports": "TLR4 is expressed at very low levels on B cells from healthy individuals and is elevated only in inflammatory disease, so a direct LPS route in resting human B cells is weak at best.",
+          "quote": "Although TLR4 is expressed at very low levels on human B cells from healthy individuals, recent reports showed that TLR4 expression and function is elevated in B cells from inflammatory disease patients.",
+          "evidence_kind": "direct_experimental",
+          "context_match": "same_system",
+          "context_note": "Primary human B cells and monocytes from healthy donors; the intent's donor is healthy.",
+          "stance": "contradicts"
+        },
+        {
+          "source": "10.1084/jem.192.1.23",
+          "title": "The toll-like receptor protein RP105 regulates lipopolysaccharide signaling in B cells",
+          "year": 2000,
+          "locator": "Abstract",
+          "supports": "B cells possess an LPS-sensing module in which RP105, predominant on mature B cells in mice and humans, cooperates with TLR4.",
+          "quote": "These data suggest the existence of the TLR4-RP105 signaling module in the LPS-induced B cell activation.",
+          "evidence_kind": "direct_experimental",
+          "context_match": "different_system",
+          "context_note": "Mouse B cells and Ba/F3 transfectants; readouts are proliferation and NF-kappaB over days, not STAT phosphorylation within 4 h.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "-> sIL6",
+      "required": null,
+      "essential": false,
+      "modifiers": [],
+      "type": "synthesis",
+      "description": "Hypothesis 5: basal, stimulus-independent production of the IL-6-like factor from plating onwards - the mechanistic alternative to the declared drift term in the unstimulated wells.",
+      "identifiers": {},
+      "evidence": [
+        {
+          "source": "10.4049/jimmunol.140.5.1690",
+          "title": "Adherence induces selective mRNA expression of monocyte mediators and proto-oncogenes",
+          "year": 1988,
+          "locator": "Abstract",
+          "supports": "Handling and adherence rapidly induce monokine mRNA in human monocytes, but secretion required a second, LPS-derived signal - basal secretion in an unstimulated well is not the default expectation.",
+          "quote": "Although all of these genes could be induced by adherence, actual secretion of the mediators required the exposure to a second signal derived from LPS.",
+          "evidence_kind": "direct_experimental",
+          "context_match": "related_system",
+          "context_note": "Primary human monocytes adhering to plastic; the intent's cells are a non-adherent suspension rested 1-2 h.",
+          "stance": "contradicts"
+        }
+      ]
+    },
+    {
+      "equation": "-> sIFN1",
+      "required": null,
+      "essential": false,
+      "modifiers": [],
+      "type": "synthesis",
+      "description": "Hypothesis 5 variant: basal production of the type I interferon-like factor from plating onwards, which would make the Reference-well rise the same communication at a low level.",
+      "identifiers": {},
+      "evidence": [
+        {
+          "source": "10.1371/journal.pone.0030166",
+          "title": "LPS regulates SOCS2 transcription in a type I interferon dependent autocrine-paracrine loop",
+          "year": 2012,
+          "locator": "Abstract",
+          "supports": "Type I IFN acts as an autocrine-paracrine loop in myeloid cultures whose blockade removes the late response; no unstimulated basal rate is quantified, so the basal arm is an extrapolation.",
+          "evidence_kind": "direct_experimental",
+          "context_match": "related_system",
+          "context_note": "Human monocyte-derived DC with TLR ligands.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "-> sIL10",
+      "required": null,
+      "essential": false,
+      "modifiers": [
+        "TLR4_act_Monocyte"
+      ],
+      "type": "synthesis",
+      "description": "Expansion: LPS-activated monocytes secrete IL-10, a further STAT3-activating factor; its kinetics make it too late for a 60-120 min onset but it could shape the 240 min values.",
+      "identifiers": {
+        "reactome": "reactome:R-HSA-6783783"
+      },
+      "evidence": [
+        {
+          "source": "10.1084/jem.174.5.1209",
+          "title": "Interleukin 10 (IL-10) inhibits cytokine synthesis by human monocytes",
+          "year": 1991,
+          "locator": "Abstract",
+          "supports": "LPS-activated human monocytes produce IL-10 only from about 7 h, peaking at 24-48 h - after this experiment's window.",
+          "quote": "IL-10 was detectable 7 h after activation of the monocytes and maximal levels of IL-10 production were observed after 24-48 h.",
+          "evidence_kind": "direct_experimental",
+          "context_match": "same_system",
+          "context_note": "Purified primary human monocytes with LPS.",
+          "stance": "contradicts"
+        }
+      ]
+    },
+    {
+      "equation": "-> sIL27",
+      "required": null,
+      "essential": false,
+      "modifiers": [
+        "TLR4_act_Monocyte"
+      ],
+      "type": "synthesis",
+      "description": "Expansion: LPS-activated monocytes secrete IL-27, which activates both STAT1 and STAT3 and could mimic a combined interferon-plus-IL-6 signature in a single factor.",
+      "identifiers": {},
+      "evidence": [
+        {
+          "source": "reactome:R-HSA-8950485",
+          "title": "STAT3 and STAT1 are phosphorylated by JAKs after IL27:IL27R interaction",
+          "year": 2024,
+          "locator": "reaction R-HSA-8950485",
+          "supports": "Curated human reaction: IL-27 engagement of its receptor leads to JAK-mediated phosphorylation of both STAT1 and STAT3 - a single-factor alternative to the two-factor hypothesis.",
+          "evidence_kind": "curated_database",
+          "context_match": "related_system",
+          "context_note": "Human curated reaction; no verified time course of IL-27 protein release by human monocytes after LPS was found.",
+          "stance": "supports"
+        }
+      ]
+    }
+  ],
+  "facts": [
+    {
+      "kind": "expression",
+      "statement": "Among purified human leukocyte populations TLR4 (with TLR2 and TLR5) is restricted to myelomonocytic cells, while T, B and NK cells express TLR1 but not TLR4 - so LPS has no direct receptor on the four lymphocyte gates.",
+      "applies_to": [
+        "TLR4_Monocyte",
+        "Tcell_CD4",
+        "Tcell_CD4neg",
+        "Bcell",
+        "NKcell"
+      ],
+      "for": [
+        "construction",
+        "condition_encoding"
+      ],
+      "evidence": [
+        {
+          "source": "10.4049/jimmunol.164.11.5998",
+          "title": "Differential expression and regulation of toll-like receptors (TLR) in human leukocytes",
+          "year": 2000,
+          "locator": "Abstract",
+          "supports": "Classifies TLR2/4/5 as restricted to myelomonocytic cells and TLR1 as ubiquitous across human leukocyte populations.",
+          "quote": "These data suggest that TLR can be classified based on expression pattern as ubiquitous (TLR1), restricted (TLR2, TLR4, and TLR5 in myelomonocytic cells), and specific (TLR3 in DC) molecules.",
+          "evidence_kind": "direct_experimental",
+          "context_match": "same_system",
+          "context_note": "Purified primary human monocytes, PMN, T, B and NK cells.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "kind": "expression",
+      "statement": "The G-CSF receptor is detectable on human neutrophils and monocytes but not lymphocytes; a separate single-cell study reports CSF3R in human T cells, so a direct G-CSF route to T cells is disputed rather than excluded.",
+      "applies_to": [
+        "GCSFR_Monocyte",
+        "Tcell_CD4",
+        "Tcell_CD4neg"
+      ],
+      "for": [
+        "construction",
+        "condition_encoding"
+      ],
+      "evidence": [
+        {
+          "source": "10.1182/blood.v95.1.270",
+          "title": "Human monocytes express functional receptors for granulocyte colony-stimulating factor",
+          "year": 2000,
+          "locator": "Abstract",
+          "supports": "RT-PCR and flow cytometry found the G-CSF receptor on neutrophils and monocytes but not lymphocytes.",
+          "quote": "G-CSF receptor expression was detected in human neutrophils and monocytes but not in lymphocytes by means of RT-PCR as well as flow cytometry.",
+          "evidence_kind": "direct_experimental",
+          "context_match": "same_system",
+          "context_note": "Healthy human volunteers, primary blood leukocytes.",
+          "stance": "supports"
+        },
+        {
+          "source": "10.1182/blood-2002-04-1200",
+          "title": "G-CSF as immune regulator in T cells expressing the G-CSF receptor",
+          "year": 2003,
+          "locator": "Abstract",
+          "supports": "Reports G-CSF receptor expression in class I- and II-restricted human T cells at the single-cell level, contradicting a strictly myeloid-restricted receptor.",
+          "quote": "In contrast to the general belief that G-CSF acts exclusively on T cells via monocytes and dendritic cells, our results clearly show the expression of the G-CSF receptor in class I- and II- restricted T cells at the single-cell level both in vivo and in vitro.",
+          "evidence_kind": "direct_experimental",
+          "context_match": "same_system",
+          "context_note": "Primary human T cells in vivo and in vitro; bears directly on whether the G-CSF well needs a relay.",
+          "stance": "contradicts"
+        }
+      ]
+    },
+    {
+      "kind": "expression",
+      "statement": "High-affinity GM-CSF binding sites are present on human myeloid cells at 50-500 per cell and absent from human T-lineage cell lines.",
+      "value": 250.0,
+      "unit": "high-affinity sites per cell (range 50-500)",
+      "applies_to": [
+        "GMR_Monocyte",
+        "IL3R_Monocyte",
+        "Monocyte"
+      ],
+      "for": [
+        "construction",
+        "condition_encoding"
+      ],
+      "evidence": [
+        {
+          "source": "10.1084/jem.164.1.251",
+          "title": "Characterization of the cell surface receptor for human granulocyte/macrophage colony-stimulating factor",
+          "year": 1986,
+          "locator": "Abstract",
+          "supports": "GM-CSF bound a single class of high-affinity receptor at 100-500 per cell on myeloid cells; T-lineage lines did not bind labelled GM-CSF.",
+          "evidence_kind": "direct_experimental",
+          "context_match": "related_system",
+          "context_note": "Primary human monocytes and human cell lines.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "kind": "affinity",
+      "statement": "GM-CSF binds its receptor with Kd about 15-30 pM and half-maximal biological activity at 10-20 pM, so 30 ng/ml (about 2 nM) is far above saturation and the receptor input can be treated as maximal from t=0.",
+      "value": 22.0,
+      "unit": "pM (range 15-30)",
+      "applies_to": [
+        "GMR_Monocyte",
+        "GMCSF",
+        "GCSF",
+        "IL3"
+      ],
+      "for": [
+        "condition_encoding",
+        "construction"
+      ],
+      "evidence": [
+        {
+          "source": "10.1073/pnas.83.3.669",
+          "title": "High-affinity binding of granulocyte-macrophage colony-stimulating factor to normal and leukemic human myeloid cells",
+          "year": 1986,
+          "locator": "Abstract",
+          "supports": "Measures high-affinity sites of 15-30 pM mediating GM-CSF activity, with half-maximal stimulation at 10-20 pM.",
+          "quote": "Both of these actions occur at concentrations between 1 and 100 pM, with half-maximal stimulation at 10-20 pM.",
+          "evidence_kind": "direct_experimental",
+          "context_match": "related_system",
+          "context_note": "Normal human myeloid cells; the value is extended to the other CSFs only by analogy.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "kind": "expression",
+      "statement": "The IFN-gamma transducing chain IFNGR2 is high on myeloid cells, moderate on B cells and poor on T cells, and its surface level determines how fast and how strongly STAT1 is activated - the rank order of the IFN-gamma responses here.",
+      "applies_to": [
+        "IFNGR_Monocyte",
+        "IFNGR_Bcell",
+        "IFNGR_Tcell_CD4"
+      ],
+      "for": [
+        "construction",
+        "condition_encoding"
+      ],
+      "evidence": [
+        {
+          "source": "https://pubmed.ncbi.nlm.nih.gov/11739558/",
+          "title": "Interferon-gamma receptor 2 expression as the deciding factor in human T, B, and myeloid cell proliferation or death",
+          "year": 2001,
+          "locator": "Abstract",
+          "supports": "Differential IFN-gammaR2 surface expression sets the number of signalling complexes and the speed of STAT-1 activation.",
+          "quote": "Differential cell membrane expression of IFN-gammaR2 determined the number of receptor complexes that transduced the IFN-gamma signal and resulted in a different response to IFN-gamma.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/11739558/",
+          "evidence_kind": "direct_experimental",
+          "context_match": "same_system",
+          "context_note": "Primary human T, B and myeloid cells; no NK data, and the intent's NK gate shows no IFN-gamma response at all.",
+          "stance": "supports"
+        },
+        {
+          "source": "10.1126/science.7618088",
+          "title": "Lack of interferon gamma receptor beta chain and the prevention of interferon gamma signaling in TH1 cells",
+          "year": 1995,
+          "locator": "Abstract",
+          "supports": "A T-cell subset can be fully IFN-gamma-unresponsive because the second receptor chain is absent - a precedent for a lymphocyte gate with no IFN-gamma-induced STAT1.",
+          "quote": "The IFN-gamma-inducible signal transducing factor (STF-IFN gamma) was activated in murine TH2 but not in TH1 cell clones, because in the latter the second chain of the IFN-gamma receptor (accessory factor 1 or IFN-gamma R beta) was absent.",
+          "evidence_kind": "direct_experimental",
+          "context_match": "different_system",
+          "context_note": "Murine Th1/Th2 clones; the intent's gates are primary human T and NK cells.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "kind": "expression",
+      "statement": "IFNAR2 is present on essentially all human blood monocytes, B cells, CD4+ and CD8+ T cells, and all express STAT1, so subset differences in the type I IFN response are not explained by receptor or STAT abundance.",
+      "value": 100.0,
+      "unit": "percent of cells positive",
+      "applies_to": [
+        "IFNAR_Monocyte",
+        "IFNAR_Bcell",
+        "IFNAR_Tcell_CD4",
+        "IFNAR_Tcell_CD4neg"
+      ],
+      "for": [
+        "construction"
+      ],
+      "evidence": [
+        {
+          "source": "10.4049/jimmunol.0902314",
+          "title": "Major differences in the responses of primary human leukocyte subsets to IFN-beta",
+          "year": 2010,
+          "locator": "Figures 8A, 8C",
+          "supports": "All four subsets stained positive for IFNAR2 and STAT1, and the B-cell STAT1 deficit was not explained by IFNAR2, STAT1, SOCS1 or phosphatase levels.",
+          "quote": "100% of monocytes, B cells, CD4+ and CD8+ T cells expressed IFNAR2",
+          "evidence_kind": "direct_experimental",
+          "context_match": "same_system",
+          "context_note": "Fresh human blood subsets; NK cells not measured.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "kind": "timescale",
+      "statement": "After type I interferon, STAT3 and STAT5 phosphorylation in human blood leukocyte subsets is maximal near 45 min and declines gradually, and STAT1 in CD8 T cells and monocytes is also optimal at 45 min.",
+      "value": 45.0,
+      "unit": "min to peak",
+      "applies_to": [
+        "IFNAR_act_Monocyte",
+        "pSTAT3_Tcell_CD4",
+        "pSTAT5_Tcell_CD4"
+      ],
+      "for": [
+        "construction"
+      ],
+      "evidence": [
+        {
+          "source": "10.4049/jimmunol.0902314",
+          "title": "Major differences in the responses of primary human leukocyte subsets to IFN-beta",
+          "year": 2010,
+          "locator": "Figure 4",
+          "supports": "Time course of PY-STAT1/3/5 in fresh human blood subsets after IFN-beta.",
+          "quote": "The highest activation of STAT3 and STAT5 was detected in all blood cell subsets after 45 min of exposure to IFN-\u03b2, declining gradually thereafter.",
+          "evidence_kind": "direct_experimental",
+          "context_match": "same_system",
+          "context_note": "Human blood with IFN-beta; the intent's IFN-alpha peaks are somewhat earlier, 15-30 min.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "kind": "rate",
+      "statement": "Once receptor signalling stops, phosphorylated STAT1 is completely cleared within about 60 min, and under continuous stimulation nuclear pY-STAT1 peaks at 20-30 min and is gone by 4 h - the order of magnitude for the STAT dephosphorylation rate.",
+      "value": 60.0,
+      "unit": "min to complete loss of pY-STAT1 after signal termination",
+      "applies_to": [
+        "pSTAT1_Tcell_CD4",
+        "pSTAT1_Bcell",
+        "pSTAT1_NKcell",
+        "pSTAT1_Monocyte"
+      ],
+      "for": [
+        "construction"
+      ],
+      "evidence": [
+        {
+          "source": "10.1002/j.1460-2075.1996.tb01016.x",
+          "title": "The rapid inactivation of nuclear tyrosine phosphorylated Stat1 depends upon a protein tyrosine phosphatase",
+          "year": 1996,
+          "locator": "Abstract",
+          "supports": "Measures persistence and clearance of activated STAT1 with and without continued receptor signalling.",
+          "quote": "In the absence of continued signaling from the receptor (imposed by staurosporine treatment) previously activated Stat1 disappeared completely within 60 min, implying continuous generation and removal of active molecules during extended IFN-gamma treatment.",
+          "evidence_kind": "direct_experimental",
+          "context_match": "different_system",
+          "context_note": "Cell lines with IFN-gamma; not measured in primary human leukocytes.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "kind": "timescale",
+      "statement": "Bulk monocyte cytokine release after LPS is slower than the lymphocyte onset seen here: TNF and IL-6 mRNA peak at 2-4 h and protein at 4-6 h in human whole blood, and purified monocytes secrete IL-6, IL-1, IL-8, TNF and G-CSF at high levels only 4-8 h after activation.",
+      "value": 4.0,
+      "unit": "h to mRNA peak (protein 4-6 h)",
+      "applies_to": [
+        "sIL6",
+        "TLR4_act_Monocyte"
+      ],
+      "for": [
+        "construction",
+        "expansion"
+      ],
+      "evidence": [
+        {
+          "source": "10.1016/0006-291x(91)90478-p",
+          "title": "Kinetics of TNF, IL-6, and IL-8 gene expression in LPS-stimulated human whole blood",
+          "year": 1991,
+          "locator": "Abstract",
+          "supports": "Two-wave kinetics of TNF, IL-6 and IL-8 induction by LPS in human blood, with protein peaks at 4-6 h.",
+          "quote": "TNF and IL-6 were induced in the first wave with mRNA levels peaking between 2-4 hours and then rapidly declining. TNF and IL-6 protein peaked at 4-6 hours and then stabilized.",
+          "evidence_kind": "direct_experimental",
+          "context_match": "related_system",
+          "context_note": "Ex vivo human whole blood; the intent's 4 h window ends where these protein peaks begin.",
+          "stance": "contradicts"
+        }
+      ]
+    },
+    {
+      "kind": "timescale",
+      "statement": "LPS induces a strong IFN-beta mRNA response in human macrophages that subsides by 8 h, while in mouse macrophages the LPS-driven ISGF3 response is far greater at 4 h than 1 h because endogenous IFN-beta protein takes hours to accumulate.",
+      "value": 8.0,
+      "unit": "h until the LPS-induced IFN-beta mRNA response subsides",
+      "applies_to": [
+        "sIFN1",
+        "TLR4_act_Monocyte"
+      ],
+      "for": [
+        "construction",
+        "expansion"
+      ],
+      "evidence": [
+        {
+          "source": "10.1189/jlb.0607412",
+          "title": "poly(I:C) and LPS induce distinct IRF3 and NF-kappaB signaling during type-I IFN and TNF responses in human macrophages",
+          "year": 2008,
+          "locator": "Abstract",
+          "supports": "Measures the kinetics of the LPS-induced IFN-beta mRNA response in human macrophages.",
+          "quote": "LPS induced a strong IFN-beta mRNA response within a short time-frame, which subsided at 8 h.",
+          "evidence_kind": "direct_experimental",
+          "context_match": "related_system",
+          "context_note": "Human monocyte-derived macrophages; the intent's producers are freshly rested CD14+ monocytes.",
+          "stance": "supports"
+        },
+        {
+          "source": "10.1189/jlb.2A0414-191R",
+          "title": "An essential role for IFN-beta in the induction of IFN-stimulated gene expression by LPS in macrophages",
+          "year": 2014,
+          "locator": "Figures 2, 3, 5",
+          "supports": "LPS-driven ISG induction requires endogenous IFN-beta and IFNAR1 and is much stronger at 4 h than 1 h because IFN-beta protein takes hours to be produced - a constraint on how early a paracrine type I IFN can act.",
+          "evidence_kind": "direct_experimental",
+          "context_match": "different_system",
+          "context_note": "Mouse bone-marrow-derived macrophages with knockouts.",
+          "stance": "contradicts"
+        }
+      ]
+    },
+    {
+      "kind": "response",
+      "statement": "In primary human PBMC, LPS induces IFN-beta transcription and secretion with STAT1 phosphorylation and downstream ISG expression, and in human myeloid cells the late arm of that response is abolished by an IFNAR2-neutralising antibody.",
+      "applies_to": [
+        "sIFN1",
+        "TLR4_act_Monocyte",
+        "IFNAR_act_Monocyte"
+      ],
+      "for": [
+        "construction",
+        "expansion"
+      ],
+      "evidence": [
+        {
+          "source": "10.1093/jleuko/qiad058",
+          "title": "Long-chain polyphosphates inhibit type I interferon signaling and augment LPS-induced cytokine secretion in human leukocytes",
+          "year": 2023,
+          "locator": "Abstract",
+          "supports": "Establishes the LPS to IFN-beta secretion to STAT1 phosphorylation to ISG chain in the intent's exact cell mixture.",
+          "evidence_kind": "direct_experimental",
+          "context_match": "same_system",
+          "context_note": "Primary human PBMC with LPS; the responding population and the minute-scale timing are not resolved there.",
+          "stance": "supports"
+        },
+        {
+          "source": "10.1371/journal.pone.0030166",
+          "title": "LPS regulates SOCS2 transcription in a type I interferon dependent autocrine-paracrine loop",
+          "year": 2012,
+          "locator": "Abstract",
+          "supports": "Demonstrates the discriminating experiment: IFNAR2 neutralisation abolishes the late type I IFN-dependent arm of the TLR4 response.",
+          "quote": "In conclusion, our results suggest that TLR4 signaling indirectly increases SOCS2 in late phase mainly via the production of endogenous type I IFN, and that subsequent IFN receptor signaling activates SOCS2 via STAT3 and STAT5.",
+          "evidence_kind": "direct_experimental",
+          "context_match": "related_system",
+          "context_note": "Human monocyte-derived dendritic cells, which are not staged in the intent's gating.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "kind": "response",
+      "statement": "GM-CSF and IL-3 induce IL-6, IL-1beta, IL-8, TNF-alpha and IL-1RA gene expression in purified human monocytes with different kinetics from LPS, while IFN-gamma alone induced none of the monocyte cytokine genes tested.",
+      "applies_to": [
+        "sIL6",
+        "GMR_act_Monocyte",
+        "IL3R_act_Monocyte",
+        "IFNGR_act_Monocyte"
+      ],
+      "for": [
+        "construction",
+        "expansion"
+      ],
+      "evidence": [
+        {
+          "source": "https://pubmed.ncbi.nlm.nih.gov/8123762/",
+          "title": "Regulatory effects of T cell lymphokines on cytokine gene expression in monocytes",
+          "year": 1993,
+          "locator": "Abstract",
+          "supports": "Gives a monocyte-intrinsic route from the CSF receptors to IL-6 production and shows IFN-gamma does not open that route.",
+          "quote": "IL-2, IL-3, and GM-CSF showed no effect on the IL-10 gene while IFN-gamma appeared to have no effect on any of the cytokine genes studied in monocytes.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/8123762/",
+          "evidence_kind": "direct_experimental",
+          "context_match": "same_system",
+          "context_note": "Elutriated primary human monocytes, serum-free and LPS-free; G-CSF was not among the stimuli tested.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "kind": "expression",
+      "statement": "Most resting human CD4 T cells carry surface IL-6R, at higher levels than CD8 T cells, while only a small and variable proportion of CD8 T and B cells are positive - the population ranking an IL-6-like factor predicts for the late STAT3 rise.",
+      "applies_to": [
+        "IL6R_Tcell_CD4",
+        "IL6R_Tcell_CD4neg",
+        "Bcell",
+        "NKcell"
+      ],
+      "for": [
+        "construction"
+      ],
+      "evidence": [
+        {
+          "source": "https://pubmed.ncbi.nlm.nih.gov/1353064/",
+          "title": "Expression of interleukin-6 receptor on blood lymphocytes without in vitro activation",
+          "year": 1992,
+          "locator": "Abstract",
+          "supports": "Measures IL-6R on unstimulated human blood lymphocyte subsets by high-sensitivity immunofluorescence.",
+          "quote": "Most CD4 cells express IL-6 receptor, whilst a small and variable proportion of CD8 and B cells are positive. CD4+ cells express higher levels of receptor than CD8+ T cells, and CD45RO+ cells express higher levels than CD45RA cells.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/1353064/",
+          "evidence_kind": "direct_experimental",
+          "context_match": "same_system",
+          "context_note": "Unstimulated primary human blood lymphocytes; NK cells not reported anywhere I found.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "kind": "response",
+      "statement": "IL-6 elicits both pSTAT3 and pSTAT1 in human T cells and monocytes within 10-30 min, so a STAT1 component in the late lymphocyte response does not by itself identify a type I interferon.",
+      "value": 10.0,
+      "unit": "min of IL-6 exposure sufficient for a measurable pSTAT response",
+      "applies_to": [
+        "IL6R_act_Tcell_CD4",
+        "pSTAT1_Tcell_CD4",
+        "pSTAT3_Tcell_CD4"
+      ],
+      "for": [
+        "construction",
+        "expansion"
+      ],
+      "evidence": [
+        {
+          "source": "10.1371/journal.pgen.1003444",
+          "title": "Functional IL6R 358Ala allele impairs classical IL-6 receptor signaling and influences risk of diverse inflammatory diseases",
+          "year": 2013,
+          "locator": "Figure 4; methods",
+          "supports": "IL-6 responsiveness was quantified as pSTAT3 and pSTAT1 in CD4 naive and memory T cells and monocytes after 10 min of IL-6.",
+          "evidence_kind": "direct_experimental",
+          "context_match": "same_system",
+          "context_note": "Primary human PBMC subsets.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "kind": "response",
+      "statement": "LPS pretreatment of primary human macrophages blocks IL-6-induced STAT3 activation rapidly and independently of transcription, while IL-10-induced STAT3 is largely unaffected - a candidate mechanism for monocyte pSTAT3 ending below Reference under LPS while lymphocyte STAT3 rises.",
+      "applies_to": [
+        "IL6R_act_Monocyte",
+        "pSTAT3_Monocyte",
+        "TLR4_act_Monocyte"
+      ],
+      "for": [
+        "construction",
+        "expansion"
+      ],
+      "evidence": [
+        {
+          "source": "10.4049/jimmunol.170.6.3263",
+          "title": "Activation of STAT3 by IL-6 and IL-10 in primary human macrophages is differentially modulated by SOCS3",
+          "year": 2003,
+          "locator": "Abstract",
+          "supports": "Measures loss of IL-6-driven STAT3 activation after LPS in primary human macrophages and shows it does not require new SOCS3 transcription.",
+          "quote": "Although LPS induces the feedback inhibitor suppressor of cytokine signaling 3 (SOCS3) in macrophages, inhibition of IL-6 signal transduction by LPS occurs rapidly and does not depend on gene transcription.",
+          "evidence_kind": "direct_experimental",
+          "context_match": "related_system",
+          "context_note": "Blood-monocyte-derived macrophages, not freshly rested monocytes.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "kind": "abundance",
+      "statement": "Human monocytes carry about 3,000-7,000 IFN-gamma binding sites per cell (Ka 4-12 x 10^8 M^-1) and degrade about 5,000 IFN-gamma molecules per cell per hour at 37 C, giving both a receptor number and a ligand-consumption rate for a shared 200 ul medium.",
+      "value": 5000.0,
+      "unit": "IFN-gamma molecules degraded per cell per hour at 37 C",
+      "applies_to": [
+        "IFNGR_Monocyte",
+        "IFNg",
+        "Monocyte"
+      ],
+      "for": [
+        "construction"
+      ],
+      "evidence": [
+        {
+          "source": "10.1172/jci112228",
+          "title": "Demonstration and partial characterization of the interferon-gamma receptor on human mononuclear phagocytes",
+          "year": 1985,
+          "locator": "Abstract",
+          "supports": "Quantifies receptor number, affinity, internalisation and ligand degradation rate on primary human monocytes.",
+          "quote": "Monocytes degraded 125I-IFN gamma into trichloroacetic acid-soluble counts at 37 degrees C but not at 4 degrees C, at an approximate rate of 5,000 molecules/cell per h.",
+          "evidence_kind": "direct_experimental",
+          "context_match": "same_system",
+          "context_note": "Primary human blood monocytes at 37 C.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "kind": "response",
+      "statement": "A relay through a sensing population is documented in human PBMC: monocytes, NK cells and T cells do not respond to CpG alone but are activated when plasmacytoid dendritic cells are present in the same culture.",
+      "applies_to": [
+        "Monocyte",
+        "NKcell",
+        "Tcell_CD4",
+        "sIFN1"
+      ],
+      "for": [
+        "construction",
+        "expansion"
+      ],
+      "evidence": [
+        {
+          "source": "10.4049/jimmunol.168.9.4531",
+          "title": "Quantitative expression of toll-like receptor 1-10 mRNA in cellular subsets of human peripheral blood mononuclear cells and sensitivity to CpG oligodeoxynucleotides",
+          "year": 2002,
+          "locator": "Abstract",
+          "supports": "Demonstrates in human PBMC that non-sensing populations respond to a TLR ligand only in the presence of the sensing population - the same well-level relay logic as the intent's question.",
+          "quote": "Despite low expression of TLR9, monocytes, NK cells, and T cells did not respond to CpG ODN in the absence of PDC but were activated in the presence of PDC.",
+          "evidence_kind": "direct_experimental",
+          "context_match": "same_system",
+          "context_note": "Purified human PBMC subsets and co-cultures; the ligand is CpG, not LPS, and dendritic cells are not staged in the intent's gating.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "kind": "response",
+      "statement": "Paracrine type I interferon from a small fraction of early responders coordinates the antiviral response of the whole population in mouse dendritic cells - a precedent for a fast, interferon-mediated relay within one culture.",
+      "applies_to": [
+        "sIFN1",
+        "Monocyte"
+      ],
+      "for": [
+        "expansion"
+      ],
+      "evidence": [
+        {
+          "source": "10.1038/nature13437",
+          "title": "Single-cell RNA-seq reveals dynamic paracrine control of cellular variation",
+          "year": 2014,
+          "locator": "Abstract; microfluidic isolation and secretion-blocking experiments",
+          "supports": "Blocking secretion and extracellular signalling showed the population response is coordinated by interferon-mediated paracrine signalling from early-responding cells.",
+          "quote": "we show that this response is coordinated by interferon-mediated paracrine signalling from these precocious cells",
+          "evidence_kind": "direct_experimental",
+          "context_match": "different_system",
+          "context_note": "Mouse bone-marrow-derived dendritic cells with LPS; the intent's system is human PBMC and the readout is STAT phosphorylation, not transcription.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "kind": "unknown",
+      "statement": "A secreted factor in a 200 ul well is not automatically uniform: diffusion competing with consumption by receptor-bearing cells generates niches of 80-120 um whose size scales with the density of consuming cells.",
+      "value": 100.0,
+      "unit": "um (range 80-120)",
+      "applies_to": [
+        "sIFN1",
+        "sIL6",
+        "IFNg"
+      ],
+      "for": [
+        "construction"
+      ],
+      "evidence": [
+        {
+          "source": "10.1016/j.immuni.2017.03.011",
+          "title": "A Tunable Diffusion-Consumption Mechanism of Cytokine Propagation Enables Plasticity in Cell-to-Cell Communication in the Immune System",
+          "year": 2017,
+          "locator": "Abstract",
+          "supports": "Quantifies the length scale of cytokine communication and shows consumption produces sharp spatial boundaries and cell-to-cell variance in exposure.",
+          "evidence_kind": "direct_experimental",
+          "context_match": "related_system",
+          "context_note": "Mouse tissue and in vitro systems; the intent's well is a suspension, so this bounds rather than refutes the well-mixed assumption.",
+          "stance": "contradicts"
+        }
+      ]
+    },
+    {
+      "kind": "assay",
+      "statement": "Arcsinh with cofactor 5 is the standard transformation for mass cytometry ion counts, mapping channels to a comparable range; it is near-linear close to zero, which is where the B- and NK-cell pSTAT1 baselines sit.",
+      "value": 5.0,
+      "unit": "arcsinh cofactor",
+      "applies_to": [
+        "observation model",
+        "all readouts"
+      ],
+      "for": [
+        "observation_model"
+      ],
+      "evidence": [
+        {
+          "source": "10.12688/f1000research.11622.3",
+          "title": "CyTOF workflow: differential discovery in high-throughput high-dimensional cytometry datasets",
+          "year": 2019,
+          "locator": "Data transformation section",
+          "supports": "States the standard arcsinh cofactor-5 transformation for CyTOF marker intensities and its purpose.",
+          "quote": "It is common practice to transform CyTOF marker intensities using, for example, arcsinh (inverse hyperbolic sine) with cofactor 5 to make the distributions more symmetric and to map them to a comparable range of expression, which is important for clustering.",
+          "evidence_kind": "review",
+          "context_match": "same_system",
+          "context_note": "Methodological workflow built on the same Bodenmiller PBMC data family.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "kind": "assay",
+      "statement": "Mass-tag cellular barcoding pools all 96 wells into one sample stained and acquired together, which is why any well-to-well difference must have arisen in the well before fixation; the same study reports PBMC signalling dynamics and cell-to-cell communication as its subject.",
+      "applies_to": [
+        "observation model",
+        "all readouts"
+      ],
+      "for": [
+        "observation_model"
+      ],
+      "evidence": [
+        {
+          "source": "10.1038/nbt.2317",
+          "title": "Multiplexed mass cytometry profiling of cellular states perturbed by small-molecule regulators",
+          "year": 2012,
+          "locator": "Abstract",
+          "supports": "The source study of these data: seven metal tags multiplex a whole 96-well plate, applied to human PBMC signalling dynamics and cell-to-cell communication.",
+          "quote": "We used seven tags to multiplex an entire 96-well plate, and applied MCB to characterize human peripheral blood mononuclear cell (PBMC) signaling dynamics and cell-to-cell communication, signaling variability between PBMCs from eight human donors, and the effects of 27 inhibitors on this system.",
+          "evidence_kind": "direct_experimental",
+          "context_match": "same_system",
+          "context_note": "The experiment being re-analysed (Cytobank 15711).",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "kind": "response",
+      "statement": "The authors of the source study read the same plate as inter-cellular communication: monocytes, which express TLR4, responded to LPS first, while B, T and NK cells - with little or no LPS receptor - responded only at later time points, attributed to IL-6 or other monocyte-released factors.",
+      "applies_to": [
+        "sIL6",
+        "sIFN1",
+        "Monocyte",
+        "Bcell",
+        "NKcell",
+        "Tcell_CD4"
+      ],
+      "for": [
+        "construction",
+        "expansion"
+      ],
+      "evidence": [
+        {
+          "source": "10.1038/nbt.2317",
+          "title": "Multiplexed mass cytometry profiling of cellular states perturbed by small-molecule regulators",
+          "year": 2012,
+          "locator": "Results, PBMC time course (SPADE analysis of the LPS response)",
+          "supports": "Reports that monocytes respond first to LPS with p38, ERK and NF-kB peaking at 15-30 min, that B, T and NK cells respond only later (T and NK STAT3/STAT5 after 2 h, B-cell STAT1 after 4 h), and attributes this to inter-cellular communication through IL-6 or other monocyte-released factors such as TNF-alpha.",
+          "evidence_kind": "direct_experimental",
+          "context_match": "same_system",
+          "context_note": "The very experiment being re-analysed; I could not retrieve the full text through an open route, so this item carries no quote.",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "kind": "unknown",
+      "statement": "A modern single-cell study of human PBMC stimulated with LPS reported that only monocytes were transcriptionally activated, with no distinct interferon-stimulated-gene response in T, B or NK cells - evidence against a strong bystander effect, though at 10 ng/ml, 24 h and on mRNA rather than STAT phosphorylation.",
+      "applies_to": [
+        "sIFN1",
+        "sIL6",
+        "Tcell_CD4",
+        "Bcell",
+        "NKcell"
+      ],
+      "for": [
+        "construction",
+        "expansion"
+      ],
+      "evidence": [
+        {
+          "source": "10.3389/fimmu.2021.636720",
+          "title": "Single Cell Analysis of Blood Mononuclear Cells Stimulated Through Either LPS or Anti-CD3 and Anti-CD28",
+          "year": 2021,
+          "locator": "Results; LPS-stimulated PBMC CITE-seq",
+          "supports": "In CITE-seq of human PBMC stimulated with LPS at 10 ng/ml for 24 h, activation was confined to monocytes, with ISG-high states reported for NK cells only after anti-CD3/CD28.",
+          "evidence_kind": "direct_experimental",
+          "context_match": "same_system",
+          "context_note": "Human PBMC with LPS, but a single 24 h endpoint and a transcriptome readout, which can miss a transient 2-4 h STAT response.",
+          "stance": "contradicts"
+        }
+      ]
+    },
+    {
+      "kind": "unknown",
+      "statement": "Handling and plating alone induce monokine mRNA in human monocytes within 30-90 min, but secretion of those mediators required a second, LPS-derived signal - which bears directly on whether the unstimulated wells' drift is basal secretion or an unrelated process.",
+      "applies_to": [
+        "sIL6",
+        "sIFN1",
+        "Monocyte",
+        "drift"
+      ],
+      "for": [
+        "construction",
+        "observation_model"
+      ],
+      "evidence": [
+        {
+          "source": "10.4049/jimmunol.140.5.1690",
+          "title": "Adherence induces selective mRNA expression of monocyte mediators and proto-oncogenes",
+          "year": 1988,
+          "locator": "Abstract",
+          "supports": "Adherence rapidly induces TNF, IL-1beta and CSF-1 mRNA in human monocytes but is not sufficient for secretion.",
+          "quote": "Although all of these genes could be induced by adherence, actual secretion of the mediators required the exposure to a second signal derived from LPS.",
+          "evidence_kind": "direct_experimental",
+          "context_match": "related_system",
+          "context_note": "Primary human monocytes adhering to plastic; the intent's cells are a rested non-adherent suspension in a deep-well block.",
+          "stance": "contradicts"
+        }
+      ]
+    },
+    {
+      "kind": "abundance",
+      "statement": "Quantitative proteomes of 28 primary human immune cell populations in resting and activated states, including secreted proteins, provide per-population copy numbers for receptors and ligands where a model needs initial values (immprot.org).",
+      "applies_to": [
+        "IFNAR_Monocyte",
+        "IL6R_Tcell_CD4",
+        "STAT1_Monocyte",
+        "STAT3_Tcell_CD4"
+      ],
+      "for": [
+        "construction"
+      ],
+      "evidence": [
+        {
+          "source": "10.1038/ni.3693",
+          "title": "Social network architecture of human immune cells unveiled by quantitative proteomics",
+          "year": 2017,
+          "locator": "Resource description; immprot.org",
+          "supports": "Reports protein copy numbers across 28 primary human hematopoietic populations in steady and activated states, integrating total and secreted proteomes to map intercellular communication.",
+          "evidence_kind": "direct_experimental",
+          "context_match": "same_system",
+          "context_note": "Primary human immune cell populations; I did not retrieve the individual copy numbers for the receptors and STATs of this model.",
+          "stance": "supports"
+        }
+      ]
+    }
+  ],
+  "queries_run": [
+    "Bodenmiller 2012 multiplexed mass cytometry profiling cellular states perturbed by small-molecule regulators PBMC",
+    "Bodenmiller mass-tag cellular barcoding PBMC time course LPS monocytes cell-to-cell communication STAT phosphorylation",
+    "van Boxel-Dezaire 2010 major differences responses primary human leukocyte subsets IFN-beta STAT1 STAT3 STAT5",
+    "LPS stimulation PBMC phospho-flow STAT1 phosphorylation lymphocytes delayed paracrine type I interferon monocytes",
+    "Tamassia 2007 MyD88-independent pathway not mobilized in human neutrophils TLR4 monocytes IFN-beta",
+    "Muzio 2000 differential expression and regulation of toll-like receptors in human leukocytes",
+    "Hornung 2002 quantitative expression of TLR1-10 mRNA in cellular subsets of human PBMC",
+    "TLR4 expression human B cells Ganley-Leal differential regulation TLR4 human B cells monocytes",
+    "IFNGR2 expression low T cells NK cells human IFN-gamma unresponsive STAT1 (Bernabei 2001, Rigamonti 2000)",
+    "IFN-gamma binding IFNGR1 dissociation constant human monocytes receptors per cell (Celada 1985)",
+    "IL-6 receptor CD126 expression human PBMC subsets CD4 CD8 NK B monocytes pSTAT3 (Ferreira 2013, Zola 1992, Lambert 2022)",
+    "G-CSF receptor CSF3R expression human monocytes lymphocytes STAT3 (Boneberg 2000, Franzke 2003)",
+    "GM-CSF receptor binding human peripheral blood monocytes not lymphocytes 125I-GM-CSF (Park 1986, Gasson 1986)",
+    "kinetics IL-6 secretion LPS-stimulated human whole blood PBMC TNF time course (DeForge 1991)",
+    "de Waal Malefyt 1991 IL-10 kinetics human monocytes LPS relative to IL-6 TNF G-CSF",
+    "IFN-beta mRNA induction LPS primary human monocytes/macrophages time course (Reimer 2008, Sheikh 2014)",
+    "LPS stimulated human PBMC type I interferon IFNAR blocking antibody ISGs (Pirttiniemi 2023, Hu 2012 SOCS2 loop)",
+    "LPS induces SOCS3 human monocytes inhibits IL-6 induced STAT3 (Niemand 2003)",
+    "Haspel Darnell 1996 rapid inactivation of nuclear tyrosine phosphorylated Stat1 phosphatase",
+    "Kumar 2003 SCF-HOS ubiquitin ligase ligand-induced down-regulation of IFNAR1",
+    "adherence induces cytokine mRNA human monocytes Haskill 1988 plating spontaneous activation",
+    "cryopreserved thawed PBMC spontaneous cytokine release resting period",
+    "single cell analysis PBMC LPS anti-CD3/CD28 CITE-seq bystander (Lawlor 2021)",
+    "mechanistic JAK/STAT models: Yamada 2003, Bachmann 2011 JAK2/STAT5",
+    "cytokine diffusion consumption niches Oyler-Yaniv 2017; paracrine IFN Shalek 2014",
+    "CyTOF workflow arcsinh cofactor 5 (Nowicka 2017); Rieckmann 2017 immune cell proteomes",
+    "Reactome identifier checks: R-HSA-909733, R-HSA-877300, R-HSA-1059683, R-HSA-512988, R-HSA-9674555, R-HSA-937061, R-HSA-166016, R-HSA-8950485, R-HSA-6783783"
+  ],
+  "notes": "Correction from the previous attempt: the three sources I had cited by bare PubMed number (11739558 Bernabei 2001 IFN-gammaR2; 8123762 the 1993 monocyte cytokine-gene study; 1353064 Zola 1992 IL-6R on blood lymphocytes) are now cited by their PubMed URL in both `source` and `url`; no item cites a bare number, and no content was otherwise changed for those items. Coverage gaps. (1) The source paper's own LPS-relay passage is reported from its Results but carries no quote: nature.com, PMC and the Europe PMC full-text XML were all inaccessible to my fetcher and the one open PDF returned undecoded binary, so only the abstract text is quotable for 10.1038/nbt.2317. (2) No source was found measuring type I IFN or IL-6 protein in the medium of an LPS-stimulated human PBMC well at 1, 2 and 4 h at 30 ng/ml - the decisive quantity. The cytokine kinetics I did find (mRNA 2-4 h, protein 4-6 h; ISGF3 far stronger at 4 h than 1 h) are slower than the 60-120 min onset in these data and are returned with stance contradicts rather than omitted. (3) NK cells are the least documented population: I found no quantification of IFNGR2, IL-6R or gp130 on human NK cells, so the NK entries rest on curated pathway records rather than population-specific experiments - which matters, because the NK gate carries two of the observations the question turns on. (4) G-CSF is the weakest arm of hypothesis 2: no source tests whether G-CSF induces IL-6 in human monocytes, and the one source on G-CSF and monokines reports suppression, returned as contradicting. (5) Whether human T cells carry a functional G-CSF receptor is a live conflict between Boneberg 2000 and Franzke 2003; both are returned with opposite stances. (6) Lawlor 2021 (human PBMC, LPS, 24 h, CITE-seq) reports monocyte-restricted activation and is returned as contradicting a strong bystander effect, with the caveat that a single 24 h transcriptome endpoint can miss a transient 2-4 h STAT response. (7) Haskill 1988 argues against the basal-secretion reading of the Reference drift and is returned with stance contradicts. (8) Quotes: verbatim text is included only where I could read it in a retrieved document (mostly abstracts and a few Results sentences); entries whose source I could reach only through metadata carry `supports` without a quote. (9) I could not verify IL-27 p28/EBI3 release kinetics in LPS-stimulated human monocytes from a citable primary source, so the IL-27 expansion reaction carries only the curated Reactome reaction and no timing fact. (10) Identifiers: receptor species are lumped receptor-plus-JAK complexes per decision 11 and deliberately carry no UniProt id (a complex is not one protein); only a GO compartment is given. The three STAT5 species use the STAT5A accession, since the panel's clone 47 does not distinguish STAT5A from STAT5B. (11) Reaction count: the per-population enumeration is deliberate - the discrimination in this question lives in which population responds to which factor, so the same conversion appears once per population rather than as one generic entry."
+}

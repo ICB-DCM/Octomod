@@ -1,0 +1,47 @@
+name: macrophage_xue_v2
+
+# Simulation horizon in the data's time unit (hours): the last sampled time.
+t_end: 72
+
+# Held-out conditions, in the data file's own column vocabulary. DRAFT: empty.
+# The question is mechanism discrimination over the candidate set by
+# information criteria on all arrays (to agree with the case owner; see
+# curation/STAGING_LOG.md).
+holdout:
+  condition_labels: []
+
+supplied: {}
+
+# A model is supplied (supplied/model.ant, parameters.json, entity_glossary.json):
+# construction is not called in round 0; the gate battery validates the model,
+# the data and observation-model agents run, and later rounds may expand.
+s1:
+  base_gate: false
+
+# The case owner's rules (xue_macrophage_ode_modelling_notes.md): no online
+# search, so the knowledge module runs OFFLINE, and the paper enters as
+# intent.supplied_literature. No literature horizon is needed offline.
+#
+# The case owner's floor decision on the offline module's card (2026-09-29):
+# nothing was graded, so the floor is not applicable; the module's two
+# activity reactions stay in the base; the module's own-knowledge facts are
+# accepted as advisory prior knowledge.
+grounding:
+  support_floor: not_applicable
+  floor_step: 1
+  decided_by: human
+  note: "keep the two activity reactions and the advisory prior knowledge is acceptable"
+  dropped: []
+  kept: [rx_1, rx_2]
+
+notes: >-
+  Second run on the Xue et al. 2014 (GEO GSE46903) IFN-γ time course, staged
+  2026-09-30 from staging/macrophage_xue after run macrophage_xue_20260929_210535
+  (5 rounds). The supplied model is that run's selected model
+  (rounds/round_4/candidates/upstream_stimulus_delay) with the attenuator
+  reparameterised (gain G_R and rate k_R, wide boxes), the IRF1 saturation
+  reparameterised (fold at saturation F_IRF1, half-saturation h_IRF1), k_A and
+  k_LA with wider boxes, and the two fractions at their physical limit fixed at 1.
+  The intent is unchanged (the knowledge module's copy, knowledge/intent_before.yaml,
+  differs only in the reworded success criterion 3, as in the previous run).
+  Workflow: default.yaml under workflows/overlays/opus_high.yaml.

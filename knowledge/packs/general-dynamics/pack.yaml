@@ -1,0 +1,19 @@
+id: general-dynamics
+version: 0.1.0
+layer: general
+scope: >
+  Tacit failure modes of ODE model construction, parameterisation and estimation that are independent of
+  biology and of measurement technology: bounds and scaling discipline, timescale/data-window matching,
+  conservation structure, and the identifiability traps that recur in every domain. Says nothing about any
+  particular assay or any particular pathway — those are the measurement and domain layers.
+applies_to:
+  - construction
+  - observation
+  - interpretation
+  - revision_proposal
+curation_status: draft-unreviewed
+provenance:
+  drafted_by: agent
+  drafted_on: 2026-08-31
+  method: LLM draft; no expert review yet
+  reviewed_by: null

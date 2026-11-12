@@ -1,0 +1,54 @@
+name: bodenmiller2012_crosstalk_r2
+
+# Last sampled time in minutes; the S1 gate ladder simulates to here.
+t_end: 240
+
+# No held-out condition. Every stimulus condition carries at least one parameter of
+# its own (a receptor input strength), which a held-out condition could not constrain,
+# and the between-population communication this run asks about is learned from all
+# populations of a well at once. Discrimination rests on data fit, information
+# criteria and, for the selected model, profile likelihoods.
+holdout:
+  condition_labels: []
+
+# No supplied model, network or PEtab problem: construction is the agents' job.
+supplied: {}
+
+# The base model is shown to the study team before any candidate is built on it:
+# the shape of the model (all populations of a well in one system, what they share)
+# is the contested part, so the base is read before the expansions are written.
+s1:
+  base_gate: true
+
+# Literature search is on: the knowledge module online, construction, and before
+# each expansion. Application case: no truth/, no blocklist. The horizon is the
+# present year, so nothing is fenced out; the engine requires the field for an
+# online search.
+research:
+  enabled: true
+  at_expansion: true
+  max_publication_year: 2026
+
+notes: >-
+  REAL PUBLISHED DATA, derived by us from the authors' deposited single-cell files.
+  Bodenmiller et al., Nat Biotechnol 30:858 (2012), doi 10.1038/nbt.2317; Cytobank
+  experiment 15711. Staged table: plate columns 3 (IL-3), 5 (Reference), 6 (G-CSF),
+  7 (GM-CSF), 9 (IFN-gamma), 10 (IFN-alpha) and 11 (LPS) for all five populations;
+  readouts pSTAT1/3/5, the population folded into the readout label; 8 time points
+  -> 840 rows. The per-row sigma column is the noise model; on the 42 monocyte rows
+  at 120 and 240 min it is widened by a declared factor 2 (description.md). The lab
+  note carries no literature: what is known about the system comes from the
+  knowledge module. Its initial version is kept as notes/description_initial.md.
+
+# The study team's floor decision from the knowledge module's floor card
+# (online, 2026-09-29): the suggested floor taken unchanged, step 1.
+grounding:
+  # advisory: the dossier is prior knowledge, not a fence; the study team's
+  # choice, written here so a change of the workflow default cannot flip it
+  mode: advisory
+  support_floor: low
+  floor_step: 1
+  decided_by: rule
+  note: "yeah we take the low as suggested ... and we step by 1"
+  dropped: []
+  kept: []

@@ -1,0 +1,38 @@
+name: sphingolipid_metabolism
+
+# Phase 1 of two: calibrate the user's supplied sphingolipid model as it stands, on
+# a data table rebuilt from the raw lipidomics export, and report what the data
+# determine. Structural changes (phase 2) are a separate, later run.
+#
+# supplied/petab/            the problem this run fits (same model.xml, rebuilt tables).
+#                            The engine always reads this fixed path; the
+#                            `supplied.petab` key below is not consulted.
+# supplied/petab_original/   the user's original PEtab problem, untouched
+# supplied/data_all.csv      raw LC-MS export, pmol per sample
+# supplied/staged/           per-tracer table for phase 2, not used here
+
+t_end: 180
+
+# One experimental condition (a single pulse-chase), so no condition can be held
+# out. Agreed with the user 2026-09-23.
+holdout:
+  condition_labels: []
+
+supplied:
+  petab: supplied/petab
+
+# Runs without the knowledge module until the module is run on this case.
+grounding:
+  skip: true
+  why: "staged before the knowledge module existed; run it before the next live run"
+
+notes: >-
+  Rebuilt from supplied/data_all.csv on 2026-09-23, choices made by the user:
+  both tracers summed per lipid class; all HexCer rows counted; technical triplicates
+  averaged within each biological replicate, the three biological replicates kept as
+  separate rows (replicateId d1-d3); each biological series divided by its own total
+  measured label at t=0 (all classes, both tracers), so values are fractions of
+  initial label; proportional noise sigma_X * X estimated per observable; measured
+  hexadecenal and hexadecanal added as observables of Hexdece and Hexdeca. Initial
+  values set in conditions.tsv from the normalised t=0 means (S1P, SA1P rescaled from
+  the SBML values), so model.xml itself is unchanged.

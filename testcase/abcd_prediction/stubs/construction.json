@@ -1,0 +1,356 @@
+{
+  "network": {
+    "species": [
+      {
+        "id": "Aa",
+        "name": "KinA_p, active (phosphorylated) kinase",
+        "compartment": "cell"
+      },
+      {
+        "id": "Ba",
+        "name": "RegB_p, active (phosphorylated) regulator",
+        "compartment": "cell"
+      },
+      {
+        "id": "D",
+        "name": "ProD, product converted from the PreC pool",
+        "compartment": "cell"
+      }
+    ],
+    "interactions": [
+      {
+        "id": "J1",
+        "type": "phosphorylation",
+        "participants": [
+          {
+            "species": "Aa",
+            "role": "product",
+            "stoichiometry": 1
+          }
+        ],
+        "evidence_tier": "default",
+        "note": "Inducer-driven KinA activation. The inactive form is not a state: the description says total KinA is flat and calibrated to 1, so the inactive pool is (Atot - Aa) and the reaction is written as production of Aa saturating at Atot. The inducer is not a species either \u2014 dose enters as the condition-owned constant u multiplying the forward rate."
+      },
+      {
+        "id": "J2",
+        "type": "degradation",
+        "participants": [
+          {
+            "species": "Aa",
+            "role": "substrate",
+            "stoichiometry": 1
+          }
+        ],
+        "evidence_tier": "default",
+        "note": "KinA deactivation (dephosphorylation), not proteolysis. Written as removal of Aa because the inactive form is not a state; the phosphatase is not measured and is folded into the first-order constant k_deact."
+      },
+      {
+        "id": "J3",
+        "type": "phosphorylation",
+        "participants": [
+          {
+            "species": "Aa",
+            "role": "modifier",
+            "stoichiometry": 1
+          },
+          {
+            "species": "Ba",
+            "role": "product",
+            "stoichiometry": 1
+          }
+        ],
+        "evidence_tier": "default",
+        "note": "KinA-catalysed RegB activation, saturating at Btot with the inactive pool implicit as (Btot - Ba). BX-11 enters as a fixed multiplicative block (1 - 0.95*bx11) on this rate only, per the description's statement that the inhibitor is RegB-activation-specific with no measurable effect on KinA."
+      },
+      {
+        "id": "J4",
+        "type": "degradation",
+        "participants": [
+          {
+            "species": "Ba",
+            "role": "substrate",
+            "stoichiometry": 1
+          }
+        ],
+        "evidence_tier": "default",
+        "note": "RegB deactivation, first order, same convention as J2."
+      },
+      {
+        "id": "J5",
+        "type": "conversion",
+        "participants": [
+          {
+            "species": "Ba",
+            "role": "modifier",
+            "stoichiometry": 1
+          },
+          {
+            "species": "D",
+            "role": "product",
+            "stoichiometry": 1
+          }
+        ],
+        "evidence_tier": "default",
+        "note": "PreC to ProD conversion catalysed by active RegB. PreC is not a state: the description gives the pool as ~5 uM total and flat, so the precursor is (Ctot - D) by conservation. This is the only conversion route in this model \u2014 see build_report decision 1, which is flagged for a user decision."
+      },
+      {
+        "id": "J6",
+        "type": "degradation",
+        "participants": [
+          {
+            "species": "D",
+            "role": "substrate",
+            "stoichiometry": 1
+          }
+        ],
+        "evidence_tier": "default",
+        "note": "First-order loss of ProD, lumping turnover and dilution as the description does \u2014 it states the two cannot be separated, so a single constant is the honest representation."
+      }
+    ]
+  },
+  "antimony": "model abcd_naive\n  compartment cell = 1;\n  species Aa in cell = 0;\n  species Ba in cell = 0;\n  species D in cell = 0;\n  u = 1;\n  bx11 = 0;\n  Atot = 1;\n  Btot = 1;\n  Ctot = 5;\n  k_act = 0.05;\n  k_deact = 0.1;\n  k_actB = 0.5;\n  k_deactB = 0.1;\n  k_cat1 = 0.03;\n  k_deg = 0.01;\n  J1: -> Aa; k_act * u * (Atot - Aa);\n  J2: Aa -> ; k_deact * Aa;\n  J3: -> Ba; k_actB * (1 - 0.95*bx11) * Aa * (Btot - Ba);\n  J4: Ba -> ; k_deactB * Ba;\n  J5: -> D; k_cat1 * Ba * (Ctot - D);\n  J6: D -> ; k_deg * D;\nend\n",
+  "parameters": [
+    {
+      "id": "k_act",
+      "nominal_value": 0.05,
+      "unit": "1/(min*dose)",
+      "evidence_tier": "default",
+      "source": "no literature value exists for a synthetic module with no host homologues; order-of-magnitude placeholder consistent with an activation resolved over tens of minutes",
+      "estimate": true,
+      "lb": 0.0005,
+      "ub": 5.0
+    },
+    {
+      "id": "k_deact",
+      "nominal_value": 0.1,
+      "unit": "1/min",
+      "evidence_tier": "default",
+      "source": "no measured phosphatase activity; placeholder on the same timescale as the activation step",
+      "estimate": true,
+      "lb": 0.001,
+      "ub": 10.0
+    },
+    {
+      "id": "k_actB",
+      "nominal_value": 0.5,
+      "unit": "1/(min*uM)",
+      "evidence_tier": "default",
+      "source": "placeholder; the description says RegB activation requires KinA but gives no rate",
+      "estimate": true,
+      "lb": 0.005,
+      "ub": 50.0
+    },
+    {
+      "id": "k_deactB",
+      "nominal_value": 0.1,
+      "unit": "1/min",
+      "evidence_tier": "default",
+      "source": "placeholder, same reasoning as k_deact",
+      "estimate": true,
+      "lb": 0.001,
+      "ub": 10.0
+    },
+    {
+      "id": "k_cat1",
+      "nominal_value": 0.03,
+      "unit": "1/(min*uM)",
+      "evidence_tier": "default",
+      "source": "placeholder chosen so that a few uM of ProD accumulate over the 120 min window from a 5 uM precursor pool",
+      "estimate": true,
+      "lb": 0.0003,
+      "ub": 3.0
+    },
+    {
+      "id": "k_deg",
+      "nominal_value": 0.01,
+      "unit": "1/min",
+      "evidence_tier": "default",
+      "source": "description says ProD is lost slowly by turnover and dilution; placeholder half-life of about an hour",
+      "estimate": true,
+      "lb": 0.0001,
+      "ub": 1.0
+    }
+  ],
+  "build_report": {
+    "decisions": [
+      {
+        "decision": "PreC to ProD conversion runs through active RegB only. No RegB-independent route is included.",
+        "alternatives_considered": [
+          "a second conversion term catalysed directly by KinA_p, in parallel with RegB",
+          "a constant basal conversion rate independent of both kinase and regulator"
+        ],
+        "evidence_tier": "default",
+        "confidence": "low",
+        "user_decision_required": true,
+        "question": "Is a direct KinA->ProD leg plausible? The description says only that the module was designed with RegB as the catalyst and that whether anything else converts PreC is untested. If ProD still accumulates in the BX-11 conditions, where RegB activation is blocked by more than 90%, this model cannot reproduce it at any parameter setting and the missing route is the first thing to add."
+      },
+      {
+        "decision": "No product feedback: ProD does not act back on any upstream step.",
+        "alternatives_considered": [
+          "ProD inhibits RegB activation (a saturating 1/(1 + D/K) factor on the J3 rate)",
+          "ProD inhibits KinA activation",
+          "ProD inhibits its own conversion beyond the (Ctot - D) depletion already present"
+        ],
+        "evidence_tier": "default",
+        "confidence": "low",
+        "user_decision_required": false,
+        "question": "The description reports anecdotal evidence of product feedback somewhere in the module but no assay and no location. Omitted here because guessing a site with no evidence would add an unidentifiable parameter to a first model; the signature to look for is a non-monotone RegB_p time course, which this structure cannot produce at constant dose."
+      },
+      {
+        "decision": "Totals are fixed, not estimated: Atot = Btot = 1 and Ctot = 5 uM, with the inactive KinA, inactive RegB and PreC pools left implicit rather than modelled as states.",
+        "alternatives_considered": [
+          "explicit inactive-form species with conservation enforced by the reactions",
+          "estimate Ctot as a free parameter around the stated 5 uM"
+        ],
+        "evidence_tier": "direct",
+        "confidence": "high",
+        "user_decision_required": false,
+        "question": null
+      },
+      {
+        "decision": "BX-11 is encoded as a fixed 95% multiplicative block on the RegB activation rate, switched by the condition-owned flag bx11, rather than as an estimated inhibition strength.",
+        "alternatives_considered": [
+          "estimate the residual activity fraction as a free parameter",
+          "model BX-11 as a competitive inhibitor binding KinA"
+        ],
+        "evidence_tier": "transferred",
+        "confidence": "medium",
+        "user_decision_required": false,
+        "question": "The >90% figure is in vitro; in-cell efficacy could differ, and the residual fraction is only identifiable if something in the BX-11 conditions depends on RegB. Fixing it keeps the parameter count down but means any ProD signal under BX-11 has to be explained by the residual leak, which is a structural assumption worth revisiting if the BX-11 conditions misfit."
+      },
+      {
+        "decision": "Mass-action kinetics throughout, with saturation entering only through the conserved-pool terms (Atot - Aa), (Btot - Ba) and (Ctot - D).",
+        "alternatives_considered": [
+          "Michaelis-Menten kinetics for the conversion step",
+          "Hill-type cooperativity in RegB activation"
+        ],
+        "evidence_tier": "default",
+        "confidence": "medium",
+        "user_decision_required": false,
+        "question": null
+      },
+      {
+        "decision": "All six rate constants are estimated with bounds spanning two decades either side of the nominal; no parameter is fixed to a prior value.",
+        "alternatives_considered": [
+          "fix k_deg from the description's 'slow' loss and estimate the rest",
+          "narrower bounds around the nominals"
+        ],
+        "evidence_tier": "default",
+        "confidence": "high",
+        "user_decision_required": false,
+        "question": null
+      }
+    ]
+  },
+  "consulted_sources": [
+    "supplied description only (stub baseline)"
+  ],
+  "model_space": [
+    {
+      "id": "basal_route",
+      "question": "Is RegB_p the only catalyst of PreC -> ProD, or is there a RegB-independent route? The lab note says this was never tested, and it is what decides ProD under BX-11.",
+      "default": "off",
+      "on_antimony_patch": {
+        "replace_reaction": "J5",
+        "with": "J5: -> D; (k_cat1 * Ba + k_cat_alt * Aa) * (Ctot - D);"
+      },
+      "adds_parameters": [
+        {
+          "id": "k_cat_alt",
+          "nominal_value": 0.005,
+          "unit": "1/(uM*min)",
+          "evidence_tier": "to_be_estimated",
+          "source": "size unknown; the fit decides",
+          "estimate": true,
+          "lb": 1e-05,
+          "ub": 1.0,
+          "denotes": "rate of the RegB-independent conversion of PreC to ProD catalysed by active KinA"
+        }
+      ],
+      "rationale": "An alternative catalyst or a slow uncatalysed conversion would both look like this and neither is excluded by the note.",
+      "discriminating_evidence": "ProD in the BX-11 arm: with the RegB route shut, a chain-only model must flatten and this one need not.",
+      "priority": 1,
+      "priority_reason": "decides ProD under BX-11, which is exactly what the held-out prediction needs"
+    },
+    {
+      "id": "product_feedback",
+      "question": "Does the product feed back on RegB activation? A regulator whose activity is tuned by the pathway output is common and the note neither states nor excludes it.",
+      "default": "off",
+      "on_antimony_patch": {
+        "replace_reaction": "J3",
+        "with": "J3: -> Ba; k_actB * (1 - 0.95*bx11) * Aa * (Btot - Ba) / (1 + D / K_fb);"
+      },
+      "adds_parameters": [
+        {
+          "id": "K_fb",
+          "nominal_value": 2.0,
+          "unit": "uM",
+          "evidence_tier": "to_be_estimated",
+          "source": "half-inhibiting product level; the fit decides",
+          "estimate": true,
+          "lb": 0.01,
+          "ub": 1000.0,
+          "denotes": "half-inhibiting ProD level for the product feedback on RegB activation"
+        }
+      ],
+      "rationale": "Product feedback shows as a RegB_p overshoot that a monotone model cannot reproduce.",
+      "discriminating_evidence": "RegB_p at the top dose without inhibitor: peak-to-plateau ratio above 1 implies feedback.",
+      "priority": 2,
+      "priority_reason": "explains the RegB_p overshoot at high dose; matters for the shape, less for the held-out ProD level"
+    }
+  ],
+  "_fixture_note": "model_space here is a FIXTURE for exercising the search path deterministically. The two axes are the ones the live construction agent raised unprompted on this case; they are written here so a stub run can search without an LLM.",
+  "entity_glossary": {
+    "species": [
+      {
+        "id": "Aa",
+        "denotes": "active (phosphorylated) KinA \u2014 the measured KinA_p peptide; the inactive pool is implicit as Atot - Aa",
+        "unit_convention": "fraction of total KinA; total normalised to 1 (the lab note reports active forms against a total normalised to 1)",
+        "lump_membership": "Aa is the single active form; no multi-site states are distinguished"
+      },
+      {
+        "id": "Ba",
+        "denotes": "active (phosphorylated) RegB \u2014 the measured RegB_p peptide; inactive pool implicit as Btot - Ba",
+        "unit_convention": "fraction of total RegB; total normalised to 1",
+        "lump_membership": "Ba is the single active form; deactivation lumped into one first-order step (J4)"
+      },
+      {
+        "id": "D",
+        "denotes": "the product ProD, measured directly as ProD_uM; the precursor PreC is implicit as Ctot - D",
+        "unit_convention": "uM, absolute (calibrated MS)",
+        "lump_membership": "D is ProD alone; PreC is not a state but the conserved remainder of the 5 uM pool"
+      }
+    ],
+    "parameters": [
+      {
+        "id": "u",
+        "role": "inducer dose, set per condition by the condition table",
+        "convention": "relative units against the standard stock (0.25, 1, 4)"
+      },
+      {
+        "id": "bx11",
+        "role": "BX-11 inhibitor switch, set per condition (0 untreated, 1 treated); scales RegB activation by (1 - 0.95*bx11)",
+        "convention": "0/1 flag; >90% inhibition per the lab note"
+      },
+      {
+        "id": "Atot",
+        "role": "total KinA, fixed",
+        "convention": "normalised to 1"
+      },
+      {
+        "id": "Btot",
+        "role": "total RegB, fixed",
+        "convention": "normalised to 1"
+      },
+      {
+        "id": "Ctot",
+        "role": "total PreC + ProD pool, fixed",
+        "convention": "uM (about 5 per the lab note)"
+      }
+    ]
+  },
+  "recommended_tier": {
+    "tier": "top2",
+    "reasoning": "both axes bear on the question and two axes are four cheap models; the base model alone is known to miss the BX-11 arm"
+  }
+}

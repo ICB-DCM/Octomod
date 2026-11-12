@@ -1,0 +1,5 @@
+Receptor turnover in a related receptor family — a note (fixture document, 2018).
+
+Over several hours, phosphorylated receptors of a related family are internalised and degraded;
+the observation is correlational, from total-receptor blots at long times. Nothing here names a
+rate constant value, and nothing here concerns the first hour after ligand addition.

@@ -1,0 +1,152 @@
+{
+  "network": {
+    "species": [
+      {
+        "id": "R",
+        "name": "unphosphorylated receptor",
+        "compartment": "cell"
+      },
+      {
+        "id": "Rp",
+        "name": "phosphorylated receptor",
+        "compartment": "cell"
+      }
+    ],
+    "interactions": [
+      {
+        "id": "J1",
+        "type": "phosphorylation",
+        "participants": [
+          {
+            "species": "R",
+            "role": "substrate",
+            "stoichiometry": 1
+          },
+          {
+            "species": "Rp",
+            "role": "product",
+            "stoichiometry": 1
+          }
+        ],
+        "evidence_tier": "default",
+        "note": "No modifier species. Ligand is not represented as a species; its effect enters as the condition-owned constant S multiplying the forward rate (see build_report decision 2)."
+      },
+      {
+        "id": "J2",
+        "type": "dephosphorylation",
+        "participants": [
+          {
+            "species": "Rp",
+            "role": "substrate",
+            "stoichiometry": 1
+          },
+          {
+            "species": "R",
+            "role": "product",
+            "stoichiometry": 1
+          }
+        ],
+        "evidence_tier": "default",
+        "note": "No modifier species. Constitutive phosphatase activity is folded into the first-order rate constant k_dephos rather than modelled explicitly; the description gives no phosphatase measurement to constrain a separate enzyme."
+      }
+    ]
+  },
+  "antimony": "model toy_phos\n  compartment cell = 1;\n  species R in cell = 10;\n  species Rp in cell = 0;\n  S = 1;\n  k_phos = 0.02;\n  k_dephos = 0.2;\n  J1: R -> Rp; k_phos * S * R;\n  J2: Rp -> R; k_dephos * Rp;\n  J3: R -> ; 50 * R * R * S + 5;\nend\n",
+  "parameters": [
+    {
+      "id": "k_phos",
+      "nominal_value": 0.02,
+      "unit": "1/(min*dose)",
+      "evidence_tier": "default",
+      "source": "no literature value exists for a synthetic module; order-of-magnitude placeholder consistent with a signalling response resolved over tens of minutes",
+      "estimate": true,
+      "lb": 0.0001,
+      "ub": 1.0
+    },
+    {
+      "id": "k_dephos",
+      "nominal_value": 0.2,
+      "unit": "1/min",
+      "evidence_tier": "default",
+      "source": "no literature value exists for a synthetic module; order-of-magnitude placeholder consistent with a signalling response resolved over tens of minutes",
+      "estimate": true,
+      "lb": 0.001,
+      "ub": 10
+    }
+  ],
+  "build_report": {
+    "decisions": [
+      {
+        "decision": "Mass-action kinetics for both the forward and the reverse step: J1 first-order in R, J2 first-order in Rp.",
+        "alternatives_considered": [
+          "Michaelis-Menten kinetics for the dephosphorylation step",
+          "Hill-type cooperativity in the phosphorylation step"
+        ],
+        "evidence_tier": "default",
+        "confidence": 0.8,
+        "user_decision_required": false,
+        "question": null
+      },
+      {
+        "decision": "Ligand binding and receptor activation are lumped into a single dimensionless dose factor S that multiplies k_phos linearly. S is condition-owned and does not appear in the parameter table.",
+        "alternatives_considered": [
+          "explicit ligand-receptor binding with L and LR species",
+          "saturating dose term S/(S+Kd) in place of the linear factor"
+        ],
+        "evidence_tier": "default",
+        "confidence": 0.6,
+        "user_decision_required": false,
+        "question": "Linearity in dose is only valid below receptor saturation. The doses span one decade and the description reports no saturation either way, so the assumption is untested at the top dose; a saturating term would be the first structural revision to try if the highest dose is systematically over-predicted."
+      },
+      {
+        "decision": "Total receptor fixed at 10 normalised units and conserved: R initialised to 10, Rp to 0, and no synthesis or degradation reactions added.",
+        "alternatives_considered": [
+          "estimate total receptor as a free parameter",
+          "add zero-order synthesis and first-order degradation of R"
+        ],
+        "evidence_tier": "reported",
+        "confidence": 0.9,
+        "user_decision_required": false,
+        "question": null
+      },
+      {
+        "decision": "k_phos and k_dephos are both left free for estimation rather than fixed to any prior value; bounds span roughly four decades each.",
+        "alternatives_considered": [
+          "fix both to generic signalling timescales from the general-dynamics pack",
+          "fix k_dephos and estimate only k_phos"
+        ],
+        "evidence_tier": "default",
+        "confidence": 0.9,
+        "user_decision_required": false,
+        "question": null
+      }
+    ]
+  },
+  "consulted_sources": [
+    "supplied experiment description only (synthetic case)"
+  ],
+  "entity_glossary": {
+    "species": [
+      {
+        "id": "R",
+        "denotes": "unphosphorylated receptor R",
+        "unit_convention": "normalised amount; total R about 10 per the lab note",
+        "lump_membership": "R is the single inactive state"
+      },
+      {
+        "id": "Rp",
+        "denotes": "phospho-R, the quantity the pR_au densitometry column reports (in arbitrary units, so a scale factor is expected)",
+        "unit_convention": "same normalised amount scale as R; R + Rp conserved at 10",
+        "lump_membership": "Rp is the single phosphorylated state"
+      }
+    ],
+    "parameters": [
+      {
+        "id": "S",
+        "role": "ligand dose, set per condition",
+        "convention": "relative units (0.3, 1, 3) against the standard stock"
+      }
+    ]
+  },
+  "_fixture_note": "attempt 2: a sink that drives R negative over the horizon"
+}

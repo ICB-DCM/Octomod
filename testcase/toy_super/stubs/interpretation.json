@@ -1,0 +1,28 @@
+{
+  "_copy_computed": true,
+  "diagnosis": "The sensor channel is what separates the structures, and it separates them qualitatively rather than by degree. At the top dose the measured A_frac rises, peaks within the first few minutes and then declines over the rest of the window; a model whose activation term does not depend on the product rises monotonically to a plateau at every parameter setting the optimiser can reach, so it cannot produce that shape and pays for it across the whole late timecourse. The structures carrying the product-feedback axis reproduce it. The bypass route buys nothing measurable: it is free to be zero and the fit puts it there, so the structure carrying it sits at the parameter-count penalty rather than at a better fit \u2014 its parameter comes back pinned at its lower bound, which is the honest reading of an axis the data do not support. Constant product loss is worse than first-order in both channels.",
+  "misfit_hypotheses": [
+    "none open on the selected structure: the residuals on both channels sit at the replicate noise floor across the training doses"
+  ],
+  "cannot_distinguish": [],
+  "nonetheless_determined": [],
+  "answers_intent": [
+    {
+      "criterion": "the selected structure carries the product-feedback axis",
+      "verdict": "pass",
+      "evidence": "the feedback structures are hundreds of AIC units clear of every structure without the axis, and the winner carries it"
+    },
+    {
+      "criterion": "the held-out dose is predicted within the assay's own replicate noise",
+      "verdict": "pass",
+      "evidence": "see the held-out block in the report; the prediction is scored against the replicate floor, not against a chosen threshold"
+    },
+    {
+      "criterion": "an axis the data do not support is reported as unsupported, with its parameter's fitted value, rather than quietly dropped",
+      "verdict": "pass",
+      "evidence": "the bypass route's parameter is pinned at its lower bound in every structure that carries it, and those structures are reported with their own AIC and weight rather than removed from the table"
+    }
+  ],
+  "recommendation": "accept",
+  "_fixture_note": "`_copy_computed` is set, so the engine's computed epistemic sets are copied in and the consistency gate holds this canned reading to the arithmetic. The prose above states what the offline check measured; if the engine disagrees, the gate fails and the case has caught something."
+}

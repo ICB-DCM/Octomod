@@ -1,0 +1,45 @@
+# Octomod — pip fallback environment spec.
+# PRIMARY setup is uv (see pyproject.toml: `uv sync`, commit uv.lock).
+# This file mirrors those pins for pip users and must stay in sync.
+# Current stable versions (PyPI, checked 2026-09-01); the repo itself never
+# installs anything.
+#
+# SETUP:
+#   python3.12 -m venv <VENV_PATH>                          # python 3.12: the
+#   <VENV_PATH>/bin/pip install --upgrade pip                # proven interpreter
+#   <VENV_PATH>/bin/pip install -r requirements.txt
+# then tell Claude the absolute <VENV_PATH>; config.py is switched in one line
+# and the whole test battery re-runs against it before anything else does.
+#
+# SWIG: not pinned here — pip will build AMICI with the
+# system (homebrew) swig, and the engine uses the same swig for model
+# compiles (config.py resolves venv-swig-if-present, else homebrew).
+# CONSISTENCY RULE: AMICI's core and all model
+# modules must share one swig. If `brew upgrade` ever bumps swig, either
+# reinstall amici in this venv or `pip install swig` to freeze one.
+
+# modelling stack
+pypesto==0.6.0            # release pin
+amici==1.0.1
+petab==0.8.2
+python-libsbml==5.21.1
+antimony==3.1.3
+libroadrunner==2.10.0     # pre-compile simulation gates (leaner than tellurium)
+fides==0.8.0
+
+# numerics / IO
+numpy==2.5.2
+scipy==1.18.1
+pandas==3.0.5
+pyyaml==6.0.3
+h5py==3.16.0              # pypesto result storage (profiles etc.)
+matplotlib==3.11.1        # pypesto visualisation
+
+# Not pip-installable, required for the llm backend:
+#   claude CLI, logged in for headless use (`claude` -> /login in a terminal,
+#   then verify:  claude -p "reply ok" --model haiku )
+
+# the result record — pydantic models,
+# one HDF5 file per run through mkstd; both already arrive via petab-select
+pydantic==2.13.5
+mkstd==0.0.13

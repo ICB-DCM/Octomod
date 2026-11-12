@@ -1,0 +1,10 @@
+{
+  "move": {
+    "type": "add_reaction",
+    "args": {
+      "directive": "add a RegB-independent conversion of PreC to ProD catalysed by KinA_p"
+    }
+  },
+  "motivated_by": "ProD rises through the whole window in the u=1 BX-11 training condition, where the model's only conversion route is shut off by more than 90%. The residuals there are one-signed and grow with time, and no setting of the six existing rate constants removes them: the chain structure bounds ProD accumulation by RegB_p activity. A route that does not depend on RegB is the smallest structural change that can produce ProD under the inhibitor, and the description explicitly leaves open whether anything besides RegB catalyses the conversion.",
+  "expected_effect": "recovers ProD rise under BX-11"
+}

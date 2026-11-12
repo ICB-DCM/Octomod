@@ -1,0 +1,46 @@
+name: ctd_petab
+
+t_end: 960
+
+holdout:
+  condition_labels: []
+
+# The whole point: a COMPLETE PEtab problem, supplied. The engine derives its model
+# and data slots from it and enters at estimation; construction and assembly agents
+# are never called, and the gates still run.
+supplied:
+  petab: supplied/petab
+
+notes: >-
+  THE PUBLISHED PROBLEM, AS DEPOSITED. Copied unmodified from the Zenodo deposit
+  accompanying Callenbach et al., PLOS Comput Biol, doi 10.1371/journal.pcbi.1014531
+  — `petab_models/petab_files_neighbouring_effect_model/`. 258 species, 1024
+  reactions, 901 KB SBML, validated by libSBML with 0 errors. 36 measurements:
+  nine phosphorylation counts at four time points, one condition.
+
+  WHY THIS CASE IS SEPARATE FROM ctd_blind. Measured 2026-09-11: a neighbouring-
+  effect model of 8 binary repeats needs 256 species and 1024 reactions, about
+  85 KB of literal Antimony in a single JSON field. The largest agent reply this
+  project has ever produced is ~18 KB. The construction contract asks an agent to
+  write model text directly, so this problem is not expressible through it. The
+  published work used PySB — a RULE-based language where a handful of rules
+  generate the network — which is precisely the representation the engine lacks.
+
+  So ctd_blind measures a limit, and this case measures everything downstream of
+  it: estimation on a 258-state model, profile likelihoods on 7 parameters, the
+  identifiability screen, and whether the report is honest about what 36 data
+  points can determine.
+
+  THE ANSWER KEY (truth/, recomputed from the deposit's own result files):
+  nllh -89.9971 at k = 7; k_p 1.6e-05, alpha 2.258; scaling xi 1.0 / 3.966 / 3.910
+  / 0.857 tracking the measured per-time-point sums 1.00 / 4.07 / 3.79 / 0.85.
+
+  EXPECT THIS TO BE SLOW, and expect that to be informative. 258 states, and the
+  uncertainty stage on live_blind_5 took 21 minutes on a 13-parameter model with 6
+  states. Measure before buying: the cost gate quotes a measured per-start time.
+
+# A benchmark with ground truth: it runs without the knowledge module,
+# so nothing the module could find reaches the blind run.
+grounding:
+  skip: true
+  why: benchmark

@@ -1,0 +1,39 @@
+{
+  "conditions": [
+    {
+      "condition_id": "c_u025",
+      "maps_to_label": "u=0.25,bx=0",
+      "overrides": {"u": 0.25, "bx11": 0},
+      "preequilibration": false,
+      "rationale": "Lowest inducer dose, no inhibitor. Both experimental factors are condition-owned constants in the model and neither appears in the parameter table: u multiplies the KinA activation rate, bx11 switches the fixed BX-11 block on RegB activation. No pre-equilibration anywhere in this case: the description says the t=0 samples are uninduced cells harvested immediately before the inducer went in, with all three species at or near zero, so the model's declared initial state (Aa = Ba = D = 0) is the experimental starting state. Pre-equilibrating would replace it with a resting steady state the experiment did not have."
+    },
+    {
+      "condition_id": "c_u1",
+      "maps_to_label": "u=1,bx=0",
+      "overrides": {"u": 1, "bx11": 0},
+      "preequilibration": false,
+      "rationale": "Reference dose, no inhibitor. u = 1 is the standard working stock the other two doses are expressed against."
+    },
+    {
+      "condition_id": "c_u4",
+      "maps_to_label": "u=4,bx=0",
+      "overrides": {"u": 4, "bx11": 0},
+      "preequilibration": false,
+      "rationale": "Highest dose, no inhibitor. The description flags that dose linearity of KinA activation is untested above u = 4, so this condition is where a linear-in-dose activation term would first show strain."
+    },
+    {
+      "condition_id": "c_u1_bx",
+      "maps_to_label": "u=1,bx=1",
+      "overrides": {"u": 1, "bx11": 1},
+      "preequilibration": false,
+      "rationale": "Reference dose with BX-11. Same inducer as c_u1, so the pair isolates the inhibitor's effect at fixed drive — this is the comparison that says what ProD does when the RegB route is shut."
+    },
+    {
+      "condition_id": "c_u4_bx",
+      "maps_to_label": "u=4,bx=1",
+      "overrides": {"u": 4, "bx11": 1},
+      "preequilibration": false,
+      "rationale": "Highest dose with BX-11, the corner of the design where the inhibitor and the top dose meet. Encoded like any other condition; whether its measurements enter the fit is not this agent's call — the holdout is declared in the testcase at staging time and applied downstream, so this encoding is written the same way whether the condition is trained on or held out."
+    }
+  ]
+}

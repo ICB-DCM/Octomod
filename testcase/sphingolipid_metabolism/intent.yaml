@@ -1,0 +1,50 @@
+# S0 intent for sphingolipid_metabolism, phase 1. Drafted with the user 2026-09-23;
+# frozen only once the user signs it off. The success criteria are the user's.
+
+question: >-
+  Calibrate the supplied model of sphingolipid metabolism against a two-tracer
+  pulse-chase, and report which of its rates the data determine and which they do
+  not, as the evidence base for a later, informed revision: which species and
+  reactions are needed, which are too detailed for these data, and whether the
+  model needs in- and outflux of label.
+
+system: >-
+  Sphingolipid metabolism in neuroblastoma cells followed by LC-MS lipidomics after
+  a 60 min pulse with alkyne sphinganine and alkyne 13C-palmitate; supplied PEtab
+  problem with 14 species and 21 mass-action reactions
+
+required_entities:
+  - Sph
+  - DhCer
+  - Cer
+  - SM
+  - HexCer
+
+required_predictions:
+  - point estimates for every estimated rate constant, with confidence intervals
+  - a statement of which rate constants the data determine and which they do not
+  - the fitted time courses of all eleven observed lipid pools over the 180 min chase
+
+perturbations:
+  - none; a single pulse-chase condition, t=0 is the end of the 60 min pulse
+
+timescale: minutes, horizon 180 min
+
+scope_exclusions:
+  - changes to the model structure, which is fitted as supplied in this phase
+  - separating the two tracers, which is deferred to the next phase
+
+success_criteria:
+  - every estimated parameter is reported with an interval, and any parameter the
+    data do not bound is named as such rather than given a point value alone
+  - the fit is judged per observable, and any lipid pool the model systematically
+    misses is named
+  - the constant influx into Pal and the outflux terms are reported with their
+    estimates and intervals, so their necessity can be judged in the next phase
+  - convergence of the multistart is evidenced, not asserted
+
+inference_target: parameter_values
+
+domain_packs:
+  - general-dynamics
+  - measurement-tech

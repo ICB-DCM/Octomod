@@ -1,0 +1,445 @@
+{
+  "classifications": [
+    {
+      "id": "rx_1.e1",
+      "evidence_kind": "curated_database",
+      "context_match": "related_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; classified from the item's own statement of a Reactome Homo sapiens curated SPT reaction entry (acyl-CoA + L-serine), generic human rather than SH-SY5Y."
+    },
+    {
+      "id": "rx_1.e2",
+      "evidence_kind": "curated_database",
+      "context_match": "related_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; item states a Reactome human reaction entry for KDSR reduction to sphinganine, generic human annotation."
+    },
+    {
+      "id": "rx_2.e1",
+      "evidence_kind": "curated_database",
+      "context_match": "related_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; item states a Reactome human reaction entry for ceramide synthase N-acylation, generic human annotation."
+    },
+    {
+      "id": "rx_2.e2",
+      "evidence_kind": "indirect",
+      "context_match": "related_system",
+      "stance": "supports",
+      "note": "The quoted sentence is an expectation stated in the introduction to the metabolism section ('may be expected to be incorporated into similar lipid classes'), not the experimental result; the excerpt's own experiment (Huh7, 60 min, TLC) follows but the quote itself only mentions the N-acylation step."
+    },
+    {
+      "id": "rx_3.e1",
+      "evidence_kind": "curated_database",
+      "context_match": "related_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; item states a Reactome human reaction entry for DEGS1 desaturation, generic human annotation."
+    },
+    {
+      "id": "rx_4.e1",
+      "evidence_kind": "curated_database",
+      "context_match": "related_system",
+      "stance": "supports",
+      "note": "Excerpt is the Reactome SGMS1 entry summation: Golgi-membrane SGMS1 forms SM from PC + ceramide and cultured-cell studies indicate it is the primary source of cellular SM; generic Homo sapiens annotation, and the sentence shows PC/DAG stoichiometry is omitted by a bare Cer -> SM step."
+    },
+    {
+      "id": "rx_4.e2",
+      "evidence_kind": "curated_database",
+      "context_match": "related_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; item states a second Reactome human reaction entry (SGMS2) for the same conversion at a different membrane."
+    },
+    {
+      "id": "rx_5.e1",
+      "evidence_kind": "curated_database",
+      "context_match": "related_system",
+      "stance": "supports",
+      "note": "Excerpt names inputs PC + ceramide, outputs SM + DAG, SGMS1 at the Golgi membrane, and states PC was identified as the phosphocholine source; generic Homo sapiens entry."
+    },
+    {
+      "id": "rx_6.e1",
+      "evidence_kind": "curated_database",
+      "context_match": "related_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; item states a Reactome human reaction entry for lysosomal acid sphingomyelinase hydrolysis of SM."
+    },
+    {
+      "id": "rx_6.e2",
+      "evidence_kind": "curated_database",
+      "context_match": "related_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; item states a Reactome human reaction entry for neutral sphingomyelinases at the plasma membrane."
+    },
+    {
+      "id": "rx_7.e1",
+      "evidence_kind": "curated_database",
+      "context_match": "related_system",
+      "stance": "supports",
+      "note": "Excerpt states the SGMS1 reaction is reversible (PC + Cer <-> SM + DAG); it does not, in the text shown, state that direction depends on Golgi ceramide and DAG levels, so only reversibility is borne out."
+    },
+    {
+      "id": "rx_8.e1",
+      "evidence_kind": "curated_database",
+      "context_match": "related_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; item states a Reactome human reaction entry for UGCG transfer of glucose from UDP-glucose to ceramide."
+    },
+    {
+      "id": "rx_9.e1",
+      "evidence_kind": "review",
+      "context_match": "related_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; item describes an introduction section of a review enumerating GBA1/GBA2/GBA3 hydrolysis of GlcCer, i.e. a review statement, not a measurement."
+    },
+    {
+      "id": "rx_10.e1",
+      "evidence_kind": "review",
+      "context_match": "related_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; item describes a review section on ganglioside biosynthesis naming LacCer as a branch point, mammalian/neuronal generic rather than SH-SY5Y."
+    },
+    {
+      "id": "rx_11.e1",
+      "evidence_kind": "curated_database",
+      "context_match": "related_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; item states a Reactome human reaction entry for acid ceramidase hydrolysis to sphingosine plus fatty acid."
+    },
+    {
+      "id": "rx_11.e2",
+      "evidence_kind": "curated_database",
+      "context_match": "related_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; item states a second Reactome human ceramidase reaction entry at the Golgi."
+    },
+    {
+      "id": "rx_12.e1",
+      "evidence_kind": "review",
+      "context_match": "related_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; item describes review sections on ceramidases and sphingoid-base re-acylation; the extension to dihydroceramide is the item's inference from family substrate scope, not a quoted statement."
+    },
+    {
+      "id": "rx_13.e1",
+      "evidence_kind": "review",
+      "context_match": "related_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; item describes a review's definition of the salvage pathway (sphingosine re-acylated to ceramide)."
+    },
+    {
+      "id": "rx_14.e1",
+      "evidence_kind": "curated_database",
+      "context_match": "related_system",
+      "stance": "supports",
+      "note": "Excerpt is the Reactome R-HSA-428273 entry: cytosolic SPHK1 phosphorylates sphingoids (SPG) to sphingoid 1-phosphate, main product S1P; Homo sapiens generic annotation."
+    },
+    {
+      "id": "rx_15.e1",
+      "evidence_kind": "curated_database",
+      "context_match": "related_system",
+      "stance": "supports",
+      "note": "Excerpt writes the substrate generically as 'sphingoids (SPG)' and gives no kinetic separation of sphinganine from sphingosine, which is exactly what the item claims."
+    },
+    {
+      "id": "rx_15.e2",
+      "evidence_kind": "curated_database",
+      "context_match": "related_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; item states the Reactome SGPL1 entry lists sphinganine 1-phosphate as a substrate yielding hexadecanal \u2014 inference of prior phosphorylation is the item's, not a quoted claim."
+    },
+    {
+      "id": "rx_16.e1",
+      "evidence_kind": "curated_database",
+      "context_match": "related_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; item states a Reactome human reaction entry for SGPP1/2 dephosphorylation of sphingoid 1-phosphates."
+    },
+    {
+      "id": "rx_17.e1",
+      "evidence_kind": "curated_database",
+      "context_match": "related_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; item states the same Reactome entry (R-HSA-428664) is written generically for sphingoid 1-phosphates."
+    },
+    {
+      "id": "rx_18.e1",
+      "evidence_kind": "curated_database",
+      "context_match": "related_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; item states the Reactome SGPL1 entry at the ER membrane, irreversible cleavage of S1P to phosphoethanolamine and hexadecenal."
+    },
+    {
+      "id": "rx_18.e2",
+      "evidence_kind": "review",
+      "context_match": "different_system",
+      "stance": "supports",
+      "note": "The quoted sentence sits in the paper's abstract/introduction framing as general background ('In normal cells, degradation ... occurs at position C2-C3 ... and channels the resulting hexadecenal into the glycerolipid biosynthesis pathway'), not a result of the experiment reported; the excerpt names no organism or cell type for this statement, and the study's own system is mouse embryonic fibroblasts."
+    },
+    {
+      "id": "rx_19.e1",
+      "evidence_kind": "curated_database",
+      "context_match": "related_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; item states the Reactome SGPL1 entry covers both sphingoid 1-phosphates with their respective aldehyde products."
+    },
+    {
+      "id": "rx_20.e1",
+      "evidence_kind": "curated_database",
+      "context_match": "related_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; item states a Reactome human reaction entry oxidising hexadec-2-enal to palmitate."
+    },
+    {
+      "id": "rx_21.e1",
+      "evidence_kind": "curated_database",
+      "context_match": "related_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; item states a Reactome human reaction entry oxidising hexadecanal to palmitate."
+    },
+    {
+      "id": "rx_22.e1",
+      "evidence_kind": "curated_database",
+      "context_match": "related_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; item states the Reactome acid ceramidase entry supplying one half-step of a collapsed reaction, and concedes the collapsed form is not itself curated."
+    },
+    {
+      "id": "rx_22.e2",
+      "evidence_kind": "curated_database",
+      "context_match": "related_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; item states the Reactome SPHK1 entry supplying the second half-step."
+    },
+    {
+      "id": "rx_23.e1",
+      "evidence_kind": "direct_experimental",
+      "context_match": "related_system",
+      "stance": "supports",
+      "note": "Excerpt reports targeted LC-MS/MS precursor-ion scanning after 1 h metabolism of TF-Spa in Huh7 cells detecting both SM and dihydroSM species with 16:0, 18:0 and 20:0 fatty acids \u2014 a measurement of the stated conversion, in a human hepatoma line rather than SH-SY5Y."
+    },
+    {
+      "id": "rx_24.e1",
+      "evidence_kind": "curated_database",
+      "context_match": "related_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; item states the Reactome UGCG entry is written for ceramide and does not itself assert dihydroceramide as substrate, so it supports only the glucosylation step."
+    },
+    {
+      "id": "rx_25.e1",
+      "evidence_kind": "review",
+      "context_match": "different_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; item describes review sections on cell-surface and extracellular sphingoid metabolism, with no SH-SY5Y or washout data."
+    },
+    {
+      "id": "rx_26.e1",
+      "evidence_kind": "review",
+      "context_match": "different_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; item describes review sections on extracellular S1P; export is the item's inference from extracellular presence."
+    },
+    {
+      "id": "rx_27.e1",
+      "evidence_kind": "review",
+      "context_match": "related_system",
+      "stance": "supports",
+      "note": "Excerpt is a review recounting others' experiments ('These experiments showed rapid incorporation of the long-chain FA tracers into early intermediates (PA and DG)', citing Thiele et al., 2019) on the same alkyne click-MS platform; a review's statement, not this paper's measurement."
+    },
+    {
+      "id": "rx_28.e1",
+      "evidence_kind": "review",
+      "context_match": "related_system",
+      "stance": "contradicts",
+      "note": "Excerpt reads 'the rapid metabolism of labeled DG to produce TG and PC (the latter via PE) occurred', placing PC downstream of DG (and PE) rather than direct from the FFA pool, so it contradicts a direct FFA -> PC step as written."
+    },
+    {
+      "id": "rx_29.e1",
+      "evidence_kind": "review",
+      "context_match": "related_system",
+      "stance": "supports",
+      "note": "Excerpt gives the sequence PA/DG first, then DG to TG and PC (via PE), with labeled PI increasing only slowly \u2014 a review's recounting of cited experiments supporting DG as the PC precursor pool, with the PE intermediate the model omits."
+    },
+    {
+      "id": "rx_30.e1",
+      "evidence_kind": "direct_experimental",
+      "context_match": "related_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; item states a results section establishing alkyne FA tracer incorporation into cellular lipid classes, and itself concedes cholesteryl ester formation is not the paper's specific claim."
+    },
+    {
+      "id": "rx_31.e1",
+      "evidence_kind": "review",
+      "context_match": "related_system",
+      "stance": "supports",
+      "note": "Excerpt states labeled DG is rapidly metabolised to TG (and PC), a review's summary of cited hepatocyte/cultured-cell experiments; it shows a DG drain to TG, not a measurement in the intent's system."
+    },
+    {
+      "id": "rx_32.e1",
+      "evidence_kind": "direct_experimental",
+      "context_match": "different_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; item states time-resolved click-MS tracing of ~120 labelled species in mouse hepatocytes and single cells \u2014 an experiment, but in a different organism and cell type."
+    },
+    {
+      "id": "rx_35.e1",
+      "evidence_kind": "direct_experimental",
+      "context_match": "different_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; item states alkyne-tracer measurement of a 2-4 h triglyceride half-life in 3T3-L1 mouse adipocytes, a lipid-storing cell type unlike neuroblastoma."
+    },
+    {
+      "id": "rx_36.e1",
+      "evidence_kind": "direct_experimental",
+      "context_match": "different_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; item states a demonstrated lipolysis/re-esterification cycle in 3T3-L1 adipocytes and hepatocytes, not neuroblastoma."
+    },
+    {
+      "id": "fact_1.e1",
+      "evidence_kind": "curated_database",
+      "context_match": "related_system",
+      "stance": "supports",
+      "note": "Excerpt contains both claims verbatim: PC identified as the phosphocholine source (mouse enzyme studies, 1970s) and cultured-cell studies indicating this is the primary source of cellular SM; generic Homo sapiens entry."
+    },
+    {
+      "id": "fact_2.e1",
+      "evidence_kind": "curated_database",
+      "context_match": "related_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; item states the Reactome SPT entry takes acyl-CoA and L-serine as inputs, implying a prior activation step."
+    },
+    {
+      "id": "fact_2.e2",
+      "evidence_kind": "curated_database",
+      "context_match": "related_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; item states the Reactome KDSR reduction is a separately annotated reaction, making Pal + Ser -> Sph a collapse."
+    },
+    {
+      "id": "fact_3.e1",
+      "evidence_kind": "curated_database",
+      "context_match": "related_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; item states the Reactome SGPL1 entry cleaves both sphingoid 1-phosphates irreversibly at the ER membrane."
+    },
+    {
+      "id": "fact_4.e1",
+      "evidence_kind": "direct_experimental",
+      "context_match": "different_system",
+      "stance": "supports",
+      "note": "Excerpt reports the measurement itself: pacSph labelling plus click/TLC, about half the pacSph metabolised to PC after 4 h in Sgpl1+/+ MEFs, with no PC or saponifiable lipids labelled in Sgpl1-/- cells \u2014 mouse embryonic fibroblasts, a different organism and cell type from SH-SY5Y."
+    },
+    {
+      "id": "fact_5.e1",
+      "evidence_kind": "review",
+      "context_match": "related_system",
+      "stance": "supports",
+      "note": "Excerpt is the review's recounting (citing Thiele et al., 2019) of rapid tracer incorporation into PA and DG then DG to TG and PC via PE; it orders the classes but the PE step shows DG -> PC is not itself a single conversion."
+    },
+    {
+      "id": "fact_6.e1",
+      "evidence_kind": "direct_experimental",
+      "context_match": "different_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; item states an alkyne-tracer measurement of 2-4 h TG half-life in 3T3-L1 mouse adipocytes, explicitly a different cell type from SH-SY5Y."
+    },
+    {
+      "id": "fact_7.e1",
+      "evidence_kind": "mechanistic_model",
+      "context_match": "different_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; item states a 25-reaction kinetic model with estimated rate constants fitted in RAW264.7 mouse macrophages, a model containing the quantities in a different organism, cell type and stimulus."
+    },
+    {
+      "id": "fact_8.e1",
+      "evidence_kind": "mechanistic_model",
+      "context_match": "different_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; item states an ODE network of 12 metabolites, 28 reactions and 12 export terms built for Kdo2-Lipid A-stimulated RAW 264.7 mouse macrophages."
+    },
+    {
+      "id": "fact_9.e1",
+      "evidence_kind": "direct_experimental",
+      "context_match": "different_system",
+      "stance": "supports",
+      "note": "No excerpt supplied and the item records the full text was unretrievable (HTTP 403), so only the abstract-level claim of deuterated-FA pulse labelling showing faster VLC than LC ceramide turnover stands; cell line unconfirmed."
+    },
+    {
+      "id": "fact_10.e1",
+      "evidence_kind": "review",
+      "context_match": "related_system",
+      "stance": "supports",
+      "note": "Excerpt states the LOQ 'was further reduced, down to 0.2 fmol labeled lipid in 20 uL sample volume (10 pM)', attributed to Thiele et al., 2019 \u2014 a review reporting another paper's platform figure, measured in hepatocytes, not SH-SY5Y."
+    },
+    {
+      "id": "fact_11.e1",
+      "evidence_kind": "direct_experimental",
+      "context_match": "related_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; item states the method paper's results/methods describing the charged azide reporter, multiplexing and ~120 species at subfemtomole sensitivity, demonstrated in mouse hepatocytes and single cells."
+    },
+    {
+      "id": "fact_11.e2",
+      "evidence_kind": "review",
+      "context_match": "related_system",
+      "stance": "supports",
+      "note": "Excerpt describes the C175-7x azide probe set giving identical MS1 masses but unique MS2 fragments and states multiplexing 'reduced the time needed for analysis by a factor of 4'; a review's account of the cited method, not its own measurement."
+    },
+    {
+      "id": "fact_12.e1",
+      "evidence_kind": "direct_experimental",
+      "context_match": "related_system",
+      "stance": "supports",
+      "note": "Excerpt reports targeted precursor-ion-scanning LC-MS/MS on Huh7 extracts after 1 h, finding TF-Spa in both SM and dhSM species \u2014 the measurement itself, in a human hepatoma line rather than SH-SY5Y."
+    },
+    {
+      "id": "fact_13.e1",
+      "evidence_kind": "curated_database",
+      "context_match": "related_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; item states Reactome compartment annotations (Golgi membrane for SGMS1 versus ER for the de novo steps) \u2014 the comparison across entries is the item's, from curated location fields."
+    },
+    {
+      "id": "fact_13.e2",
+      "evidence_kind": "review",
+      "context_match": "related_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; item describes a review of CERT-mediated ER-to-Golgi ceramide transfer and notes no quantitative transfer half-time was found."
+    },
+    {
+      "id": "fact_14.e1",
+      "evidence_kind": "review",
+      "context_match": "related_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; item describes a review section on stepwise GlcCer -> LacCer -> ganglioside glycosylation with LacCer as a branch point."
+    },
+    {
+      "id": "fact_15.e1",
+      "evidence_kind": "curated_database",
+      "context_match": "related_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; item states the Reactome acid ceramidase entry's outputs are sphingosine and a free fatty acid."
+    },
+    {
+      "id": "fact_15.e2",
+      "evidence_kind": "review",
+      "context_match": "related_system",
+      "stance": "supports",
+      "note": "No excerpt supplied; item describes the review's salvage-pathway definition placing free sphingosine as the catabolic product that is re-acylated."
+    },
+    {
+      "id": "fact_16.e1",
+      "evidence_kind": "curated_database",
+      "context_match": "related_system",
+      "stance": "contradicts",
+      "note": "No excerpt supplied; item states the Reactome entry annotates only hexadec-2-enal -> palmitate, so the reverse direction is unannotated \u2014 contradicting palmitate label entering the aldehyde pool by this route."
+    },
+    {
+      "id": "fact_16.e2",
+      "evidence_kind": "curated_database",
+      "context_match": "related_system",
+      "stance": "contradicts",
+      "note": "No excerpt supplied; item states the Reactome entry annotates hexadecanal -> palmitate only, not the reverse."
+    }
+  ]
+}

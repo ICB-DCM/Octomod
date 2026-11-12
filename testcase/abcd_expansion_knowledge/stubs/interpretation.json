@@ -1,0 +1,23 @@
+{
+  "_copy_computed": true,
+  "diagnosis": "The chain-only model fails on the inhibitor conditions, and it fails in the one direction that matters for the question asked. Under BX-11 the model holds RegB_p at roughly a twentieth of its untreated level, and the only conversion route in the model is proportional to RegB_p, so simulated ProD is close to flat in the BX-11 conditions at every parameter setting the optimiser can reach. The measured ProD is not flat there: it rises through the whole 120 min window in the u=1 BX-11 training condition, and the residuals in that condition are one-signed and grow with time — the signature of a missing route, not of mis-tuned rate constants. The fit buys what agreement it has by inflating the conversion rate, which then costs it accuracy in the untreated conditions, so the misfit is visible on both sides of the inhibitor split rather than confined to one condition. The held-out u=4 BX-11 prediction inherits the same structural gap and is systematically low. A second, independent discrepancy sits in RegB_p at the top untreated dose: the data peak early and then relax, while this model's RegB_p is monotone by construction at constant inducer dose — no parameter setting of a chain with no feedback can produce a non-monotone RegB_p. Two separate structural gaps, each visible in a different observable, and neither is a noise-model or scaling artefact: the readout is calibrated, the noise is additive and the residual pattern is systematic in time rather than scattered.",
+  "misfit_hypotheses": [
+    "missing RegB-independent conversion of PreC",
+    "missing product feedback on RegB activation"
+  ],
+  "cannot_distinguish": [],
+  "nonetheless_determined": [],
+  "answers_intent": [
+    {
+      "criterion": "held-out (u=4, BX-11) ProD nRMSE < 0.25",
+      "verdict": "fail",
+      "evidence": "The held-out ProD prediction is systematically below the measurements at every time past the first sample, and the shortfall grows monotonically through the window rather than scattering around the data. The error is structural: the model has no route by which ProD can accumulate while RegB activation is blocked, so the residual is bounded away from zero no matter how the six rate constants are set. This is not a case of the fit being loose — the same model reproduces the untreated conditions much more closely, which localises the failure to the inhibitor arm."
+    },
+    {
+      "criterion": "predictive band covers >= 80% of held-out points",
+      "verdict": "fail",
+      "evidence": "Coverage fails for the same structural reason. The band is the multistart ensemble spread widened by the estimated observation noise, and the ensemble is tight here because the training data do constrain the six parameters of this structure — a wrong model fitted confidently. A tight band centred on a biased prediction covers less than a loose one would, so the coverage number should be read as evidence about the structure, not about the uncertainty machinery."
+    }
+  ],
+  "recommendation": "revise"
+}

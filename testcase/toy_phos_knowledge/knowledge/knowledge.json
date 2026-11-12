@@ -1,0 +1,496 @@
+{
+  "kind": "survey",
+  "mode": "online",
+  "system": {
+    "summary": "A synthetic receptor module: the ligand drives phosphorylation of the receptor R to Rp within minutes, a constitutive phosphatase returns Rp to R, and total receptor stays near 10 normalised units over the first hour.",
+    "scope": "the receptor module in the lab's own cell line, one related receptor with a published two-state model, and a related receptor family observed over hours",
+    "unknowns": [
+      "whether the ligand phosphorylates the receptor directly or through a binding step",
+      "which phosphatase returns Rp to R"
+    ]
+  },
+  "species": [
+    {
+      "id": "R",
+      "name": "unphosphorylated receptor",
+      "represents": "R",
+      "identifiers": {}
+    },
+    {
+      "id": "Rp",
+      "name": "phosphorylated receptor",
+      "represents": "Rp",
+      "identifiers": {}
+    }
+  ],
+  "reactions": [
+    {
+      "id": "req_1",
+      "equation": "R -> Rp",
+      "written": "R -> Rp",
+      "parsed": {
+        "reactants": {
+          "R": 1.0
+        },
+        "products": {
+          "Rp": 1.0
+        },
+        "reversible": false
+      },
+      "modifiers": [],
+      "type": "phosphorylation",
+      "description": "ligand-driven phosphorylation of the receptor",
+      "required": true,
+      "essential": true,
+      "origin": "human",
+      "identifiers": {},
+      "addressed": true,
+      "evidence": [
+        {
+          "source": "Receptor module phosphorylation kinetics \u2014 a note (fixture, 2024)",
+          "title": "Receptor module phosphorylation kinetics",
+          "year": 2024,
+          "locator": "paragraph 2",
+          "supports": "ligand addition drives phosphorylation of R to Rp within minutes, in cells expressing the module",
+          "quote": "ligand addition drives phosphorylation of R to Rp within minutes",
+          "url": "file:./sources/receptor_note.txt",
+          "evidence_kind": "direct_experimental",
+          "context_match": "same_system",
+          "context_note": "the same receptor module in the same cells",
+          "stance": "supports",
+          "origin": "knowledge",
+          "source_key": "receptor module phosphorylation kinetics \u2014 a note (fixture, 2024)",
+          "id": "req_1.e1",
+          "fetch_status": "cached",
+          "cached_file": "2b9d8f630be66aec.txt",
+          "sha256": "2b9d8f630be66aec",
+          "content_type": "text/plain",
+          "bytes": 415,
+          "resolution": "not-checkable",
+          "resolution_class": "not_checkable",
+          "quote_found": true,
+          "second_kind": "direct_experimental",
+          "second_context": "same_system",
+          "second_stance": "supports",
+          "second_note": "the note shows the conversion in these cells",
+          "counts": true,
+          "graded_as": {
+            "evidence_kind": "direct_experimental",
+            "context_match": "same_system"
+          }
+        }
+      ],
+      "evidence_dropped": [],
+      "note": "ligand-driven phosphorylation; the ligand enters as a dose, not a species",
+      "grade": "high",
+      "because": [
+        {
+          "id": "req_1.e1",
+          "source": "Receptor module phosphorylation kinetics \u2014 a note (fixture, 2024)",
+          "evidence_kind": "direct_experimental",
+          "context_match": "same_system",
+          "rule": "a direct_experimental source in same_system"
+        }
+      ],
+      "flags": [],
+      "counting": [
+        "req_1.e1"
+      ],
+      "n_sources": 1
+    },
+    {
+      "id": "rx_1",
+      "equation": "Rp -> R",
+      "parsed": {
+        "reactants": {
+          "Rp": 1.0
+        },
+        "products": {
+          "R": 1.0
+        },
+        "reversible": false
+      },
+      "modifiers": [],
+      "type": "dephosphorylation",
+      "description": "constitutive dephosphorylation of the receptor",
+      "required": false,
+      "essential": true,
+      "origin": "knowledge",
+      "identifiers": {},
+      "evidence": [
+        {
+          "source": "Receptor module phosphorylation kinetics \u2014 a note (fixture, 2024)",
+          "title": "Receptor module phosphorylation kinetics",
+          "year": 2024,
+          "locator": "paragraph 2",
+          "supports": "a constitutive phosphatase returns Rp to R",
+          "quote": "a constitutive phosphatase returns Rp to R",
+          "url": "file:./sources/receptor_note.txt",
+          "evidence_kind": "direct_experimental",
+          "context_match": "same_system",
+          "context_note": "the same receptor module in the same cells",
+          "stance": "supports",
+          "origin": "knowledge",
+          "source_key": "receptor module phosphorylation kinetics \u2014 a note (fixture, 2024)",
+          "id": "rx_1.e1",
+          "fetch_status": "cached",
+          "cached_file": "2b9d8f630be66aec.txt",
+          "sha256": "2b9d8f630be66aec",
+          "content_type": "text/plain",
+          "bytes": 415,
+          "resolution": "not-checkable",
+          "resolution_class": "not_checkable",
+          "quote_found": true,
+          "second_kind": "direct_experimental",
+          "second_context": "same_system",
+          "second_stance": "supports",
+          "second_note": "the note shows the return in these cells",
+          "counts": true,
+          "graded_as": {
+            "evidence_kind": "direct_experimental",
+            "context_match": "same_system"
+          }
+        },
+        {
+          "source": "A two-state model of receptor phosphorylation \u2014 a note (fixture, 2021)",
+          "title": "A two-state model of receptor phosphorylation",
+          "year": 2021,
+          "locator": "paragraph 2",
+          "supports": "a published model of a related receptor writes the dephosphorylation of Rp as first order in Rp",
+          "quote": "writes the dephosphorylation of Rp as first order in Rp",
+          "url": "file:./sources/phosphatase_model.txt",
+          "evidence_kind": "mechanistic_model",
+          "context_match": "related_system",
+          "context_note": "a related receptor, in another cell line",
+          "stance": "supports",
+          "origin": "knowledge",
+          "source_key": "a two-state model of receptor phosphorylation \u2014 a note (fixture, 2021)",
+          "id": "rx_1.e2",
+          "fetch_status": "cached",
+          "cached_file": "32720e18c74d9b7a.txt",
+          "sha256": "32720e18c74d9b7a",
+          "content_type": "text/plain",
+          "bytes": 297,
+          "resolution": "not-checkable",
+          "resolution_class": "not_checkable",
+          "quote_found": true,
+          "second_kind": "mechanistic_model",
+          "second_context": "related_system",
+          "second_stance": "supports",
+          "second_note": "a published model of a related receptor",
+          "counts": true,
+          "graded_as": {
+            "evidence_kind": "mechanistic_model",
+            "context_match": "related_system"
+          }
+        }
+      ],
+      "evidence_dropped": [],
+      "grade": "high",
+      "because": [
+        {
+          "id": "rx_1.e1",
+          "source": "Receptor module phosphorylation kinetics \u2014 a note (fixture, 2024)",
+          "evidence_kind": "direct_experimental",
+          "context_match": "same_system",
+          "rule": "a direct_experimental source in same_system"
+        }
+      ],
+      "flags": [],
+      "counting": [
+        "rx_1.e1",
+        "rx_1.e2"
+      ],
+      "n_sources": 2
+    },
+    {
+      "id": "rx_2",
+      "equation": "Rp ->",
+      "parsed": {
+        "reactants": {
+          "Rp": 1.0
+        },
+        "products": {},
+        "reversible": false
+      },
+      "modifiers": [],
+      "type": "degradation",
+      "description": "degradation of the phosphorylated receptor after internalisation, over hours",
+      "required": false,
+      "essential": false,
+      "origin": "knowledge",
+      "identifiers": {},
+      "evidence": [
+        {
+          "source": "Receptor turnover in a related receptor family \u2014 a note (fixture, 2018)",
+          "title": "Receptor turnover in a related receptor family",
+          "year": 2018,
+          "locator": "paragraph 2",
+          "supports": "phosphorylated receptors of a related family are internalised and degraded over several hours",
+          "quote": "",
+          "url": "file:./sources/receptor_turnover.txt",
+          "evidence_kind": "indirect",
+          "context_match": "related_system",
+          "context_note": "a related receptor family, over hours rather than the first hour",
+          "stance": "supports",
+          "origin": "knowledge",
+          "source_key": "receptor turnover in a related receptor family \u2014 a note (fixture, 2018)",
+          "id": "rx_2.e1",
+          "fetch_status": "cached",
+          "cached_file": "da43c6914aeb64f0.txt",
+          "sha256": "da43c6914aeb64f0",
+          "content_type": "text/plain",
+          "bytes": 362,
+          "resolution": "not-checkable",
+          "resolution_class": "not_checkable",
+          "second_kind": "indirect",
+          "second_context": "related_system",
+          "second_stance": "supports",
+          "second_note": "correlational, over hours; no quote to read around",
+          "counts": true,
+          "graded_as": {
+            "evidence_kind": "indirect",
+            "context_match": "related_system"
+          }
+        }
+      ],
+      "evidence_dropped": [],
+      "grade": "weak",
+      "because": [
+        {
+          "id": "rx_2.e1",
+          "source": "Receptor turnover in a related receptor family \u2014 a note (fixture, 2018)",
+          "evidence_kind": "indirect",
+          "context_match": "related_system",
+          "rule": "any counting source"
+        }
+      ],
+      "flags": [
+        {
+          "flag": "unquoted",
+          "item": "rx_2.e1",
+          "why": "no quote"
+        }
+      ],
+      "counting": [
+        "rx_2.e1"
+      ],
+      "n_sources": 1
+    }
+  ],
+  "facts": [
+    {
+      "id": "fact_1",
+      "kind": "abundance",
+      "statement": "total receptor stays near 10 normalised units over the first hour",
+      "value": 10,
+      "unit": "normalised units",
+      "applies_to": [
+        "R",
+        "Rp"
+      ],
+      "for": [
+        "construction"
+      ],
+      "origin": "knowledge",
+      "evidence_declared": true,
+      "evidence": [
+        {
+          "source": "Receptor module phosphorylation kinetics \u2014 a note (fixture, 2024)",
+          "title": "Receptor module phosphorylation kinetics",
+          "year": 2024,
+          "locator": "paragraph 2",
+          "supports": "total receptor stays near 10 normalised units over the first hour",
+          "quote": "Total receptor stays near 10 normalised units over the first hour",
+          "url": "file:./sources/receptor_note.txt",
+          "evidence_kind": "direct_experimental",
+          "context_match": "same_system",
+          "context_note": "the same receptor module in the same cells",
+          "stance": "supports",
+          "origin": "knowledge",
+          "source_key": "receptor module phosphorylation kinetics \u2014 a note (fixture, 2024)",
+          "id": "fact_1.e1",
+          "fetch_status": "cached",
+          "cached_file": "2b9d8f630be66aec.txt",
+          "sha256": "2b9d8f630be66aec",
+          "content_type": "text/plain",
+          "bytes": 415,
+          "resolution": "not-checkable",
+          "resolution_class": "not_checkable",
+          "quote_found": true,
+          "second_kind": "direct_experimental",
+          "second_context": "same_system",
+          "second_stance": "supports",
+          "second_note": "the note reports the total over the first hour",
+          "counts": true,
+          "graded_as": {
+            "evidence_kind": "direct_experimental",
+            "context_match": "same_system"
+          }
+        }
+      ],
+      "evidence_dropped": [],
+      "grade": "high",
+      "because": [
+        {
+          "id": "fact_1.e1",
+          "source": "Receptor module phosphorylation kinetics \u2014 a note (fixture, 2024)",
+          "evidence_kind": "direct_experimental",
+          "context_match": "same_system",
+          "rule": "a direct_experimental source in same_system"
+        }
+      ],
+      "flags": [],
+      "counting": [
+        "fact_1.e1"
+      ],
+      "n_sources": 1
+    },
+    {
+      "id": "fact_2",
+      "kind": "assay",
+      "statement": "phospho-R is read by immunoblot densitometry in arbitrary units, background-subtracted and not calibrated against a standard",
+      "value": null,
+      "unit": "",
+      "applies_to": [
+        "the pR_au readout"
+      ],
+      "for": [
+        "observation"
+      ],
+      "origin": "knowledge",
+      "evidence_declared": true,
+      "evidence": [],
+      "evidence_dropped": [],
+      "grade": "none",
+      "because": [],
+      "flags": [],
+      "counting": [],
+      "n_sources": 0
+    }
+  ],
+  "queries_run": [
+    "receptor phosphorylation ligand dose kinetics (fixture)",
+    "receptor dephosphorylation constitutive phosphatase (fixture)",
+    "phosphorylated receptor internalisation degradation (fixture)"
+  ],
+  "notes": "FIXTURE: the required phosphorylation has one direct source in this system; the dephosphorylation has the same and a published model of a related receptor; the degradation is described for a related family over hours, a process the intent's scope excludes over this window. The assay fact has no source beyond the lab note.",
+  "horizon": 2025,
+  "forbidden_sources": [
+    "blocked-preprints.example"
+  ],
+  "dropped": [],
+  "reply_lacks": [],
+  "n_documents": 3,
+  "n_documents_cached": 3,
+  "n_sources_checked": 3,
+  "verification": {
+    "n_items": 5,
+    "n_classified": 5,
+    "n_disagree": 0,
+    "unknown_ids": []
+  },
+  "grading": {
+    "rules": {
+      "high": [
+        {
+          "kind": "direct_experimental",
+          "context": "same_system"
+        },
+        {
+          "kind": "curated_database",
+          "context": [
+            "same_system",
+            "related_system"
+          ]
+        },
+        {
+          "at_least": 2,
+          "earning": "medium"
+        }
+      ],
+      "medium": [
+        {
+          "kind": "direct_experimental",
+          "context": "related_system"
+        },
+        {
+          "kind": "mechanistic_model",
+          "context": [
+            "same_system",
+            "related_system"
+          ]
+        },
+        {
+          "at_least": 2,
+          "kind": "review",
+          "context": [
+            "same_system",
+            "related_system"
+          ]
+        }
+      ],
+      "low": [
+        {
+          "kind": "review",
+          "context": [
+            "same_system",
+            "related_system"
+          ]
+        },
+        {
+          "kind": "direct_experimental",
+          "context": "different_system"
+        },
+        {
+          "kind": "mechanistic_model",
+          "context": "different_system"
+        },
+        {
+          "at_least": 2,
+          "kind": "indirect"
+        }
+      ],
+      "weak": [
+        {
+          "any": true
+        }
+      ]
+    },
+    "contested_caps_at": "medium"
+  },
+  "suggestion": {
+    "band": "high",
+    "why": "rx_1 (Rp -> R) is the lowest-graded supported essential reaction: high \u2014 Receptor module phosphorylation kinetics \u2014 a note (fixture, 2024) (direct_experimental, same_system)",
+    "unsupported": [],
+    "leaves_at": {}
+  },
+  "calls": [
+    {
+      "name": "knowledge.1",
+      "role": "knowledge",
+      "mode": "survey",
+      "search": "online",
+      "backend": "stub",
+      "model": "stub",
+      "effort": null,
+      "cost_usd": null,
+      "sha": "a71060c98889aa9a",
+      "at": "2026-09-28T20:31:33"
+    },
+    {
+      "name": "knowledge_verification.1",
+      "role": "knowledge_verification",
+      "mode": "",
+      "search": "offline",
+      "backend": "stub",
+      "model": "stub",
+      "effort": null,
+      "cost_usd": null,
+      "sha": "128636d6061abb89",
+      "at": "2026-09-28T20:31:33"
+    }
+  ],
+  "cost_usd": null,
+  "written_at": "2026-09-28T20:31:33"
+}

@@ -1,0 +1,35 @@
+{
+  "verdicts": [
+    {
+      "aspect": "noise model vs readout physics",
+      "ok": true,
+      "note": "Additive normal noise with an estimated constant sigma is consistent with a plate-reader signal whose well-to-well spread is flat in absolute terms across the decay. Estimating sigma is required here rather than optional: it enters the profile likelihood for k1, and fixing it to the replicate range over two wells would understate the interval."
+    },
+    {
+      "aspect": "condition encoding",
+      "ok": true,
+      "note": "One condition with no overrides, matching a dataset with no condition column. Pre-equilibration off is correct — the pre-washout induced state is outside the model, and the induced level is carried by the estimated A0 instead."
+    },
+    {
+      "aspect": "scaling for calibrated units",
+      "ok": true,
+      "note": "Scaling mode 'none' is the right call and the non-obvious one. The description's dilution-series calibration puts the data on the model's scale, and with a single condition any free scale factor would be exactly collinear with A0 — the FIM would show a flat direction and the k1 profile would widen for no informational reason."
+    },
+    {
+      "aspect": "observable mapping",
+      "ok": true,
+      "note": "obs_A maps to the A_conc label with formula A and linear transformation. Single species, single observable, time in hours in both the table and the model."
+    },
+    {
+      "aspect": "estimated initial value",
+      "ok": true,
+      "note": "A0 is a free parameter reaching the state through the antimony initial assignment A = A0, and it appears in the parameter table with bounds 1 to 100 that bracket the stated 8-12 range with room to spare. Checked that A0 is not also being set as a condition override, which would silently pin it and collapse the k1 profile."
+    },
+    {
+      "aspect": "identifiability under a single condition",
+      "ok": true,
+      "note": "k1, A0 and sigma are jointly identifiable from one exponential decay sampled at eight timepoints: A0 is set by the early plateau, k1 by the curvature, sigma by the residual spread. This holds only because no scale parameter was introduced — flagged here because it is the assumption the whole case rests on."
+    }
+  ],
+  "overall": "pass"
+}

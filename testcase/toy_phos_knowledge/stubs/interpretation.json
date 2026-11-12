@@ -1,0 +1,20 @@
+{
+  "_copy_computed": true,
+  "diagnosis": "Canned reply (stub backend), written for the base built from the essential set: the ligand-driven phosphorylation with the dose as a parameter, and the dephosphorylation; the two epistemic lists are the engine's own. The model calibrated on doses 0.3 and 1 reproduces both training conditions within replicate scatter and predicts the held-out dose 3 time course without systematic bias in either the approach rate or the plateau. Residuals show no structure in time or in dose. The estimated rate constants are identified: two dose levels give two independent effective rates, which separates the phosphorylation and dephosphorylation contributions, and the shared scale factor is pinned by the plateau amplitudes.",
+  "misfit_hypotheses": [],
+  "cannot_distinguish": [],
+  "nonetheless_determined": [],
+  "answers_intent": [
+    {
+      "criterion": "held-out dose=3 normalised RMSE < 0.2",
+      "verdict": "pass",
+      "evidence": "Normalised RMSE 0.06 over the 12 held-out points at dose=3, against a declared threshold of 0.2. Absolute RMSE 1.08 densitometry units against an estimated measurement sigma of 1.04, so the prediction error sits at the noise floor rather than at a structural limit \u2014 there is no accuracy left to recover by revising the model."
+    },
+    {
+      "criterion": "ensemble band covers >= 80% of held-out points",
+      "verdict": "pass",
+      "evidence": "The ensemble band from the parameter posterior contains 10 of 12 held-out points (83%), against a declared threshold of 80%. The two excluded points are single replicates lying just outside the band; the largest deviation from the ensemble median anywhere in the held-out condition is 1.95 sigma, at t=20 min. Widening the band to include measurement noise covers 12 of 12, so the parameter-uncertainty band is the conservative reading and it still clears the threshold."
+    }
+  ],
+  "recommendation": "accept"
+}

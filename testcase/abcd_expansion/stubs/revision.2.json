@@ -1,0 +1,50 @@
+{
+  "diagnosis": "STUB call 2: with the RegB route shut (bx11 = 1) the selected model predicts ProD to flatten, but the residuals in the BX-11 arm run positive throughout and the form fit names a relaxation, not noise: ProD keeps being made when RegB is inhibited. The space varied only the regulation of RegB; it never questioned who catalyses PreC -> ProD. A RegB-independent route, catalysed by active KinA, is the missing ingredient. (call 2: also proposes an invalid ghost axis.)",
+  "axes": [
+    {
+      "id": "basal_route",
+      "question": "Is there a RegB-independent conversion of PreC to ProD, catalysed by active KinA?",
+      "default": "off",
+      "on_antimony_patch": {
+        "replace_reaction": "J5",
+        "with": "J5: -> D; (k_cat1 * Ba + k_cat_alt * Aa) * (Ctot - D);"
+      },
+      "adds_parameters": [
+        {
+          "id": "k_cat_alt",
+          "nominal_value": 0.005,
+          "unit": "1/(uM*min)",
+          "evidence_tier": "to_be_estimated",
+          "source": "size unknown; the fit decides",
+          "estimate": true,
+          "lb": 1e-05,
+          "ub": 1.0,
+          "denotes": "rate of the RegB-independent PreC -> ProD conversion by active KinA"
+        }
+      ],
+      "rationale": "ProD rises under BX-11 where the RegB route is >90% shut; only a route that does not pass through RegB_p can make it.",
+      "discriminating_evidence": "obs_ProD in c_u1_bx (and the held-out c_u4_bx): the selected model flattens, the data keep rising.",
+      "priority": 1,
+      "priority_reason": "the residuals under BX-11 point at exactly this route and at nothing else"
+    },
+    {
+      "id": "ghost_sink",
+      "question": "STUB: an axis that patches a reaction the selected model does not have and uses an undeclared symbol",
+      "default": "off",
+      "priority": 2,
+      "priority_reason": "stub: deliberately invalid",
+      "on_antimony_patch": {
+        "replace_reaction": "J6",
+        "with": "J6: D -> ; (k_deg + k_ghost) * D;"
+      },
+      "adds_parameters": [],
+      "rationale": "STUB: exists to be dropped by the eager validator (undeclared symbol k_ghost).",
+      "discriminating_evidence": "none \u2014 this axis is a fixture for the re-call path"
+    }
+  ],
+  "stop_instead": false,
+  "expand_from": {
+    "candidate_id": "base",
+    "why": "the feedback candidate wins on the criterion, but its residuals are spread across every condition while base leaves them localised in ProD \u2014 the cleaner platform to add a production route to"
+  }
+}

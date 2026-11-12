@@ -1,0 +1,92 @@
+{
+  "candidates": [
+    {
+      "id": "M1_chain",
+      "label": "linear chain: inducer -> KinA -> RegB -> ProD",
+      "rationale": "The module as designed and as the description narrates it: RegB is the only catalyst of the PreC conversion and nothing feeds back. This is the null against which the other two are scored \u2014 if the extra terms buy nothing, the information criteria should say so, and the honest answer is the simplest wiring. It is also the candidate the BX-11 conditions bear on most directly: with RegB activation blocked by more than 90%, this structure can only make ProD through the residual leak."
+    },
+    {
+      "id": "M2_feedforward",
+      "label": "chain plus a direct KinA-catalysed conversion of PreC (coherent feedforward)",
+      "rationale": "Adds one parameter to M1: KinA converts PreC directly, in parallel with RegB. This is the description's first open question stated as a model \u2014 whether anything besides RegB catalyses the conversion. It is separable from M1 by the BX-11 conditions specifically, because that is where the RegB route is off and the direct route is not, and the extra route is dose-graded through Aa rather than constant, which distinguishes it from a basal leak.",
+      "on_antimony_patch": [
+        {
+          "append": [
+            "J7: -> D; k_cat2 * Aa * (Ctot - D);"
+          ]
+        }
+      ],
+      "adds_parameters": [
+        {
+          "id": "k_cat2",
+          "nominal_value": 0.01,
+          "unit": "1/(min*uM)",
+          "evidence_tier": "to_be_estimated",
+          "source": "as in M2_feedforward",
+          "estimate": true,
+          "lb": 0.0001,
+          "ub": 1.0
+        }
+      ]
+    },
+    {
+      "id": "M3_ff_feedback",
+      "label": "chain plus direct KinA route plus product feedback of ProD on RegB activation",
+      "rationale": "Adds one further parameter to M2: ProD inhibits RegB activation through a saturating 1/(1 + D/K_fb) factor. This is the description's second open question \u2014 anecdotal product feedback with no assay and no stated location. The site is a guess, but a constrained one: feedback onto RegB activation is the only placement that produces a non-monotone RegB_p at constant inducer dose, and non-monotonicity is the only qualitative signature the data could carry for feedback anywhere in this module. If K_fb runs to its upper bound the candidate collapses onto M2 and the information criteria will penalise the spare parameter, which is the honest way for this hypothesis to lose.",
+      "on_antimony_patch": [
+        {
+          "append": [
+            "J7: -> D; k_cat2 * Aa * (Ctot - D);"
+          ]
+        },
+        {
+          "replace_reaction": "J9",
+          "with": "J3: -> Ba; k_actB * (1 - 0.95*bx11) * Aa * (Btot - Ba) / (1 + D/K_fb);"
+        }
+      ],
+      "adds_parameters": [
+        {
+          "id": "k_cat2",
+          "nominal_value": 0.01,
+          "unit": "1/(min*uM)",
+          "evidence_tier": "to_be_estimated",
+          "source": "as in M2_feedforward",
+          "estimate": true,
+          "lb": 0.0001,
+          "ub": 1.0
+        },
+        {
+          "id": "K_fb",
+          "nominal_value": 1.0,
+          "unit": "uM",
+          "evidence_tier": "to_be_estimated",
+          "source": "no assay for the feedback exists per the description; nominal set at 1 uM, the order of the product concentrations reached in this experiment, so the feedback is neither switched off nor saturated at the start. Bounds span four decades: an upper bound far above the product range is how this candidate degrades gracefully into M2_feedforward if the feedback is not real",
+          "estimate": true,
+          "lb": 0.01,
+          "ub": 100.0
+        }
+      ]
+    }
+  ],
+  "build_report": {
+    "decisions": [
+      {
+        "decision": "Three candidates as differences from the tested chain: the base, + the direct KinA route, + route and product feedback.",
+        "rationale": "The description leaves exactly two structural questions open; each candidate adds one answer to the previous one, so neighbours differ in one feature.",
+        "alternatives_considered": "feedback without the route (not asked by the description)",
+        "evidence": [
+          {
+            "source": "lab_note",
+            "locator": "open questions",
+            "supports": "whether a RegB-independent route exists and whether the product feedback is real",
+            "origin": "user-provided"
+          }
+        ],
+        "evidence_tier": "direct",
+        "confidence": "high",
+        "user_decision_required": false,
+        "question": ""
+      }
+    ]
+  }
+}

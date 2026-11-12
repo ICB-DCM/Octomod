@@ -1,0 +1,812 @@
+{
+  "system": {
+    "summary": "IFN-\u03b3 acts through a receptor\u2013JAK1/JAK2\u2013STAT1 axis. Its best-characterised transcriptional output in macrophages is a fast primary wave that includes IRF1 and SOCS1, followed by IFN-\u03b3-inducible chemokines, CXCL9 and CXCL10 among them. In the intent's effective model, the unobserved activity A stands for this STAT1-dependent (and possibly IRF1-assisted) transcriptional activity, and each transcript is a basal-plus-A-driven production balanced by first-order decay. JAK\u2013STAT signalling is known to be self-limiting. SOCS1 is induced by IFN-\u03b3 and is a critical inhibitor of IFN-\u03b3 signalling in mice. Other negative regulators (tyrosine phosphatases, PIAS proteins) are also described. So an attenuation of A is biologically plausible, but not specific to SOCS1. The dataset (Xue et al. 2014, GEO GSE46903) has these facts: one IFN-\u03b3 dose (200 IU/ml), baseline cells differentiated for 72 h in GM-CSF, and log2 quantile-normalised Illumina intensities with a dataset-wide background of 6.747 log2. Gene-specific mRNA half-lives for IRF1, SOCS1, CXCL9 and CXCL10 in human GM-CSF macrophages are not known to me from a checkable source.",
+    "scope": "Protocol and assay facts come from the study itself: human CD14+ monocyte-derived macrophages, 72 h GM-CSF, IFN-\u03b3 200 IU/ml, Illumina HT-12 V3 (supplied papers lit_1\u2013lit_3). Pathway and feedback facts come from reviews covering mouse and human cells (mostly macrophages, fibroblasts and cell lines) and from mouse SOCS1-knockout experiments. mRNA decay-rate facts come from mouse cells (NIH3T3 fibroblasts; mouse cells under inflammatory stimuli), not from human macrophages under IFN-\u03b3.",
+    "unknowns": [
+      "Whether IFN-\u03b3 stayed in the medium for the whole interval, and whether the medium was changed or GM-CSF was still present at t = 0, is not stated by the study.",
+      "Whether the deposited GEO VALUEs include the batch-effect removal described in the supplement is not known.",
+      "mRNA half-lives of IRF1, SOCS1, CXCL9 and CXCL10 in human GM-CSF macrophages, basal or IFN-\u03b3-stimulated, are not known from a checkable source.",
+      "What drives the transient CXCL10 (and SOCS1) rise in untreated controls at 6\u201312 h is unknown. Culture handling or autocrine signalling are possibilities, not established.",
+      "Whether attenuation of IFN-\u03b3 transcriptional activity in human macrophages is dominated by SOCS1 or by other negative regulators (phosphatases, PIAS, receptor down-regulation, ligand depletion) is not settled for this system.",
+      "Whether CXCL9/CXCL10 induction depends on newly made IRF1 protein (a second tier), rather than only on the primary STAT1 activity, is not resolved for this system."
+    ]
+  },
+  "species": [
+    {
+      "id": "IFNg",
+      "name": "IFN-\u03b3 stimulus (external input, 200 IU/ml or 0)",
+      "represents": "",
+      "identifiers": {
+        "hgnc": "hgnc:5438",
+        "uniprot": "uniprot:P01579"
+      }
+    },
+    {
+      "id": "A",
+      "name": "effective IFN-\u03b3-driven transcriptional activity (unobserved; not a measured STAT1 concentration)",
+      "represents": "A",
+      "identifiers": {}
+    },
+    {
+      "id": "IRF1_mRNA",
+      "name": "IRF1 transcript (probe ILMN_1708375)",
+      "represents": "IRF1_mRNA",
+      "identifiers": {
+        "hgnc": "hgnc:6116"
+      }
+    },
+    {
+      "id": "SOCS1_mRNA",
+      "name": "SOCS1 transcript (probe ILMN_1774733)",
+      "represents": "SOCS1_mRNA",
+      "identifiers": {
+        "hgnc": "hgnc:19383"
+      }
+    },
+    {
+      "id": "CXCL9_mRNA",
+      "name": "CXCL9 transcript (probe ILMN_1745356)",
+      "represents": "CXCL9_mRNA",
+      "identifiers": {
+        "hgnc": "hgnc:7098"
+      }
+    },
+    {
+      "id": "CXCL10_mRNA",
+      "name": "CXCL10 transcript (probe ILMN_1791759)",
+      "represents": "CXCL10_mRNA",
+      "identifiers": {
+        "hgnc": "hgnc:10637"
+      }
+    },
+    {
+      "id": "SOCS1_act",
+      "name": "unmeasured SOCS1-protein inhibitory activity produced from SOCS1_mRNA (feedback hypothesis only)",
+      "represents": "",
+      "identifiers": {
+        "uniprot": "uniprot:O15524"
+      }
+    },
+    {
+      "id": "R",
+      "name": "generic unmeasured inhibitory activity produced in response to A, not tied to SOCS1 (attenuation hypothesis only)",
+      "represents": "",
+      "identifiers": {}
+    }
+  ],
+  "reactions": [
+    {
+      "equation": "-> A",
+      "required": null,
+      "essential": true,
+      "modifiers": [
+        "IFNg"
+      ],
+      "type": "other",
+      "description": "IFN-\u03b3-driven generation of the effective transcriptional activity A (stands in for receptor/JAK/STAT1 activation, which is out of scope)",
+      "identifiers": {},
+      "evidence": [
+        {
+          "source": "doi:10.1126/science.8197455",
+          "title": "Jak-STAT pathways and transcriptional activation in response to IFNs and other extracellular signaling proteins",
+          "year": 1994,
+          "locator": "whole article",
+          "supports": "IFN-\u03b3 activates JAK kinases and STAT1, which moves to the nucleus and activates transcription of IFN-\u03b3-responsive genes; this is the activity A abstracts.",
+          "url": "https://doi.org/10.1126/science.8197455",
+          "evidence_kind": "review",
+          "context_match": "related_system",
+          "context_note": "Review of mammalian (human and mouse) cell lines; not specific to human GM-CSF macrophages",
+          "stance": "supports"
+        },
+        {
+          "source": "doi:10.1189/jlb.0603252",
+          "title": "Interferon-gamma: an overview of signals, mechanisms and functions",
+          "year": 2004,
+          "locator": "sections on IFN-\u03b3 signalling and macrophage responses",
+          "supports": "IFN-\u03b3 signals through the JAK\u2013STAT1 pathway to drive transcription of IFN-\u03b3-regulated genes in macrophages.",
+          "url": "https://doi.org/10.1189/jlb.0603252",
+          "evidence_kind": "review",
+          "context_match": "related_system",
+          "context_note": "Review covering mouse and human macrophages and other cells",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "A ->",
+      "required": null,
+      "essential": true,
+      "modifiers": [],
+      "type": "other",
+      "description": "first-order decay/deactivation of A (stands in for STAT1 dephosphorylation and nuclear export; sets A's timescale)",
+      "identifiers": {},
+      "evidence": [
+        {
+          "source": "doi:10.1038/nri1226",
+          "title": "Regulation of JAK-STAT signalling in the immune system",
+          "year": 2003,
+          "locator": "section on negative regulation of JAK\u2013STAT signalling",
+          "supports": "Activated STATs are inactivated by tyrosine phosphatases and other negative regulators, so STAT activity is not sustained indefinitely after activation.",
+          "url": "https://doi.org/10.1038/nri1226",
+          "evidence_kind": "review",
+          "context_match": "related_system",
+          "context_note": "Review of immune cells in general, mostly mouse and cell lines",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "-> IRF1_mRNA",
+      "required": "req_1",
+      "essential": true,
+      "modifiers": [
+        "A"
+      ],
+      "type": "synthesis",
+      "description": "basal plus A-dependent transcription of IRF1 (IRF1 is a primary IFN-\u03b3/STAT1 target)",
+      "identifiers": {},
+      "evidence": [
+        {
+          "source": "doi:10.1038/s41577-018-0029-z",
+          "title": "IFN\u03b3: signalling, epigenetics and roles in immunity, metabolism, disease and cancer immunotherapy",
+          "year": 2018,
+          "locator": "section on IFN-\u03b3 signalling and transcriptional responses",
+          "supports": "IRF1 is a STAT1-induced primary-response gene of IFN-\u03b3 in macrophages, and it contributes to a secondary wave of IFN-\u03b3-induced transcription.",
+          "url": "https://doi.org/10.1038/s41577-018-0029-z",
+          "evidence_kind": "review",
+          "context_match": "related_system",
+          "context_note": "Review covering human and mouse macrophages; not the GM-CSF 72 h protocol specifically",
+          "stance": "supports"
+        },
+        {
+          "source": "doi:10.1189/jlb.0603252",
+          "title": "Interferon-gamma: an overview of signals, mechanisms and functions",
+          "year": 2004,
+          "locator": "section on IFN-\u03b3-regulated transcription factors",
+          "supports": "IRF1 is induced by IFN-\u03b3 via STAT1 and is a key transcription factor in the IFN-\u03b3 response.",
+          "url": "https://doi.org/10.1189/jlb.0603252",
+          "evidence_kind": "review",
+          "context_match": "related_system",
+          "context_note": "Review, mouse and human cells",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "IRF1_mRNA ->",
+      "required": "req_2",
+      "essential": true,
+      "modifiers": [],
+      "type": "degradation",
+      "description": "first-order decay of IRF1 mRNA",
+      "identifiers": {},
+      "evidence": [
+        {
+          "source": "doi:10.1038/nature10098",
+          "title": "Global quantification of mammalian gene expression control",
+          "year": 2011,
+          "locator": "mRNA half-life measurements (main text and supplementary tables)",
+          "supports": "Genome-wide mRNA turnover was modelled as first-order decay and fitted to metabolic-labelling data, giving gene-specific half-lives.",
+          "url": "https://doi.org/10.1038/nature10098",
+          "evidence_kind": "direct_experimental",
+          "context_match": "different_system",
+          "context_note": "Mouse NIH3T3 fibroblasts, unstimulated; not human macrophages under IFN-\u03b3",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "-> SOCS1_mRNA",
+      "required": "req_3",
+      "essential": true,
+      "modifiers": [
+        "A"
+      ],
+      "type": "synthesis",
+      "description": "basal plus A-dependent transcription of SOCS1 (cytokine/STAT-induced gene)",
+      "identifiers": {},
+      "evidence": [
+        {
+          "source": "doi:10.1038/nri1226",
+          "title": "Regulation of JAK-STAT signalling in the immune system",
+          "year": 2003,
+          "locator": "section on SOCS proteins",
+          "supports": "SOCS genes, SOCS1 included, are transcriptionally induced by cytokines through STAT activation, forming a classical negative-feedback loop.",
+          "url": "https://doi.org/10.1038/nri1226",
+          "evidence_kind": "review",
+          "context_match": "related_system",
+          "context_note": "Review of immune cells in general, not human GM-CSF macrophages",
+          "stance": "supports"
+        },
+        {
+          "source": "doi:10.1016/S0092-8674(00)80047-1",
+          "title": "SOCS1 is a critical inhibitor of interferon gamma signaling and prevents the potentially fatal neonatal actions of this cytokine",
+          "year": 1999,
+          "locator": "whole article",
+          "supports": "SOCS1 is part of the IFN-\u03b3 response and restrains IFN-\u03b3 signalling in mice.",
+          "url": "https://doi.org/10.1016/S0092-8674(00)80047-1",
+          "evidence_kind": "direct_experimental",
+          "context_match": "related_system",
+          "context_note": "Mouse, SOCS1-deficient animals and cells; not human macrophages",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "SOCS1_mRNA ->",
+      "required": "req_4",
+      "essential": true,
+      "modifiers": [],
+      "type": "degradation",
+      "description": "first-order decay of SOCS1 mRNA",
+      "identifiers": {},
+      "evidence": [
+        {
+          "source": "doi:10.1038/nature10098",
+          "title": "Global quantification of mammalian gene expression control",
+          "year": 2011,
+          "locator": "mRNA half-life measurements",
+          "supports": "mRNA turnover was modelled as first-order decay with gene-specific half-lives (general principle; no SOCS1-specific claim is made here).",
+          "url": "https://doi.org/10.1038/nature10098",
+          "evidence_kind": "direct_experimental",
+          "context_match": "different_system",
+          "context_note": "Mouse NIH3T3 fibroblasts",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "-> CXCL9_mRNA",
+      "required": "req_5",
+      "essential": true,
+      "modifiers": [
+        "A"
+      ],
+      "type": "synthesis",
+      "description": "basal plus A-dependent transcription of CXCL9 (IFN-\u03b3-inducible chemokine)",
+      "identifiers": {},
+      "evidence": [
+        {
+          "source": "doi:10.1189/jlb.0603252",
+          "title": "Interferon-gamma: an overview of signals, mechanisms and functions",
+          "year": 2004,
+          "locator": "sections on IFN-\u03b3-induced chemokines in macrophages",
+          "supports": "CXCL9 (MIG) is an IFN-\u03b3-inducible chemokine gene in macrophages.",
+          "url": "https://doi.org/10.1189/jlb.0603252",
+          "evidence_kind": "review",
+          "context_match": "related_system",
+          "context_note": "Review, mouse and human macrophages",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "CXCL9_mRNA ->",
+      "required": "req_6",
+      "essential": true,
+      "modifiers": [],
+      "type": "degradation",
+      "description": "first-order decay of CXCL9 mRNA",
+      "identifiers": {},
+      "evidence": [
+        {
+          "source": "doi:10.1038/ni.1699",
+          "title": "The stability of mRNA influences the temporal order of the induction of genes encoding inflammatory molecules",
+          "year": 2009,
+          "locator": "whole article",
+          "supports": "Inflammatory-gene mRNAs decay at gene-specific rates, and differences in mRNA stability shape the timing of their induction (general principle; no CXCL9-specific claim is made here).",
+          "url": "https://doi.org/10.1038/ni.1699",
+          "evidence_kind": "direct_experimental",
+          "context_match": "different_system",
+          "context_note": "Mouse cells under inflammatory stimuli other than IFN-\u03b3; not human macrophages",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "-> CXCL10_mRNA",
+      "required": "req_7",
+      "essential": true,
+      "modifiers": [
+        "A"
+      ],
+      "type": "synthesis",
+      "description": "basal plus A-dependent transcription of CXCL10 (IFN-\u03b3-inducible chemokine)",
+      "identifiers": {},
+      "evidence": [
+        {
+          "source": "doi:10.1189/jlb.0603252",
+          "title": "Interferon-gamma: an overview of signals, mechanisms and functions",
+          "year": 2004,
+          "locator": "sections on IFN-\u03b3-induced chemokines in macrophages",
+          "supports": "CXCL10 (IP-10) is an IFN-\u03b3-inducible chemokine gene in macrophages.",
+          "url": "https://doi.org/10.1189/jlb.0603252",
+          "evidence_kind": "review",
+          "context_match": "related_system",
+          "context_note": "Review, mouse and human macrophages",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "CXCL10_mRNA ->",
+      "required": "req_8",
+      "essential": true,
+      "modifiers": [],
+      "type": "degradation",
+      "description": "first-order decay of CXCL10 mRNA",
+      "identifiers": {},
+      "evidence": [
+        {
+          "source": "doi:10.1038/ni.1699",
+          "title": "The stability of mRNA influences the temporal order of the induction of genes encoding inflammatory molecules",
+          "year": 2009,
+          "locator": "whole article",
+          "supports": "Inflammatory-gene mRNAs decay at gene-specific rates, and mRNA stability shapes the timing of induction (general principle; no CXCL10-specific claim is made here).",
+          "url": "https://doi.org/10.1038/ni.1699",
+          "evidence_kind": "direct_experimental",
+          "context_match": "different_system",
+          "context_note": "Mouse cells under inflammatory stimuli other than IFN-\u03b3",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "-> SOCS1_act",
+      "required": null,
+      "essential": false,
+      "modifiers": [
+        "SOCS1_mRNA"
+      ],
+      "type": "synthesis",
+      "description": "Hypothesis H_SOCS1 (SOCS1-transcript-derived feedback): translation of an inhibitory SOCS1 activity from SOCS1_mRNA",
+      "identifiers": {},
+      "evidence": [
+        {
+          "source": "doi:10.1038/nri1226",
+          "title": "Regulation of JAK-STAT signalling in the immune system",
+          "year": 2003,
+          "locator": "section on SOCS proteins",
+          "supports": "Cytokine-induced SOCS proteins are the effectors of a STAT-driven negative-feedback loop.",
+          "url": "https://doi.org/10.1038/nri1226",
+          "evidence_kind": "review",
+          "context_match": "related_system",
+          "context_note": "Review, immune cells in general",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "SOCS1_act ->",
+      "required": null,
+      "essential": false,
+      "modifiers": [],
+      "type": "degradation",
+      "description": "Hypothesis H_SOCS1: first-order loss of the SOCS1 inhibitory activity (the second half of its cycle)",
+      "identifiers": {},
+      "evidence": []
+    },
+    {
+      "equation": "-> A",
+      "required": null,
+      "essential": false,
+      "modifiers": [
+        "IFNg",
+        "SOCS1_act"
+      ],
+      "type": "other",
+      "description": "Hypothesis H_SOCS1: IFN-\u03b3-driven generation of A, inhibited by SOCS1_act (SOCS1 acts on JAK/receptor, upstream of A)",
+      "identifiers": {},
+      "evidence": [
+        {
+          "source": "doi:10.1016/S0092-8674(00)80047-1",
+          "title": "SOCS1 is a critical inhibitor of interferon gamma signaling and prevents the potentially fatal neonatal actions of this cytokine",
+          "year": 1999,
+          "locator": "whole article",
+          "supports": "SOCS1 deficiency leads to excessive IFN-\u03b3 responses and IFN-\u03b3-dependent neonatal lethality in mice, so SOCS1 inhibits IFN-\u03b3 signalling.",
+          "url": "https://doi.org/10.1016/S0092-8674(00)80047-1",
+          "evidence_kind": "direct_experimental",
+          "context_match": "related_system",
+          "context_note": "Mouse knockout, in vivo and derived cells; not human GM-CSF macrophages",
+          "stance": "supports"
+        },
+        {
+          "source": "doi:10.1038/43206",
+          "title": "A family of cytokine-inducible inhibitors of signalling",
+          "year": 1997,
+          "locator": "whole article",
+          "supports": "SOCS1 was identified as a cytokine-inducible inhibitor of cytokine (JAK\u2013STAT) signalling.",
+          "url": "https://doi.org/10.1038/43206",
+          "evidence_kind": "direct_experimental",
+          "context_match": "different_system",
+          "context_note": "Mouse myeloid cell line, IL-6 signalling; not IFN-\u03b3 in human macrophages",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "-> R",
+      "required": null,
+      "essential": false,
+      "modifiers": [
+        "A"
+      ],
+      "type": "synthesis",
+      "description": "Hypothesis H_ATT (generic attenuation not tied to SOCS1 mRNA): an inhibitory activity R produced in response to A",
+      "identifiers": {},
+      "evidence": [
+        {
+          "source": "doi:10.1038/nri1226",
+          "title": "Regulation of JAK-STAT signalling in the immune system",
+          "year": 2003,
+          "locator": "section on negative regulators (SOCS, PIAS, tyrosine phosphatases)",
+          "supports": "Several classes of negative regulators, not only SOCS proteins, limit JAK\u2013STAT signalling.",
+          "url": "https://doi.org/10.1038/nri1226",
+          "evidence_kind": "review",
+          "context_match": "related_system",
+          "context_note": "Review, immune cells in general",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "equation": "R ->",
+      "required": null,
+      "essential": false,
+      "modifiers": [],
+      "type": "degradation",
+      "description": "Hypothesis H_ATT: first-order loss of the generic inhibitory activity R",
+      "identifiers": {},
+      "evidence": []
+    },
+    {
+      "equation": "-> A",
+      "required": null,
+      "essential": false,
+      "modifiers": [
+        "IFNg",
+        "R"
+      ],
+      "type": "other",
+      "description": "Hypothesis H_ATT: IFN-\u03b3-driven generation of A, inhibited by the generic attenuation activity R",
+      "identifiers": {},
+      "evidence": [
+        {
+          "source": "doi:10.1038/nri1226",
+          "title": "Regulation of JAK-STAT signalling in the immune system",
+          "year": 2003,
+          "locator": "section on negative regulation",
+          "supports": "Negative regulators act at the receptor/JAK level and on STATs to terminate signalling.",
+          "url": "https://doi.org/10.1038/nri1226",
+          "evidence_kind": "review",
+          "context_match": "related_system",
+          "context_note": "Review, immune cells in general",
+          "stance": "supports"
+        }
+      ]
+    }
+  ],
+  "facts": [
+    {
+      "kind": "response",
+      "statement": "IFN-\u03b3 was applied to baseline macrophages at a single dose of 200 IU/ml (Immunotools).",
+      "value": 200,
+      "unit": "IU/ml",
+      "applies_to": [
+        "IFNg"
+      ],
+      "for": [
+        "condition_encoding"
+      ],
+      "evidence": [
+        {
+          "source": "lit_1",
+          "title": "Transcriptome-Based Network Analysis Reveals a Spectrum Model of Human Macrophage Activation",
+          "year": 2014,
+          "locator": "Supplemental Information, 'Human macrophage activation'",
+          "supports": "Gives the IFN-\u03b3 concentration used for activation (200 IU/ml) and the supplier; one dose level for every IFN-\u03b3 condition.",
+          "quote": "IFN \u03b3 (200 IU/ml), TNF (800 IU/ml), standard LPS (sLPS, 10ng/ml, Sigma) or combinations thereof. All cytokines were purchased from Immunotools if not indicated otherwise.",
+          "url": "file:./paper/1-s2.0-S107476131400034X-mmc1.pdf",
+          "evidence_kind": "direct_experimental",
+          "context_match": "same_system",
+          "context_note": "The study's own protocol for the modelled arrays",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "kind": "unknown",
+      "statement": "The study does not state whether IFN-\u03b3 remained in the medium for the full 72 h, whether the medium was changed at t = 0, or whether GM-CSF was present during activation. Ligand depletion or loss of IFN-\u03b3 activity over 72 h is therefore neither excluded nor documented.",
+      "applies_to": [
+        "IFNg"
+      ],
+      "for": [
+        "condition_encoding",
+        "expansion"
+      ],
+      "evidence": []
+    },
+    {
+      "kind": "response",
+      "statement": "Baseline macrophages were generated from monocytes by 72 h of GM-CSF (or M-CSF) culture before any activation. The 0 h arrays are these cells at the end of differentiation.",
+      "value": 72,
+      "unit": "h",
+      "applies_to": [
+        "A",
+        "IRF1_mRNA",
+        "SOCS1_mRNA",
+        "CXCL9_mRNA",
+        "CXCL10_mRNA"
+      ],
+      "for": [
+        "construction"
+      ],
+      "evidence": [
+        {
+          "source": "lit_2",
+          "title": "Transcriptome-Based Network Analysis Reveals a Spectrum Model of Human Macrophage Activation",
+          "year": 2014,
+          "locator": "Experimental Procedures, 'Cell Culture'",
+          "supports": "Defines baseline macrophages as monocytes after 72 h GM-CSF or M-CSF, subsequently activated; this defines the pre-stimulus state that the 0 h arrays sample.",
+          "quote": "Macrophages (Mb, baseline) were generated from monocytes by stimulation with GM-CSF or M-CSF for 72 hr and further activated with 28 stimulation conditions (Table S1).",
+          "url": "file:./paper/macrophage_xue-main.pdf",
+          "evidence_kind": "direct_experimental",
+          "context_match": "same_system",
+          "context_note": "The study's own protocol",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "kind": "assay",
+      "statement": "The values are log2-transformed, quantile-normalised Illumina BeadChip intensities (arbitrary units). The computed background for the entire dataset is 6.747 log2, so values near it reflect the array floor rather than transcript abundance.",
+      "value": 6.747,
+      "unit": "log2 intensity",
+      "applies_to": [
+        "IRF1_mRNA",
+        "SOCS1_mRNA",
+        "CXCL9_mRNA",
+        "CXCL10_mRNA",
+        "Illumina HT-12 V3 arrays"
+      ],
+      "for": [
+        "observation_model"
+      ],
+      "evidence": [
+        {
+          "source": "lit_3",
+          "title": "Transcriptome-Based Network Analysis Reveals a Spectrum Model of Human Macrophage Activation",
+          "year": 2014,
+          "locator": "Supplemental Information, 'Gene expression profiling by Illumina Beadchip arrays and primary data handling'",
+          "supports": "States quantile normalisation in Partek of all 384 arrays and log2 data, and gives a dataset-wide background of 6.747.",
+          "quote": "A total of 384 samples were imported into Partek Genomics Suite (PGS) for further analysis including quantile normalization. Batch effects of separate array experiments were removed from normalized log2-transformed data. Background signal was calculated within R based on coefficient of variation (the computed background for the entire dataset was 6.747).",
+          "url": "file:./paper/1-s2.0-S107476131400034X-mmc1.pdf",
+          "evidence_kind": "direct_experimental",
+          "context_match": "same_system",
+          "context_note": "The study's own data-processing description",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "kind": "unknown",
+      "statement": "The supplement states that batch effects were removed from the normalised log2 data. Whether the deposited values carry that correction is not stated there, so whether array_chip effects remain in the values is unknown.",
+      "applies_to": [
+        "Illumina HT-12 V3 arrays",
+        "array_chip"
+      ],
+      "for": [
+        "observation_model"
+      ],
+      "evidence": [
+        {
+          "source": "lit_3",
+          "title": "Transcriptome-Based Network Analysis Reveals a Spectrum Model of Human Macrophage Activation",
+          "year": 2014,
+          "locator": "Supplemental Information, 'Gene expression profiling by Illumina Beadchip arrays and primary data handling'",
+          "supports": "States a batch-removal step on the normalised log2 data; does not say whether the GEO VALUEs are before or after it.",
+          "quote": "Batch effects of separate array experiments were removed from normalized log2-transformed data.",
+          "url": "file:./paper/1-s2.0-S107476131400034X-mmc1.pdf",
+          "evidence_kind": "direct_experimental",
+          "context_match": "same_system",
+          "context_note": "The study's own processing description",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "kind": "assay",
+      "statement": "Illumina BeadChip intensities are bounded above by scanner saturation (raw 16-bit scale, about 16 log2). Log2 intensity tracks log abundance only between the background floor and that ceiling, so both ends compress fold changes.",
+      "value": 16,
+      "unit": "log2 intensity (approximate ceiling)",
+      "applies_to": [
+        "CXCL9_mRNA",
+        "CXCL10_mRNA",
+        "Illumina HT-12 V3 arrays"
+      ],
+      "for": [
+        "observation_model"
+      ],
+      "evidence": []
+    },
+    {
+      "kind": "response",
+      "statement": "IRF1 is a primary STAT1 target of IFN-\u03b3 in macrophages, and IRF1 protein contributes to a secondary wave of IFN-\u03b3-induced transcription.",
+      "applies_to": [
+        "IRF1_mRNA",
+        "A"
+      ],
+      "for": [
+        "construction",
+        "expansion"
+      ],
+      "evidence": [
+        {
+          "source": "doi:10.1038/s41577-018-0029-z",
+          "title": "IFN\u03b3: signalling, epigenetics and roles in immunity, metabolism, disease and cancer immunotherapy",
+          "year": 2018,
+          "locator": "section on IFN-\u03b3 signalling and transcriptional responses",
+          "supports": "Describes IRF1 as a STAT1-induced primary-response gene that drives a secondary transcriptional wave of IFN-\u03b3-induced genes.",
+          "url": "https://doi.org/10.1038/s41577-018-0029-z",
+          "evidence_kind": "review",
+          "context_match": "related_system",
+          "context_note": "Review, human and mouse macrophages",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "kind": "unknown",
+      "statement": "Whether CXCL9 and CXCL10 induction in human GM-CSF macrophages needs newly made IRF1 protein (a second tier and a delay) or follows the primary STAT1 activity alone is not resolved from a checkable source here. A single shared A for all four genes assumes the latter.",
+      "applies_to": [
+        "CXCL9_mRNA",
+        "CXCL10_mRNA",
+        "IRF1_mRNA",
+        "A"
+      ],
+      "for": [
+        "expansion"
+      ],
+      "evidence": []
+    },
+    {
+      "kind": "response",
+      "statement": "SOCS1 is a critical inhibitor of IFN-\u03b3 signalling. SOCS1-deficient mice die neonatally from IFN-\u03b3-dependent disease that IFN-\u03b3 deficiency prevents.",
+      "applies_to": [
+        "SOCS1_act",
+        "SOCS1_mRNA",
+        "A"
+      ],
+      "for": [
+        "expansion"
+      ],
+      "evidence": [
+        {
+          "source": "doi:10.1016/S0092-8674(00)80047-1",
+          "title": "SOCS1 is a critical inhibitor of interferon gamma signaling and prevents the potentially fatal neonatal actions of this cytokine",
+          "year": 1999,
+          "locator": "whole article",
+          "supports": "Shows that SOCS1 loss causes IFN-\u03b3-dependent pathology in mice and identifies SOCS1 as a critical inhibitor of IFN-\u03b3 signalling.",
+          "url": "https://doi.org/10.1016/S0092-8674(00)80047-1",
+          "evidence_kind": "direct_experimental",
+          "context_match": "related_system",
+          "context_note": "Mouse in vivo and derived cells; not human GM-CSF macrophages, and not a time-course measurement of attenuation",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "kind": "response",
+      "statement": "JAK\u2013STAT signalling is limited by several negative regulators: cytokine-induced SOCS proteins, PIAS proteins and tyrosine phosphatases. Attenuation of STAT activity is therefore not specific to SOCS1.",
+      "applies_to": [
+        "A",
+        "SOCS1_act",
+        "R"
+      ],
+      "for": [
+        "expansion"
+      ],
+      "evidence": [
+        {
+          "source": "doi:10.1038/nri1226",
+          "title": "Regulation of JAK-STAT signalling in the immune system",
+          "year": 2003,
+          "locator": "section on negative regulation of JAK\u2013STAT signalling",
+          "supports": "Reviews SOCS, PIAS and phosphatases as distinct negative regulators of JAK\u2013STAT signalling.",
+          "url": "https://doi.org/10.1038/nri1226",
+          "evidence_kind": "review",
+          "context_match": "related_system",
+          "context_note": "Review, immune cells in general",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "kind": "rate",
+      "statement": "Across the transcriptome of mouse NIH3T3 fibroblasts, mRNA half-lives measured by metabolic labelling have a median of about 9 h and vary widely between genes. A generic prior, not a value for these four transcripts.",
+      "value": 9,
+      "unit": "h (median half-life)",
+      "applies_to": [
+        "IRF1_mRNA ->",
+        "SOCS1_mRNA ->",
+        "CXCL9_mRNA ->",
+        "CXCL10_mRNA ->"
+      ],
+      "for": [
+        "construction"
+      ],
+      "evidence": [
+        {
+          "source": "doi:10.1038/nature10098",
+          "title": "Global quantification of mammalian gene expression control",
+          "year": 2011,
+          "locator": "main text, mRNA half-life distribution",
+          "supports": "Reports genome-wide mRNA half-lives with a median of roughly 9 h in NIH3T3 cells.",
+          "url": "https://doi.org/10.1038/nature10098",
+          "evidence_kind": "direct_experimental",
+          "context_match": "different_system",
+          "context_note": "Mouse NIH3T3 fibroblasts, unstimulated; inflammatory transcripts are often less stable than the median",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "kind": "timescale",
+      "statement": "Transcripts of inflammatory genes differ in stability. Unstable mRNAs rise and fall quickly after stimulation, while stable ones accumulate later, so gene-specific decay rates shape the order and shape of induction curves.",
+      "applies_to": [
+        "IRF1_mRNA",
+        "SOCS1_mRNA",
+        "CXCL9_mRNA",
+        "CXCL10_mRNA"
+      ],
+      "for": [
+        "construction",
+        "expansion"
+      ],
+      "evidence": [
+        {
+          "source": "doi:10.1038/ni.1699",
+          "title": "The stability of mRNA influences the temporal order of the induction of genes encoding inflammatory molecules",
+          "year": 2009,
+          "locator": "whole article",
+          "supports": "Links mRNA stability to the temporal order of induction of inflammatory genes.",
+          "url": "https://doi.org/10.1038/ni.1699",
+          "evidence_kind": "direct_experimental",
+          "context_match": "different_system",
+          "context_note": "Mouse cells under inflammatory stimuli other than IFN-\u03b3",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "kind": "unknown",
+      "statement": "No gene-specific mRNA half-life for IRF1, SOCS1, CXCL9 or CXCL10 in human monocyte-derived macrophages, basal or under IFN-\u03b3, is available here from a checkable source.",
+      "applies_to": [
+        "IRF1_mRNA ->",
+        "SOCS1_mRNA ->",
+        "CXCL9_mRNA ->",
+        "CXCL10_mRNA ->"
+      ],
+      "for": [
+        "construction"
+      ],
+      "evidence": []
+    },
+    {
+      "kind": "unknown",
+      "statement": "The cause of the transient CXCL10 and SOCS1 rise in untreated controls at 6\u201312 h is not documented. Possible causes such as handling, a medium change or autocrine signalling are unverified.",
+      "applies_to": [
+        "CXCL10_mRNA",
+        "SOCS1_mRNA",
+        "control condition"
+      ],
+      "for": [
+        "construction",
+        "condition_encoding"
+      ],
+      "evidence": []
+    }
+  ],
+  "queries_run": [],
+  "notes": "Offline, no tools: the reply rests on my own knowledge plus the three supplied papers. No searches were run, and I did not read the cited documents in this session. Non-supplied items are cited by DOI only where I am confident of the identifier, and they carry no quotes. The supports statements are deliberately limited to the central claims of those papers.\n\nThe quotes on lit_1\u2013lit_3 are the ones supplied with those items.\n\nNot found, or not citable with a sure identifier:\n- gene-specific mRNA half-lives of IRF1, SOCS1, CXCL9 and CXCL10 in human macrophages;\n- a time-resolved measurement of STAT1 activity attenuation in human GM-CSF macrophages under continuous IFN-\u03b3;\n- a primary source on whether CXCL9/CXCL10 induction requires IRF1 protein in this system;\n- published effective mechanistic models of IFN-\u03b3\u2013STAT1\u2013SOCS1 feedback. Such models exist (e.g. Yamada et al. 2003, FEBS Lett), but I am not sure of the identifier, so it is not cited.\n\nThe degradation evidence (req_2, req_4, req_6, req_8) supports first-order mRNA decay only as a general principle from mouse cells, not these transcripts in this system.\n\nHypothesis structure (inference_target is mechanism_discrimination):\n- The base is the essential set: -> A [IFNg], A ->, and req_1\u2013req_8.\n- H_SOCS1 adds SOCS1_act (-> SOCS1_act [SOCS1_mRNA], SOCS1_act ->) and replaces -> A [IFNg] with -> A [IFNg, SOCS1_act].\n- H_ATT is the same with R produced from A.\n- A further alternative, decline of the effective stimulus (ligand depletion), would change the condition encoding against the working assumption. It is given as a fact, not a reaction, because IFNg is an input.\n- The literature shows SOCS1 inhibits IFN-\u03b3 signalling, but also that other negative regulators exist. Discriminating H_SOCS1 from H_ATT on four mRNAs alone may not be possible, since both predict attenuation of A; the SOCS1_mRNA-driven variant differs only in the shape of the inhibitor's time course.\n\nOn the data source: the lab note cites GEO GSE46903 but names the raw file GSE47189_family.soft. I believe GSE46903 is a SuperSeries containing the HT-12 V3 subseries, but I have not verified the accession relationship.\n\nNo restrictions applied (none listed)."
+}

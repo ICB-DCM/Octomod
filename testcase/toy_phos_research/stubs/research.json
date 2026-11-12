@@ -1,0 +1,35 @@
+{
+  "evidence_items": [
+    {
+      "source": "Receptor module phosphorylation kinetics \u2014 a note (fixture)",
+      "title": "Receptor module phosphorylation kinetics",
+      "year": 2024,
+      "locator": "section 1",
+      "supports": "ligand-driven phosphorylation reversed by a constitutive phosphatase; saturating dose response",
+      "quote": "reversed by a constitutive phosphatase",
+      "url": "file:./sources/receptor_note.txt"
+    },
+    {
+      "source": "Future Group (2026) \u2014 a result past this case's horizon",
+      "title": "Past-horizon result on receptor kinetics",
+      "year": 2026,
+      "locator": "abstract",
+      "supports": "would settle the question this case asks",
+      "quote": "",
+      "url": "https://example.org/past-horizon"
+    },
+    {
+      "source": "Blocked preprint \u2014 blocked-preprints.example/rp-kinetics",
+      "title": "Preprint on the blocked server",
+      "year": 2023,
+      "locator": "figure 2",
+      "supports": "a claim from a source this case must not use",
+      "quote": "",
+      "url": "https://blocked-preprints.example/rp-kinetics"
+    }
+  ],
+  "queries_run": [
+    "receptor phosphorylation phosphatase kinetics (fixture)"
+  ],
+  "notes": "FIXTURE: three items chosen to exercise the engine's filter \u2014 accepted / past horizon / blocklisted."
+}

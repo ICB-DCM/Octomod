@@ -1,0 +1,9 @@
+parameterId	parameterName	parameterScale	lowerBound	upperBound	nominalValue	estimate	parameterType
+k_p	k_p	log10	1E-6	1E+6	1	1	
+alpha	k_p_increased	log10	1E-6	1E+6	1	1	
+xi_0	xi_0=1	log10	1E-6	1E+6	1	0	
+xi_1	xi_1	log10	1E-6	1E+6	1	1	
+xi_2	xi_2	log10	1E-6	1E+6	1	1	
+xi_16	xi_16	log10	1E-6	1E+6	1	1	
+s_t0	s_t_0	log10	1E-6	1E+6	1	1	
+sd	sd	log10	1E-6	1E+6	1	1	

@@ -1,0 +1,8 @@
+{
+  "move": {
+    "type": "stop",
+    "args": {}
+  },
+  "motivated_by": "the model structure is supplied and the lab note excludes it from revision; this case asks for a calibration, so there is no structural move to propose",
+  "expected_effect": ""
+}

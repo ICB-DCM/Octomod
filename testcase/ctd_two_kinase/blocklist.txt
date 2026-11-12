@@ -1,0 +1,9 @@
+# Sources the research agent must never use for this case, engine-enforced.
+#
+# THIS CASE BLOCKS NOTHING. The 2026 paper on the intact-molecule data is supplied
+# to the run as typed claims in intent.yaml, so blocking it would be pointless, and
+# it cannot hand over what this case tests: it leaves direction undetermined, it
+# says nothing about CDK7 on this substrate, and it never saw two kinases at once.
+# The data here are synthetic; none of the generating values appears in any paper.
+# Czudnochowski et al. (2012), the source of the real intact-molecule measurements,
+# is not blocked either: finding it is what a modeller would do.

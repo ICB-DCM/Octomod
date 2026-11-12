@@ -1,0 +1,207 @@
+{
+  "system": {
+    "summary": "SynMod-4 is an engineered four-protein module: the inducer activates KinA, active KinA activates RegB, and active RegB converts the precursor PreC into ProD, which is lost slowly. The lab's own construction notes characterise each step in the module's strain.",
+    "scope": "the module's own strain, as its construction notes document it, and a review of related engineered modules",
+    "unknowns": [
+      "whether anything besides RegB converts PreC",
+      "whether the product acts back on the module"
+    ]
+  },
+  "species": [
+    {
+      "id": "Aa",
+      "name": "active KinA",
+      "represents": "KinA_p"
+    },
+    {
+      "id": "Ba",
+      "name": "active RegB",
+      "represents": "RegB_p"
+    },
+    {
+      "id": "D",
+      "name": "the product ProD",
+      "represents": "ProD"
+    },
+    {
+      "id": "BD",
+      "name": "active RegB held by the product",
+      "represents": ""
+    }
+  ],
+  "reactions": [
+    {
+      "equation": "-> Aa",
+      "essential": true,
+      "type": "phosphorylation",
+      "description": "inducer-driven activation of KinA; the inactive pool is the remainder of the normalised total",
+      "evidence": [
+        {
+          "source": "SynMod-4 construction and characterisation notes \u2014 the lab's own notes (fixture, 2024)",
+          "title": "SynMod-4 construction and characterisation notes",
+          "year": 2024,
+          "locator": "paragraph 2",
+          "url": "file:./sources/construction_notes.txt",
+          "evidence_kind": "direct_experimental",
+          "context_match": "same_system",
+          "context_note": "the module's own strain, characterised by the lab that built it",
+          "stance": "supports",
+          "supports": "the inducer drives KinA to its active form within minutes",
+          "quote": "the inducer drives KinA to its active form KinA_p within minutes"
+        }
+      ]
+    },
+    {
+      "equation": "Aa ->",
+      "essential": true,
+      "type": "dephosphorylation",
+      "description": "first-order deactivation of KinA",
+      "evidence": [
+        {
+          "source": "SynMod-4 construction and characterisation notes \u2014 the lab's own notes (fixture, 2024)",
+          "title": "SynMod-4 construction and characterisation notes",
+          "year": 2024,
+          "locator": "paragraph 2",
+          "url": "file:./sources/construction_notes.txt",
+          "evidence_kind": "direct_experimental",
+          "context_match": "same_system",
+          "context_note": "the module's own strain, characterised by the lab that built it",
+          "stance": "supports",
+          "supports": "active KinA returns to the inactive form by first-order dephosphorylation",
+          "quote": "Active KinA returns to the inactive form by first-order dephosphorylation"
+        }
+      ]
+    },
+    {
+      "equation": "-> Ba",
+      "essential": true,
+      "modifiers": [
+        "Aa"
+      ],
+      "type": "phosphorylation",
+      "description": "KinA-catalysed activation of RegB",
+      "evidence": [
+        {
+          "source": "SynMod-4 construction and characterisation notes \u2014 the lab's own notes (fixture, 2024)",
+          "title": "SynMod-4 construction and characterisation notes",
+          "year": 2024,
+          "locator": "paragraph 2",
+          "url": "file:./sources/construction_notes.txt",
+          "evidence_kind": "direct_experimental",
+          "context_match": "same_system",
+          "context_note": "the module's own strain, characterised by the lab that built it",
+          "stance": "supports",
+          "supports": "active KinA drives RegB to its active form",
+          "quote": "KinA_p drives RegB to its active form RegB_p"
+        }
+      ]
+    },
+    {
+      "equation": "Ba ->",
+      "essential": true,
+      "type": "dephosphorylation",
+      "description": "first-order deactivation of RegB",
+      "evidence": [
+        {
+          "source": "SynMod-4 construction and characterisation notes \u2014 the lab's own notes (fixture, 2024)",
+          "title": "SynMod-4 construction and characterisation notes",
+          "year": 2024,
+          "locator": "paragraph 2",
+          "url": "file:./sources/construction_notes.txt",
+          "evidence_kind": "direct_experimental",
+          "context_match": "same_system",
+          "context_note": "the module's own strain, characterised by the lab that built it",
+          "stance": "supports",
+          "supports": "RegB_p is deactivated first order",
+          "quote": "RegB_p is deactivated first order"
+        }
+      ]
+    },
+    {
+      "equation": "-> D",
+      "essential": true,
+      "modifiers": [
+        "Ba"
+      ],
+      "type": "conversion",
+      "description": "RegB-catalysed conversion of the precursor pool into ProD",
+      "evidence": [
+        {
+          "source": "SynMod-4 construction and characterisation notes \u2014 the lab's own notes (fixture, 2024)",
+          "title": "SynMod-4 construction and characterisation notes",
+          "year": 2024,
+          "locator": "paragraph 2",
+          "url": "file:./sources/construction_notes.txt",
+          "evidence_kind": "direct_experimental",
+          "context_match": "same_system",
+          "context_note": "the module's own strain, characterised by the lab that built it",
+          "stance": "supports",
+          "supports": "active RegB converts the precursor PreC into ProD in the module's own strain",
+          "quote": "Active RegB converts the precursor PreC into the product ProD"
+        }
+      ]
+    },
+    {
+      "equation": "D ->",
+      "essential": true,
+      "type": "degradation",
+      "description": "slow loss of ProD by turnover and dilution",
+      "evidence": [
+        {
+          "source": "SynMod-4 construction and characterisation notes \u2014 the lab's own notes (fixture, 2024)",
+          "title": "SynMod-4 construction and characterisation notes",
+          "year": 2024,
+          "locator": "paragraph 2",
+          "url": "file:./sources/construction_notes.txt",
+          "evidence_kind": "direct_experimental",
+          "context_match": "same_system",
+          "context_note": "the module's own strain, characterised by the lab that built it",
+          "stance": "supports",
+          "supports": "ProD is lost slowly by turnover and dilution",
+          "quote": "ProD is lost slowly by turnover and dilution"
+        }
+      ]
+    },
+    {
+      "equation": "Ba + D -> BD",
+      "essential": false,
+      "type": "binding",
+      "description": "active RegB held by the product in an inactive complex",
+      "evidence": [
+        {
+          "source": "Regulator sequestration by pathway products \u2014 a review of engineered modules (fixture, 2021)",
+          "title": "Regulator sequestration by pathway products",
+          "year": 2021,
+          "locator": "paragraph 2",
+          "supports": "a review notes that a pathway product may hold the active regulator in an inactive complex",
+          "quote": "a pathway product may bind the active regulator and hold it in an inactive complex",
+          "url": "file:./sources/sequestration_review.txt",
+          "evidence_kind": "review",
+          "context_match": "related_system",
+          "context_note": "a review across engineered modules, no experiment in SynMod-4",
+          "stance": "supports"
+        }
+      ]
+    }
+  ],
+  "facts": [
+    {
+      "kind": "stoichiometry",
+      "statement": "the PreC + ProD pool is about 5 uM in total and does not change appreciably over two hours",
+      "value": 5,
+      "unit": "uM",
+      "applies_to": [
+        "D"
+      ],
+      "for": [
+        "construction"
+      ],
+      "evidence": []
+    }
+  ],
+  "queries_run": [
+    "SynMod-4 construction notes KinA RegB PreC ProD (fixture)",
+    "pathway product sequesters active regulator engineered modules (fixture)"
+  ],
+  "notes": "FIXTURE: the six conversions of the designed module have a direct source in the module's own notes; the sequestration of active RegB by the product is named in one review of related modules; the pool fact is the lab note's and has no source of its own."
+}

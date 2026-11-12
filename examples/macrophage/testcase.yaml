@@ -1,0 +1,42 @@
+name: macrophage_xue
+
+# Simulation horizon in the data's time unit (hours): the last sampled time.
+t_end: 72
+
+# Held-out conditions, in the data file's own column vocabulary. DRAFT: empty.
+# The question is mechanism discrimination over the candidate set by
+# information criteria on all arrays (to agree with the case owner; see
+# curation/STAGING_LOG.md).
+holdout:
+  condition_labels: []
+
+supplied: {}
+
+# The mechanism is contested (feedback or not): pause on the base before any
+# candidate is built. DRAFT, to agree.
+s1:
+  base_gate: true
+
+# The case owner's rules (xue_macrophage_ode_modelling_notes.md): no online
+# search, so the knowledge module runs OFFLINE, and the paper enters as
+# intent.supplied_literature. No literature horizon is needed offline.
+#
+# The case owner's floor decision on the offline module's card (2026-09-29):
+# nothing was graded, so the floor is not applicable; the module's two
+# activity reactions stay in the base; the module's own-knowledge facts are
+# accepted as advisory prior knowledge.
+grounding:
+  support_floor: not_applicable
+  floor_step: 1
+  decided_by: human
+  note: "keep the two activity reactions and the advisory prior knowledge is acceptable"
+  dropped: []
+  kept: [rx_1, rx_2]
+
+notes: >-
+  Application case: Xue et al. 2014 (GEO GSE46903) IFN-γ time course in
+  GM-CSF-differentiated human macrophages, four transcripts, 81 arrays.
+  Staged 2026-09-29 from the raw GEO deposit (curation/make_panel.py; the
+  raw files in raw/ are not read by a run). Workflow: workflows/default.yaml
+  under workflows/overlays/opus_high.yaml (OCTOMOD_SPEC_OVERLAY), Opus at
+  effort high.

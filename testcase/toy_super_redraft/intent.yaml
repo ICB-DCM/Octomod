@@ -1,0 +1,57 @@
+# Frozen S0 intent for toy_super. Written at staging time and never edited by an
+# agent — the success criteria in particular are what the agent is judged
+# against, so it may not choose them (spec.py rule 1, applied to the intent).
+#
+# inference_target is `prediction`, not `mechanism_discrimination`, and that is
+# deliberate: the supermodel encoding lives on the SEARCH path, where the
+# agent declares axes and the human buys them by tier and the engine enumerates
+# the lattice. `mechanism_discrimination` is the other path, where the agent
+# hands over finished candidates and no lattice is enumerated.
+
+question: >-
+  What is the smallest wiring of the sensor-product module that predicts the
+  held-out dose: does the product feed back on the sensor, is there an input
+  route that bypasses the sensor, and does product formation need one active
+  sensor or two?
+
+system: sensor-product module, cell-free extract (synthetic benchmark)
+
+required_entities:
+  - A_frac
+  - P_uM
+
+required_predictions:
+  - the active-sensor and product timecourses at the held-out dose
+
+perturbations:
+  - input dose u in {0.5, 2, 8}
+
+timescale: minutes, horizon 120 min
+
+scope_exclusions:
+  - gene expression (the system is cell-free)
+  - growth and dilution
+  - spatial effects
+  - any change in sensor total over the timecourse
+
+success_criteria:
+  # What the case can honestly claim, measured (see the notes in
+  # testcase.yaml). The selected structure carrying the feedback axis is
+  # robust: every structure without it is >= 105 AIC units behind. A decisive
+  # Akaike WEIGHT is deliberately NOT asked for: the bypass axis is exactly
+  # neutralizable and false, so a model carrying it sits at the
+  # useless-parameter penalty and the winner's weight measures 0.7365 — asking
+  # for >= 0.7 would be asking the engine to round a boundary in our favour.
+  # Nor is the UNDECIDED rule asked for: that runner-up measures dAIC 2.055,
+  # just outside the dAIC <= 2 band, and which side of 2 it lands on is decided
+  # by noise.
+  - the selected structure carries the product-feedback axis
+  - the held-out dose is predicted within the assay's own replicate noise
+  - an axis the data do not support is reported as unsupported, with its
+    parameter's fitted value, rather than quietly dropped
+
+inference_target: prediction
+
+domain_packs:
+  - general-dynamics
+  - measurement-tech

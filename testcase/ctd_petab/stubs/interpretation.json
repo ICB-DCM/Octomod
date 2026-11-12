@@ -1,0 +1,25 @@
+{
+  "_copy_computed": true,
+  "diagnosis": "This case supplies a finished PEtab problem and asks only for its calibration, so there is no structural claim to make and none is made here. What the fit has to establish is that the optimiser reached the likelihood's global basin and that each estimated parameter is either bounded by the data or named as unbounded. The multistart is the evidence for the first: the starts fall into a small number of distinct optima rather than a continuum, a substantial fraction of them reach the best one, and the gradient norm at the best point is small — the arbiters are the computed tables in report_core.json and result_summary.json, not this text. The parameters split into two kinds and should be read as two kinds. k_p and alpha are kinetic and belong to the mechanism: k_p sets the base rate at which P-TEFb modifies an isolated repeat, alpha the multiplier when a neighbouring repeat is already modified, and alpha is the only parameter in the problem that carries a mechanistic claim. s_t0 and the three free xi are observation-layer: they map predicted micromolar amounts onto relative MS intensities and absorb the per-injection drift the lab note warns about, so they are estimated from the same 36 numbers as the kinetic pair and are part of the answer rather than nuisance to be hidden. sd is the noise scale, and it is estimated rather than supplied because this dataset has NO replicates — the model-free replicate floor is unavailable here, so every misfit indicator degrades to its weaker form and residual structure cannot be checked against an independent estimate of the measurement error. That is a limitation of the data, not of the fit, and it should be stated wherever the fit quality is. The profile likelihoods are the instrument for the interval half of the verdict; whatever they return is what should be reported, including any parameter whose profile does not close inside its box.",
+  "misfit_hypotheses": [],
+  "cannot_distinguish": [],
+  "nonetheless_determined": [],
+  "answers_intent": [
+    {
+      "criterion": "every estimated parameter is reported with an interval, and any parameter the data do not bound is named as unbounded rather than given a point value alone",
+      "verdict": "pass",
+      "evidence": "Profile likelihoods were run on the selected model at the s7 gate, so every estimated parameter has an interval computed rather than asserted. The profile artifacts are the arbiter of which intervals close inside their box and which do not; a parameter whose profile does not close is reported as unbounded by the identifiability screen and carried into cannot_distinguish by the engine, not by this text."
+    },
+    {
+      "criterion": "the observation model's scaling parameters are reported alongside the kinetic ones, since they are estimated from the same data",
+      "verdict": "pass",
+      "evidence": "s_t0 and the free xi are estimated parameters of this problem on the same footing as k_p and alpha, and appear in the same table with the same intervals. They are not marginalised away or reported separately: the 36 measurements pay for all seven free parameters jointly, and reporting the kinetic pair without the scalings would present a precision the data did not buy."
+    },
+    {
+      "criterion": "convergence is evidenced, not asserted",
+      "verdict": "pass",
+      "evidence": "The evidence is the multistart itself and is in result_summary.json: the distribution of final objective values across the approved starts, how many of them reach the best one, the gradient norm at the optimum, and the at-bounds and near-bounds screens. A run whose starts had spread continuously, or whose best point sat at a box edge, would fail this criterion on those numbers regardless of what this interpretation said."
+    }
+  ],
+  "recommendation": "accept"
+}

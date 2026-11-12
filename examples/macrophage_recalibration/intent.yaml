@@ -1,0 +1,106 @@
+# Intent for staging/macrophage_xue_v2 (second run, 2026-09-30): the first run's
+# intent with inference_target parameter_values — a model is supplied, and the
+# deliverable is its parameters with profile-likelihood intervals — and criterion
+# 1 reworded accordingly. Everything else, including the required reactions, is
+# unchanged, so the knowledge module's dossier still applies.
+# Frozen at the intent gate (S0). The success criteria are what the run is
+# judged against and are never edited by an agent.
+
+question: >-
+  Can one shared transcriptional activity driven by IFN-γ, together with
+  gene-specific basal production, activity-dependent production and
+  first-order mRNA degradation, explain the IRF1, SOCS1, CXCL9 and CXCL10
+  time courses of GM-CSF-differentiated human macrophages over 0.5–72 h, or
+  is an attenuation of that activity needed, and does a single inhibitory
+  feedback variable (for instance one produced from the SOCS1 transcript)
+  account for it? Which of the activation, turnover and feedback rates can
+  these arrays actually pin down?
+
+system: >-
+  Human monocyte-derived macrophages (CD14+ monocytes, 3 days GM-CSF),
+  activated with IFN-γ 200 IU/ml; population-average transcript levels by
+  Illumina HT-12 V3 arrays (GEO GSE46903, Xue et al. 2014). Effective
+  transcription model: one unobserved IFN-γ-driven activity and four mRNAs.
+
+required_entities:
+  - A             # the effective IFN-γ-driven transcriptional activity (unobserved)
+  - IRF1_mRNA
+  - SOCS1_mRNA
+  - CXCL9_mRNA
+  - CXCL10_mRNA
+
+required_predictions:
+  - the four transcript time courses under IFN-γ (0.5–72 h) on the log2 array scale, per donor series
+  - the time-matched untreated (control) time courses
+  - whether the activity is attenuated, and the attenuation timescale against the transcripts' degradation timescales
+
+perturbations:
+  - IFN-γ 200 IU/ml added at t = 0 and assumed to stay in the medium (continuous stimulus; working assumption, open to revision); arrays at 0.5, 1, 2, 4, 6, 12, 24, 72 h (stimulus = IFNg)
+  - untreated controls (stimulus = control), arrays at 0, 6, 12, 24, 48, 72 h
+
+timescale: hours; first sample 0.5 h, last 72 h; horizon 72 h
+
+scope_exclusions:
+  - receptor binding, JAK/STAT phosphorylation, nuclear transport, or any explicitly measured STAT1 species
+  - single-cell state switching or M1/M2 population fractions
+  - other stimuli, other differentiation protocols, the ChIP-seq data
+  - raw array reprocessing; any second log transform or per-time-point normalisation of the values
+  - freely estimated Hill exponents
+  - a detection-threshold or censoring term in the noise model
+  - donor-specific kinetic parameters (donors may differ at most in baseline or scaling)
+
+success_criteria:
+  - the supplied model (the first run's selected model, reparameterised) is refitted on all 81 arrays and its fit compared with the first run's on the same data; any alternative the run goes on to test is compared with it by information criteria, a winner reported with Akaike weight >= 0.7, otherwise the indistinguishable set reported as such
+  - the selected model reproduces each of the four IFN-γ time courses within the donor-to-donor scatter, with no systematic time-dependent residual for any transcript
+  - the initial state is constrained by the pretreatment arrays and the untreated time courses are fitted within the donor-to-donor scatter; movement in the untreated cultures is never used as evidence for or against stimulation-induced feedback, and any control excursion the model does not reproduce is reported as unexplained rather than absorbed by a feedback parameter
+  - if attenuation is selected, its timescale and the four degradation rates are reported with profile-likelihood intervals; every rate the arrays cannot resolve is named as such
+  - kinetic parameters are shared across donors; any donor-specific baseline or scaling parameter is declared and counted against the model
+
+inference_target: parameter_values
+
+domain_packs:
+  - general-dynamics
+  - measurement-tech
+
+# From the notes' equation dm_j/dt = b_j + v_j H_j(A) - delta_j m_j: each
+# transcript is produced (basal plus activity-dependent, A as modifier) and
+# lost by first-order degradation. A required reaction enters the model
+# whatever the literature says and is exempt from the support floor. The
+# activity's own activation and loss are NOT listed on purpose: the notes
+# leave its form open ("constrain or eliminate its timescale if the data
+# cannot resolve it").
+required_reactions:
+  - {equation: "-> IRF1_mRNA",   modifiers: [A], note: "basal + A-dependent production, linear or simple saturating in A, no free Hill exponent"}
+  - {equation: "IRF1_mRNA ->",   note: "first-order degradation"}
+  - {equation: "-> SOCS1_mRNA",  modifiers: [A], note: "basal + A-dependent production, linear or simple saturating in A, no free Hill exponent"}
+  - {equation: "SOCS1_mRNA ->",  note: "first-order degradation"}
+  - {equation: "-> CXCL9_mRNA",  modifiers: [A], note: "basal + A-dependent production, linear or simple saturating in A, no free Hill exponent"}
+  - {equation: "CXCL9_mRNA ->",  note: "first-order degradation"}
+  - {equation: "-> CXCL10_mRNA", modifiers: [A], note: "basal + A-dependent production, linear or simple saturating in A, no free Hill exponent"}
+  - {equation: "CXCL10_mRNA ->", note: "first-order degradation"}
+
+# The paper the case owner already has (the only literature allowed for this
+# case; no online search). Claims written from the paper's own text; the
+# documents are cached into the run for audit, the agents receive the claims.
+supplied_literature:
+  - source: "Xue et al. 2014, Immunity 40(2):274-288, supplemental experimental procedures"
+    title: "Transcriptome-Based Network Analysis Reveals a Spectrum Model of Human Macrophage Activation"
+    year: 2014
+    locator: "Supplemental Information, 'Human macrophage activation'"
+    supports: "IFN-γ was applied to baseline macrophages at 200 IU/ml; the stimulus dose is one fixed level, so the input is a single constant in every IFN-γ condition"
+    quote: "IFN γ (200 IU/ml), TNF (800 IU/ml), standard LPS (sLPS, 10ng/ml, Sigma) or combinations thereof. All cytokines were purchased from Immunotools if not indicated otherwise."
+    url: "file:./paper/1-s2.0-S107476131400034X-mmc1.pdf"
+  - source: "Xue et al. 2014, Immunity 40(2):274-288, main text"
+    title: "Transcriptome-Based Network Analysis Reveals a Spectrum Model of Human Macrophage Activation"
+    year: 2014
+    locator: "Experimental Procedures, 'Cell Culture'"
+    supports: "Baseline macrophages were obtained from monocytes by 72 h of GM-CSF (or M-CSF) culture before any activation; the 0 h arrays are these cells at the end of differentiation"
+    quote: "Macrophages (Mb, baseline) were generated from monocytes by stimulation with GM-CSF or M-CSF for 72 hr and further activated with 28 stimulation conditions (Table S1)."
+    url: "file:./paper/macrophage_xue-main.pdf"
+  - source: "Xue et al. 2014, Immunity 40(2):274-288, supplemental experimental procedures"
+    title: "Transcriptome-Based Network Analysis Reveals a Spectrum Model of Human Macrophage Activation"
+    year: 2014
+    locator: "Supplemental Information, 'Gene expression profiling by Illumina Beadchip arrays and primary data handling'"
+    supports: "The deposited values are log2, quantile-normalised Illumina HT-12 V3 intensities in arbitrary units; the array background for the whole dataset is 6.747 log2 units, so values near it are the detection floor rather than an abundance"
+    quote: "A total of 384 samples were imported into Partek Genomics Suite (PGS) for further analysis including quantile normalization. Batch effects of separate array experiments were removed from normalized log2-transformed data. Background signal was calculated within R based on coefficient of variation (the computed background for the entire dataset was 6.747)."
+    url: "file:./paper/1-s2.0-S107476131400034X-mmc1.pdf"

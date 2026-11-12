@@ -1,0 +1,53 @@
+name: abcd_mechanism_knowledge
+
+# Simulation horizon for the S1 gate ladder; matches the last sampled time.
+t_end: 120
+
+# Empty on purpose: discrimination here is by information criteria over the
+# candidate set, as in abcd_mechanism, whose data and question this case shares.
+holdout:
+  condition_labels: []
+
+supplied: {}
+
+# The knowledge module ran before the intent was frozen (online, on stubbed
+# replies): its output is `knowledge/`, and this is the person's decision on its
+# floor card. The survey grades the six conversions of the designed module
+# high (the lab's own construction notes, a direct experiment in this system)
+# and one further conversion that is not essential, active RegB sequestered by
+# the product into a complex, low (one review of related modules). The
+# suggested floor is high and the person took it.
+#
+# The round is built in two calls: construction writes the base (the designed
+# module), the expansions write three candidates as differences from it. The
+# variants' floor is medium, one band below the base's. M2_feedforward adds a
+# KinA-catalysed conversion of the precursor, whose reactants and products are
+# the designed conversion's (so the dossier's high entry describes it);
+# M4_sequestration adds the sequestration, graded low, and names it in
+# `missing`. The round's one targeted search (stubs/knowledge_targeted.1.json)
+# returns it from a direct experiment in a related module, medium: it is
+# admitted at the variants' floor and the variation is kept.
+grounding:
+  # the strict mode is what this fixture tests: the base is exactly the essential set
+  mode: strict
+  support_floor: high
+  floor_step: 1
+  decided_by: human
+  note: "high: build the base from the designed module the construction notes document"
+
+# The case's one literature horizon: the knowledge module's searches obey it.
+research:
+  max_publication_year: 2025
+
+notes: >-
+  abcd_mechanism's data, lab note, intent and truth, built on the knowledge
+  module and with the discrimination round in two calls (the construction stub
+  returns the base only; stubs/expansion.json the candidates as declared
+  differences). Every source the stubbed replies cite is a fixture document
+  under sources/, fetched over file:, and names no DOI, PMID or URL, so the
+  citation check reads each one as not checkable without touching the network
+  and every grade is deterministic offline. The knowledge/ folder is the output
+  of `./run.sh knowledge --testcase testcase/abcd_mechanism_knowledge --mode
+  online --backend stub` on stubs/knowledge.1.json and
+  stubs/knowledge_verification.1.json. This case asserts engine mechanics, not
+  a recovered mechanism.

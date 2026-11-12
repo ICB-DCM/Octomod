@@ -1,0 +1,3 @@
+# Sources no literature search may use for this case, engine-enforced.
+# Fixture entry: a made-up preprint server one stub item names.
+blocked-preprints.example

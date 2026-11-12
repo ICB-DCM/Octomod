@@ -1,0 +1,5 @@
+parameterId	parameterScale	lowerBound	upperBound	nominalValue	estimate
+k_phos	log10	0.0001	1.0	0.02	1
+k_dephos	log10	0.001	10.0	0.2	1
+sc_obs_pR	log10	0.001	1.0e3	1.0	1
+sigma_obs_pR	log10	0.0001	1.0e3	1.0	1

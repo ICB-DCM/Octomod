@@ -1,0 +1,120 @@
+# Frozen S0 intent for ctd_two_kinase. Written at staging time; never edited by an
+# agent.
+#
+# THE TWO-KINASE, REPEAT-RESOLVED CASE. Synthetic data from a truth the front end
+# authored and a human signs off (truth/), on the system of ctd_blind: P-TEFb on
+# an 8-repeat CTD, now read per repeat, with CDK7 as a second kinase on the same
+# substrate, alone and in combination. The truth keeps every published fact
+# (distributive P-TEFb, one phosphate per repeat, local cooperativity, CDK7 a
+# Ser5 kinase without priming) and makes its own assumptions only where the
+# literature is open: the direction of P-TEFb's local effect, CDK7's lack of any
+# neighbour or positional effect, and additivity of the two kinases.
+#
+# The combined condition is HELD OUT: the model is built and fitted on the two
+# single-kinase tubes and must predict the tube with both. That prediction is the
+# case's exam; no published experiment has run two CTD kinases at once.
+#
+# RESEARCH IS ENABLED with the year fence at 2026 and an empty blocklist. The
+# published quantitative analysis of the intact-molecule data is SUPPLIED below as
+# typed claims: it leaves direction undetermined and says nothing about CDK7, so
+# it cannot hand over what this case tests.
+
+question: >-
+  Determine what governs the rate at which each individual CTD repeat is
+  phosphorylated by P-TEFb and by CDK7, using the repeat-resolved measurements
+  together with the intact-molecule signal from the single-kinase conditions.
+  State whether P-TEFb's local effect has a direction along the array and whether
+  it is a property of the kinase or of the substrate, predict the condition in
+  which both kinases act together, and state what remains undecided.
+
+system: >-
+  RNA polymerase II CTD (8 consensus heptarepeats, synthetic peptide, in vitro),
+  phosphorylated by P-TEFb (CDK9–cyclin T1) and by the TFIIH kinase module CDK7;
+  repeat-resolved and intact-molecule time courses, three conditions, three
+  replicates
+
+required_entities:
+  - CTD
+  - P-TEFb
+  - CDK7
+  - ATP
+
+required_predictions:
+  - the mechanism governing the per-repeat phosphorylation rate of each kinase,
+    identified and defended
+  - the occupancy of every repeat over time in the condition with both kinases,
+    predicted before that condition is seen
+  - a statement of what the repeat-resolved readout resolves that the
+    intact-molecule readout cannot
+
+perturbations:
+  - three conditions — P-TEFb alone, CDK7 alone, both together — each sampled over
+    time with three replicates per point
+
+timescale: minutes, horizon 960 min (16 h)
+
+scope_exclusions:
+  - transcription, DNA and the polymerase itself — purified in vitro assay
+  - the identity of the kinase that placed a given phosphate (not observed; each
+    repeat is one bit whichever kinase modified it)
+  - the distinction between serine positions within a repeat (one phosphate per
+    repeat under these conditions)
+
+success_criteria:
+  - the selected mechanism is reported with its information criterion, its Akaike
+    weight and the indistinguishable set, honestly, whatever they turn out to be
+  - any claim about direction along the array, or about what has happened around a
+    repeat, is supported by the repeat-resolved measurements and not by the
+    intact-molecule measurements alone
+  - the held-out condition is predicted from the single-kinase fits and the
+    prediction is compared with its measurements as an explicit test
+  - the observation model is stated explicitly, including how the intact-molecule
+    signal is mapped onto predicted amounts at each time point and how the
+    occupancy ratios are mapped onto the model's states
+
+inference_target: mechanism_discrimination
+
+domain_packs:
+  - general-dynamics
+  - measurement-tech
+
+supplied_literature:
+  - source: "Callenbach et al. (2026), quantitative modelling of P-TEFb-mediated CTD phosphorylation"
+    title: >-
+      Quantitative modelling of P-TEFb mediated CTD phosphorylation identifies
+      local cooperativity
+    year: 2026
+    locator: abstract
+    supports: >-
+      on the intact-molecule data, P-TEFb acts distributively, and a repeat next to
+      an already phosphorylated repeat is modified faster
+    quote: >-
+      Our results indicate that P-TEFb acts distributively but with pronounced local
+      cooperativity: repeats adjacent to phosphorylated sites are modified at higher
+      rates.
+    url: https://doi.org/10.1371/journal.pcbi.1014531
+  - source: "Callenbach et al. (2026), quantitative modelling of P-TEFb-mediated CTD phosphorylation"
+    title: >-
+      Quantitative modelling of P-TEFb mediated CTD phosphorylation identifies
+      local cooperativity
+    year: 2026
+    locator: abstract
+    supports: >-
+      whether the local effect has a direction along the array was left undecided,
+      because the intact-molecule readout does not resolve positions
+    quote: >-
+      We find no evidence for directional bias, although the limited positional
+      resolution of the data precludes a definitive conclusion.
+    url: https://doi.org/10.1371/journal.pcbi.1014531
+  - source: "Callenbach et al. (2026), quantitative modelling of P-TEFb-mediated CTD phosphorylation"
+    title: >-
+      Quantitative modelling of P-TEFb mediated CTD phosphorylation identifies
+      local cooperativity
+    year: 2026
+    locator: "Results, comparison of the fully processive, uniform distributive and neighbouring-effect models"
+    supports: >-
+      among the compared models of the intact-molecule data, the one in which the
+      rate of a repeat depends on its already modified neighbours fits best
+    quote: >-
+      The Neighbouring-effect model further improves the fit
+    url: https://doi.org/10.1371/journal.pcbi.1014531

@@ -1,0 +1,41 @@
+{
+  "permissions": {
+    "allow": [
+      "WebSearch",
+      "WebFetch",
+      "Bash(./run.sh *)",
+      "Bash(.venv/bin/python -m octomod *)",
+      "Bash(.venv/bin/python tests/*)",
+      "Bash(uv sync)",
+      "Bash(uv run *)",
+      "Bash(uv --version)",
+      "Bash(xcode-select -p)",
+      "Bash(claude --version)",
+      "Bash(claude auth status*)",
+      "Bash(dot -V)",
+      "Bash(git status*)",
+      "Bash(git diff*)",
+      "Bash(git log*)",
+      "Bash(git branch*)",
+      "Bash(git checkout *)",
+      "Bash(git switch *)"
+    ],
+    "deny": [
+      "Bash(uv pip *)",
+      "Bash(uv add *)",
+      "Bash(uv remove *)",
+      "Bash(uv tool *)",
+      "Bash(pip *)",
+      "Bash(pip3 *)",
+      "Bash(conda *)",
+      "Bash(python -m venv*)",
+      "Bash(git commit*)",
+      "Bash(git push*)",
+      "Write(runs/**)",
+      "Edit(runs/**)",
+      "Write(testcase/*/truth/**)",
+      "Edit(testcase/*/truth/**)"
+    ],
+    "blockReadsOutsideWorkingDirectories": true
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "_copy_computed": true,
+  "diagnosis": "STUB: canned reply from testcase/sphingolipid_metabolism/stubs/interpretation.json, served by the stub backend for token-free plumbing runs. No agent read this fit, and nothing in this reply is a judgement about it or about the system it models. The two epistemic lists are the engine's own computed lists, copied in by the engine (_copy_computed), so what the data do and do not determine is the engine's reading, not this text's. misfit_hypotheses is empty because none was formed, not because none exists. The recommendation 'accept' is the canned default that ends the loop after round 0; it does not assess the fit. The arbiters are the computed artifacts: report_core.json, estimation/result_summary.json, the identifiability screen and the profiles.",
+  "misfit_hypotheses": [],
+  "cannot_distinguish": [],
+  "nonetheless_determined": [],
+  "answers_intent": [
+    {
+      "criterion": "every estimated parameter is reported with an interval, and any parameter the data do not bound is named as such rather than given a point value alone",
+      "verdict": "partial",
+      "evidence": "STUB: not judged. 'partial' is the canned placeholder the contract's pass|partial|fail enum forces; read the profile and identifiability tables in the round report for the answer."
+    },
+    {
+      "criterion": "the fit is judged per observable, and any lipid pool the model systematically misses is named",
+      "verdict": "partial",
+      "evidence": "STUB: not judged. 'partial' is the canned placeholder; read the per-observable fit table and the residual diagnostics in the round report for the answer."
+    },
+    {
+      "criterion": "the constant influx into Pal and the outflux terms are reported with their estimates and intervals, so their necessity can be judged in the next phase",
+      "verdict": "partial",
+      "evidence": "STUB: not judged. 'partial' is the canned placeholder; read the parameter table and profiles in the round report for the answer."
+    },
+    {
+      "criterion": "convergence of the multistart is evidenced, not asserted",
+      "verdict": "partial",
+      "evidence": "STUB: not judged. 'partial' is the canned placeholder; read the waterfall and the convergence checks in estimation/result_summary.json for the answer."
+    }
+  ],
+  "recommendation": "accept"
+}

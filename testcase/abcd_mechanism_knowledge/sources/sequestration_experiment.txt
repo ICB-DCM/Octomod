@@ -1,0 +1,3 @@
+Product binds the active regulator in a related synthetic module (fixture document, 2023).
+
+In a related synthetic module built from the same parts library, the product bound the active regulator into a stable complex: pull-down of the regulator recovered the product, and the complex accumulated as the product rose. Nothing here names a rate constant value.

@@ -1,0 +1,40 @@
+{
+  "conditions": [
+    {
+      "condition_id": "dose_0",
+      "maps_to_label": "dose=0",
+      "overrides": {
+        "S": 0
+      },
+      "preequilibration": false,
+      "rationale": "Blank lanes: unstimulated wells, no ligand \u2014 S = 0, so the model predicts no phosphorylation and the subtracted blank rows read ~0."
+    },
+    {
+      "condition_id": "dose_0p3",
+      "maps_to_label": "dose=0.3",
+      "overrides": {
+        "S": 0.3
+      },
+      "preequilibration": false,
+      "rationale": "Relative dose enters as the condition-owned constant S. No pre-equilibration: the description states the t=0 samples are unstimulated cells taken immediately before ligand addition, so the model's declared initial state (R=10, Rp=0) is the experimental starting state and simulating to steady state first would replace it with a phosphatase-dominated resting level the experiment did not have."
+    },
+    {
+      "condition_id": "dose_1",
+      "maps_to_label": "dose=1",
+      "overrides": {
+        "S": 1
+      },
+      "preequilibration": false,
+      "rationale": "Reference dose; S=1 is the standard working stock against which the other two are expressed."
+    },
+    {
+      "condition_id": "dose_3",
+      "maps_to_label": "dose=3",
+      "overrides": {
+        "S": 3
+      },
+      "preequilibration": false,
+      "rationale": "Highest dose. Held out for prediction per testcase.yaml \u2014 encoded here so the simulation is defined, but its measurements are excluded from the fit."
+    }
+  ]
+}

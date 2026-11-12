@@ -1,0 +1,50 @@
+# Frozen S0 intent for ctd_countonly — the NEGATIVE CONTROL for ctd_positional.
+#
+# Identical truth, identical seed, identical question. The ONLY difference is the
+# observable: counts, not positions. The expected outcome is a DECLARED
+# NON-IDENTIFIABILITY, because the count-data likelihood is exactly invariant under
+# reversing the chain (verified to 1e-15; truth/true_model.md).
+#
+# A run that names a direction here is WRONG, and that is the most valuable failure
+# this pair can produce. A run that recovers neighbour dependence but declines to
+# name a direction is CORRECT and is the point of the control.
+
+question: >-
+  Determine what governs the rate at which each individual CTD repeat is
+  phosphorylated by P-TEFb. Be explicit about what this measurement can and cannot
+  establish about the mechanism.
+
+system: >-
+  RNA polymerase II CTD (8 heptarepeats, in vitro), phosphorylated by P-TEFb;
+  intact-molecule mass-spectrometry time course with three replicates
+
+required_entities:
+  - the CTD substrate, resolved by number of phosphorylated repeats
+  - the kinase P-TEFb
+  - ATP
+
+required_predictions:
+  - the mechanism governing the per-repeat phosphorylation rate, identified and defended
+  - a statement of which mechanistic questions this measurement cannot answer
+
+perturbations:
+  - none — a single in vitro condition, sampled over time, three replicates per point
+
+timescale: minutes, horizon 960 min (16 h)
+
+scope_exclusions:
+  - transcription, DNA and the polymerase itself — purified in vitro assay
+  - the distinction between Ser2 and Ser5 within a repeat (mutually exclusive here)
+
+success_criteria:
+  - the selected mechanism is reported with its information criterion, its Akaike
+    weight and the indistinguishable set, honestly, whatever they turn out to be
+  - any structure the data cannot determine is declared undetermined rather than
+    decided
+  - the observation model is stated explicitly, including the per-time-point scaling
+
+inference_target: mechanism_discrimination
+
+domain_packs:
+  - general-dynamics
+  - measurement-tech

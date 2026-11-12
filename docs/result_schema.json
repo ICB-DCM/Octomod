@@ -1,0 +1,4634 @@
+{
+  "$defs": {
+    "AgentCallRecord": {
+      "additionalProperties": true,
+      "description": "Everything archived about one agent role in one round.\n\n`calls` holds the ledger's `agent_call` rows (one per invocation, with\nmodel, cost, duration and prompt sha); the prompt and replies in the record\nare those of the LAST invocation, because the engine overwrites them per role.",
+      "properties": {
+        "attempts": {
+          "items": {
+            "$ref": "#/$defs/AttemptRecord"
+          },
+          "tier": "audit",
+          "title": "Attempts",
+          "type": "array"
+        },
+        "base_key": {
+          "default": null,
+          "description": "expansion: the base model the candidates were written against.",
+          "title": "Base Key"
+        },
+        "calls": {
+          "description": "The ledger's agent_call rows for this role in this round.",
+          "items": {
+            "$ref": "#/$defs/LedgerEvent"
+          },
+          "title": "Calls",
+          "type": "array"
+        },
+        "cost_usd": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Sum of cost_usd over `calls`, when reported.",
+          "title": "Cost Usd"
+        },
+        "dossier": {
+          "default": null,
+          "description": "The retry dossier: earlier attempts and why each failed.",
+          "tier": "audit",
+          "title": "Dossier"
+        },
+        "elided": {
+          "description": "Fields removed from this record by a tiered copy (store.prune). Empty on a full record.",
+          "items": {
+            "type": "string"
+          },
+          "tier": "core",
+          "title": "Elided",
+          "type": "array"
+        },
+        "fallback_applied": {
+          "default": null,
+          "description": "A deterministic fallback the engine applied to this role's reply.",
+          "title": "Fallback Applied"
+        },
+        "overlay_audits": {
+          "additionalProperties": true,
+          "description": "assembly_verification: overlay audits by content sha.",
+          "tier": "bulk",
+          "title": "Overlay Audits",
+          "type": "object"
+        },
+        "pinned": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "A reply pinned for re-use (the interpretation).",
+          "title": "Pinned"
+        },
+        "prompt": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "The exact prompt of the last call.",
+          "tier": "audit",
+          "title": "Prompt"
+        },
+        "prompt_gate": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/GateRecord"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "The agent_prompt_bytes gate for that prompt."
+        },
+        "prompt_misses": {
+          "additionalProperties": true,
+          "description": "Why a cached reply was NOT reused: both prompts and the first difference.",
+          "tier": "audit",
+          "title": "Prompt Misses",
+          "type": "object"
+        },
+        "redrafts": {
+          "description": "The ledger's redraft rows for this role.",
+          "items": {
+            "$ref": "#/$defs/LedgerEvent"
+          },
+          "title": "Redrafts",
+          "type": "array"
+        },
+        "replies": {
+          "additionalProperties": true,
+          "description": "Per attempt: the raw reply, and `timeout`/`killed` with partial output.",
+          "tier": "audit",
+          "title": "Replies",
+          "type": "object"
+        },
+        "reply": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "The accepted, validated JSON object.",
+          "title": "Reply"
+        },
+        "role": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Filled from the key.",
+          "title": "Role"
+        }
+      },
+      "title": "AgentCallRecord",
+      "type": "object"
+    },
+    "AssemblyRecord": {
+      "additionalProperties": true,
+      "description": "`\u2026/candidates/<id>/assembly` (or the round's `shared_assembly`): the merge's source\nof truth \u2014 observables, noise, scaling, conditions, each an agent block.",
+      "properties": {
+        "conditions": {
+          "items": {},
+          "title": "Conditions",
+          "type": "array"
+        },
+        "elided": {
+          "description": "Fields removed from this record by a tiered copy (store.prune). Empty on a full record.",
+          "items": {
+            "type": "string"
+          },
+          "tier": "core",
+          "title": "Elided",
+          "type": "array"
+        },
+        "noise": {
+          "items": {},
+          "title": "Noise",
+          "type": "array"
+        },
+        "observables": {
+          "items": {},
+          "title": "Observables",
+          "type": "array"
+        },
+        "scaling": {
+          "items": {},
+          "title": "Scaling",
+          "type": "array"
+        }
+      },
+      "title": "AssemblyRecord",
+      "type": "object"
+    },
+    "AttemptRecord": {
+      "additionalProperties": true,
+      "description": "One raw reply of an agent, accepted or not.",
+      "properties": {
+        "attempt": {
+          "title": "Attempt",
+          "type": "integer"
+        },
+        "elided": {
+          "description": "Fields removed from this record by a tiered copy (store.prune). Empty on a full record.",
+          "items": {
+            "type": "string"
+          },
+          "tier": "core",
+          "title": "Elided",
+          "type": "array"
+        },
+        "gate_failures": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Gate Failures",
+          "type": "array"
+        },
+        "text": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "The raw reply text.",
+          "tier": "audit",
+          "title": "Text"
+        }
+      },
+      "required": [
+        "attempt"
+      ],
+      "title": "AttemptRecord",
+      "type": "object"
+    },
+    "AxisRecord": {
+      "additionalProperties": true,
+      "description": "One structural or observation axis of `space/axes`.",
+      "properties": {
+        "adds_parameters": {
+          "items": {},
+          "title": "Adds Parameters",
+          "type": "array"
+        },
+        "declared_by": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Declared By"
+        },
+        "default": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Default"
+        },
+        "discriminating_evidence": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "items": {},
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Discriminating Evidence"
+        },
+        "elided": {
+          "description": "Fields removed from this record by a tiered copy (store.prune). Empty on a full record.",
+          "items": {
+            "type": "string"
+          },
+          "tier": "core",
+          "title": "Elided",
+          "type": "array"
+        },
+        "frozen": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "The last selection, not a deletion.",
+          "title": "Frozen"
+        },
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "kind": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Kind"
+        },
+        "on_antimony_patch": {
+          "default": null,
+          "title": "On Antimony Patch"
+        },
+        "on_assembly_patch": {
+          "default": null,
+          "title": "On Assembly Patch"
+        },
+        "priority": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Priority"
+        },
+        "priority_reason": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "items": {},
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Priority Reason"
+        },
+        "question": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "items": {},
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Question"
+        },
+        "rationale": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "items": {},
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Rationale"
+        },
+        "support": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "An expansion axis with grounding on: the reactions its patch adds to the base, annotated against the reaction dossier, and their weakest label ({reactions, label}).",
+          "title": "Support"
+        }
+      },
+      "required": [
+        "id"
+      ],
+      "title": "AxisRecord",
+      "type": "object"
+    },
+    "CandidateRecord": {
+      "additionalProperties": true,
+      "description": "One fitted model of a round \u2014 `rounds/<k>/candidates/<id>`, or `_single`.",
+      "properties": {
+        "assembly": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/AssemblyRecord"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "assembly_overlay_applied": {
+          "anyOf": [
+            {
+              "items": {},
+              "type": "array"
+            },
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "The overlay patches S3 applied: {patch, as}.",
+          "title": "Assembly Overlay Applied"
+        },
+        "attempts": {
+          "additionalProperties": true,
+          "description": "Earlier fits a refit superseded, by attempt number: estimation, starts, multistart.",
+          "tier": "bulk",
+          "title": "Attempts",
+          "type": "object"
+        },
+        "axes_on": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Axes On",
+          "type": "array"
+        },
+        "budget_declined": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "The human's `n` at this candidate's re-asked budget gate (candidate, note, reasons, at): read back on a resume, so the candidate is dropped once and never asked again this round.",
+          "title": "Budget Declined"
+        },
+        "cost": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/CostRecord"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "decisions": {
+          "additionalProperties": {
+            "$ref": "#/$defs/DecisionRecord"
+          },
+          "description": "The candidate's own gate decisions, by module.",
+          "title": "Decisions",
+          "type": "object"
+        },
+        "dropped": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/LedgerEvent"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "The candidate_dropped row, when it was dropped."
+        },
+        "elided": {
+          "description": "Fields removed from this record by a tiered copy (store.prune). Empty on a full record.",
+          "items": {
+            "type": "string"
+          },
+          "tier": "core",
+          "title": "Elided",
+          "type": "array"
+        },
+        "estimation": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/EstimationRecord"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "estimation_settings": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "The settings the fit ran with: declared, budget-gate choices, refit overrides.",
+          "title": "Estimation Settings"
+        },
+        "fit_key": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "What identifies this fit for re-use (reuse.py).",
+          "title": "Fit Key"
+        },
+        "gates": {
+          "additionalProperties": {
+            "$ref": "#/$defs/GateRecord"
+          },
+          "description": "By gate id \u2014 the candidate's own gates.",
+          "title": "Gates",
+          "type": "object"
+        },
+        "id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Filled from the key.",
+          "title": "Id"
+        },
+        "label": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Label"
+        },
+        "markers": {
+          "additionalProperties": true,
+          "description": "Marker name \u2192 payload, per candidate.",
+          "title": "Markers",
+          "type": "object"
+        },
+        "model": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ModelRecord"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "None for `_single`: the round's model is this candidate's."
+        },
+        "multistart": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "The multistart as arrays, one per OptimizerResult field (`estimation.result_from_record` rebuilds the pypesto.Result).",
+          "tier": "bulk",
+          "title": "Multistart"
+        },
+        "optimizer_compare_runs": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "tier": "bulk",
+          "title": "Optimizer Compare Runs"
+        },
+        "optimizer_comparison": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "tier": "bulk",
+          "title": "Optimizer Comparison"
+        },
+        "optimizer_selection": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Optimizer Selection"
+        },
+        "petab": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/PetabRecord"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "probe_record": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "The cost probe as measured, so a budget answer does not re-run it.",
+          "title": "Probe Record"
+        },
+        "profiles": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Persisted profile likelihoods, for re-use.",
+          "tier": "bulk",
+          "title": "Profiles"
+        },
+        "profiles_timing": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "What each profile cost, for projections.",
+          "title": "Profiles Timing"
+        },
+        "rationale": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Rationale"
+        },
+        "refit": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Read so that records keeping the refit here still load; the engine writes it to `estimation_settings.refit`.",
+          "title": "Refit"
+        },
+        "starts": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Table"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Per-start table of the multistart.",
+          "tier": "bulk"
+        },
+        "structural_nulls": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Parameter combinations no output depends on, at any value.",
+          "title": "Structural Nulls"
+        },
+        "structural_nulls_at_mle": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "The same, evaluated at the fitted optimum.",
+          "title": "Structural Nulls At Mle"
+        }
+      },
+      "title": "CandidateRecord",
+      "type": "object"
+    },
+    "CostRecord": {
+      "additionalProperties": true,
+      "description": "The compile-and-probe slot (`\u2026/candidates/<id>/cost`). The optimiser\ncomparison, when it ran, is its own sibling (`optimizer_comparison`).",
+      "properties": {
+        "approved_n_starts": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "From the cost marker: what the human approved.",
+          "title": "Approved N Starts"
+        },
+        "compile_s": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Compile S"
+        },
+        "elided": {
+          "description": "Fields removed from this record by a tiered copy (store.prune). Empty on a full record.",
+          "items": {
+            "type": "string"
+          },
+          "tier": "core",
+          "title": "Elided",
+          "type": "array"
+        },
+        "engine": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Engine"
+        },
+        "median_start_s": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Median Start S"
+        },
+        "n_probe_starts": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "N Probe Starts"
+        },
+        "objective_eval_s": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Objective Eval S"
+        },
+        "probe_engine": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "How the probe's starts ran (here, or dispatched to `n_workers` processes, and why), each start's wall and CPU, and the probe's wall against its one-at-a-time work (`speedup`). `median_start_s` is serial-equivalent: a start's wall when it ran alone, its CPU when others ran beside it.",
+          "title": "Probe Engine"
+        },
+        "probe_fvals": {
+          "items": {
+            "type": "number"
+          },
+          "title": "Probe Fvals",
+          "type": "array"
+        },
+        "projected_wall_s": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Projected Wall S"
+        },
+        "proposed_n_starts": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Proposed N Starts"
+        },
+        "sensitivity_probe": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "tier": "bulk",
+          "title": "Sensitivity Probe"
+        },
+        "solver_settings": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Solver Settings"
+        },
+        "steady_state": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Steady State"
+        },
+        "tolerance_agreement": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "tier": "bulk",
+          "title": "Tolerance Agreement"
+        }
+      },
+      "title": "CostRecord",
+      "type": "object"
+    },
+    "DataRecord": {
+      "additionalProperties": true,
+      "description": "The data slot \u2014 `rounds/<k>/data`. Identical in every round of a run.",
+      "properties": {
+        "design_summary": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Design summary.",
+          "title": "Design Summary"
+        },
+        "elided": {
+          "description": "Fields removed from this record by a tiered copy (store.prune). Empty on a full record.",
+          "items": {
+            "type": "string"
+          },
+          "tier": "core",
+          "title": "Elided",
+          "type": "array"
+        },
+        "measurements": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Table"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "The engine's long measurement table.",
+          "tier": "bulk"
+        },
+        "n_rows": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "N Rows"
+        },
+        "phenomenology": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "What the curves look like, in words (data_phenomenology).",
+          "title": "Phenomenology"
+        },
+        "producer": {
+          "default": "unknown",
+          "enum": [
+            "engine",
+            "agent:construction",
+            "agent:data_extraction",
+            "agent:assembly",
+            "agent:observation",
+            "agent:condition",
+            "agent:research",
+            "agent:construction_verification",
+            "agent:assembly_verification",
+            "agent:interpretation",
+            "agent:revision_proposal",
+            "agent:revision",
+            "human",
+            "policy",
+            "user-supplied",
+            "seeded-from-previous-round",
+            "unknown"
+          ],
+          "title": "Producer",
+          "type": "string"
+        },
+        "raw": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Table"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "The raw measurements, when present.",
+          "tier": "bulk"
+        },
+        "report": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Mappings, labels, flags.",
+          "title": "Report"
+        },
+        "signals": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Data signals.",
+          "tier": "bulk",
+          "title": "Signals"
+        }
+      },
+      "title": "DataRecord",
+      "type": "object"
+    },
+    "DecisionRecord": {
+      "additionalProperties": true,
+      "description": "A human (or policy, or auto) answer at a gate, with what the engine read\nfrom the note. Written by `ask_once` at `\u2026/decisions/<module>`; the\n`human_gate` ledger rows carry the same answer.",
+      "properties": {
+        "approved": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Approved"
+        },
+        "at": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "At"
+        },
+        "consequences": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Consequences"
+        },
+        "elided": {
+          "description": "Fields removed from this record by a tiered copy (store.prune). Empty on a full record.",
+          "items": {
+            "type": "string"
+          },
+          "tier": "core",
+          "title": "Elided",
+          "type": "array"
+        },
+        "mode": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "interactive | file | auto | policy | recorded.",
+          "title": "Mode"
+        },
+        "module": {
+          "title": "Module",
+          "type": "string"
+        },
+        "note": {
+          "default": "",
+          "title": "Note",
+          "type": "string"
+        },
+        "question": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Question"
+        },
+        "round": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Round"
+        },
+        "signed": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "How the signature reads: a human, policy(<sha>), auto.",
+          "title": "Signed"
+        },
+        "source_file": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "The decision file this was read from, if any.",
+          "title": "Source File"
+        }
+      },
+      "required": [
+        "module"
+      ],
+      "title": "DecisionRecord",
+      "type": "object"
+    },
+    "EstimationRecord": {
+      "additionalProperties": true,
+      "description": "The estimation slot's summary (`\u2026/candidates/<id>/estimation`), as S6\nwrites it. The multistart's arrays, the per-start table, earlier\nattempts and a refit are the candidate's own siblings (`multistart`,\n`starts`, `attempts`, `refit`), each written by its own step.",
+      "properties": {
+        "at_bounds": {
+          "items": {},
+          "title": "At Bounds",
+          "type": "array"
+        },
+        "best_fval": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Best Fval"
+        },
+        "best_grad_norm": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Best Grad Norm"
+        },
+        "best_x_unscaled": {
+          "additionalProperties": {
+            "type": "number"
+          },
+          "title": "Best X Unscaled",
+          "type": "object"
+        },
+        "elided": {
+          "description": "Fields removed from this record by a tiered copy (store.prune). Empty on a full record.",
+          "items": {
+            "type": "string"
+          },
+          "tier": "core",
+          "title": "Elided",
+          "type": "array"
+        },
+        "ensemble": {
+          "items": {},
+          "tier": "bulk",
+          "title": "Ensemble",
+          "type": "array"
+        },
+        "ensemble_delta_nllh": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Ensemble Delta Nllh"
+        },
+        "estimated_inner": {
+          "additionalProperties": true,
+          "title": "Estimated Inner",
+          "type": "object"
+        },
+        "fvals": {
+          "description": "Sorted final objective values.",
+          "items": {
+            "type": "number"
+          },
+          "tier": "bulk",
+          "title": "Fvals",
+          "type": "array"
+        },
+        "n_data": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "N Data"
+        },
+        "n_starts": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "N Starts"
+        },
+        "near_bound_fraction": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Near Bound Fraction"
+        },
+        "near_bounds": {
+          "items": {},
+          "title": "Near Bounds",
+          "type": "array"
+        },
+        "optimizer": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Optimizer"
+        },
+        "producer": {
+          "default": "engine",
+          "enum": [
+            "engine",
+            "agent:construction",
+            "agent:data_extraction",
+            "agent:assembly",
+            "agent:observation",
+            "agent:condition",
+            "agent:research",
+            "agent:construction_verification",
+            "agent:assembly_verification",
+            "agent:interpretation",
+            "agent:revision_proposal",
+            "agent:revision",
+            "human",
+            "policy",
+            "user-supplied",
+            "seeded-from-previous-round",
+            "unknown"
+          ],
+          "title": "Producer",
+          "type": "string"
+        },
+        "seed": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Seed"
+        },
+        "starts": {
+          "anyOf": [
+            {
+              "items": {},
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "The per-start rows, as S6 lists them.",
+          "tier": "bulk",
+          "title": "Starts"
+        },
+        "x_names": {
+          "items": {
+            "type": "string"
+          },
+          "title": "X Names",
+          "type": "array"
+        }
+      },
+      "title": "EstimationRecord",
+      "type": "object"
+    },
+    "EvaluationRecord": {
+      "additionalProperties": true,
+      "description": "The evaluation slot (`rounds/<k>/evaluation`): S7's report \u2014 the\ncomputed core plus the interpretation and the T2' verdict. Written once,\nwhole, when S7 finishes; a round without it has no report. The computed\ncore alone (`evaluation_core`) and the attribution (`attribution`) are\nthe round's siblings.",
+      "properties": {
+        "attribution": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "tier": "bulk",
+          "title": "Attribution"
+        },
+        "best_fval": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Best Fval"
+        },
+        "chi2_per_dof": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Chi2 Per Dof"
+        },
+        "computed_cannot_distinguish": {
+          "items": {},
+          "title": "Computed Cannot Distinguish",
+          "type": "array"
+        },
+        "computed_nonetheless_determined": {
+          "items": {},
+          "title": "Computed Nonetheless Determined",
+          "type": "array"
+        },
+        "declared_constants": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Declared Constants"
+        },
+        "discrimination": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Search rounds: the selection table and winner.",
+          "title": "Discrimination"
+        },
+        "elided": {
+          "description": "Fields removed from this record by a tiered copy (store.prune). Empty on a full record.",
+          "items": {
+            "type": "string"
+          },
+          "tier": "core",
+          "title": "Elided",
+          "type": "array"
+        },
+        "estimated_inner": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Estimated Inner"
+        },
+        "fit": {
+          "description": "Per observable \u00d7 condition fit rows.",
+          "items": {},
+          "title": "Fit",
+          "type": "array"
+        },
+        "goal": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Goal"
+        },
+        "holdout": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Holdout"
+        },
+        "identifiability": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Identifiability"
+        },
+        "interpretation": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "The interpretation agent's block.",
+          "title": "Interpretation"
+        },
+        "latent_states": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "tier": "bulk",
+          "title": "Latent States"
+        },
+        "misfit_evidence": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Misfit Evidence"
+        },
+        "n_ensemble": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "N Ensemble"
+        },
+        "noise_check": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Noise Check"
+        },
+        "parameters": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Parameters"
+        },
+        "prediction_uncertainty": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "tier": "bulk",
+          "title": "Prediction Uncertainty"
+        },
+        "profiles": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "tier": "bulk",
+          "title": "Profiles"
+        },
+        "t2prime_passed": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "T2Prime Passed"
+        }
+      },
+      "title": "EvaluationRecord",
+      "type": "object"
+    },
+    "ExpansionRecord": {
+      "additionalProperties": true,
+      "description": "The round's expansion decision (`rounds/<k>/expansion`). The offer the\nhuman answered and the diagnostics the agent asked for are the round's\nsiblings `expansion_offer` and `expansion_diagnostics`.",
+      "properties": {
+        "axes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Axes",
+          "type": "array"
+        },
+        "base": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Base"
+        },
+        "base_was_the_agents_recommendation": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Base Was The Agents Recommendation"
+        },
+        "carried_undecided": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Carried Undecided",
+          "type": "array"
+        },
+        "elided": {
+          "description": "Fields removed from this record by a tiered copy (store.prune). Empty on a full record.",
+          "items": {
+            "type": "string"
+          },
+          "tier": "core",
+          "title": "Elided",
+          "type": "array"
+        },
+        "expanded": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Expanded"
+        },
+        "expanded_from": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Expanded From"
+        },
+        "floor": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "With grounding on, the support floor of the round the offer seeds, as the answer left it: {band, step, source} (schedule, or human when the person set it at the card).",
+          "title": "Floor"
+        },
+        "from_winner": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "From Winner"
+        },
+        "next_round": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Next Round"
+        },
+        "not_bought_by_ceiling": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Not Bought By Ceiling",
+          "type": "array"
+        },
+        "refused_for_floor": {
+          "description": "The axes the offer refused for that floor (the round's `axis_refused` says why).",
+          "items": {
+            "type": "string"
+          },
+          "title": "Refused For Floor",
+          "type": "array"
+        },
+        "why": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Why"
+        }
+      },
+      "title": "ExpansionRecord",
+      "type": "object"
+    },
+    "GateRecord": {
+      "additionalProperties": true,
+      "description": "One deterministic gate verdict \u2014 `gates.GateResult` plus where it ran.",
+      "properties": {
+        "advisory_findings": {
+          "items": {},
+          "title": "Advisory Findings",
+          "type": "array"
+        },
+        "at": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "ISO timestamp, from the ledger.",
+          "title": "At"
+        },
+        "blocking": {
+          "default": true,
+          "title": "Blocking",
+          "type": "boolean"
+        },
+        "candidate": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Candidate id when the gate ran per candidate.",
+          "title": "Candidate"
+        },
+        "detail": {
+          "default": "",
+          "title": "Detail",
+          "type": "string"
+        },
+        "elided": {
+          "description": "Fields removed from this record by a tiered copy (store.prune). Empty on a full record.",
+          "items": {
+            "type": "string"
+          },
+          "tier": "core",
+          "title": "Elided",
+          "type": "array"
+        },
+        "gate_id": {
+          "description": "The gate's id, e.g. estimation_waterfall_plateau.",
+          "title": "Gate Id",
+          "type": "string"
+        },
+        "module": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Module that ran the gate.",
+          "title": "Module"
+        },
+        "passed": {
+          "title": "Passed",
+          "type": "boolean"
+        },
+        "round": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Round"
+        },
+        "solver_settings": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/SolverSettings"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "threshold": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "items": {
+                "type": "number"
+              },
+              "type": "array"
+            },
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "The declared threshold it was compared against.",
+          "title": "Threshold"
+        },
+        "tier": {
+          "description": "T0 | T1 | T2 | T2prime | T3, as the gate declares.",
+          "title": "Tier",
+          "type": "string"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "items": {
+                "type": "number"
+              },
+              "type": "array"
+            },
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "The computed quantity.",
+          "title": "Value"
+        }
+      },
+      "required": [
+        "gate_id",
+        "tier",
+        "passed"
+      ],
+      "title": "GateRecord",
+      "type": "object"
+    },
+    "IntentRecord": {
+      "additionalProperties": true,
+      "description": "S0's frozen intent \u2014 `intent`.",
+      "properties": {
+        "domain_packs": {
+          "items": {},
+          "title": "Domain Packs",
+          "type": "array"
+        },
+        "elided": {
+          "description": "Fields removed from this record by a tiered copy (store.prune). Empty on a full record.",
+          "items": {
+            "type": "string"
+          },
+          "tier": "core",
+          "title": "Elided",
+          "type": "array"
+        },
+        "inference_target": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "prediction | parameter_values | mechanism_discrimination.",
+          "title": "Inference Target"
+        },
+        "perturbations": {
+          "items": {},
+          "title": "Perturbations",
+          "type": "array"
+        },
+        "question": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Question"
+        },
+        "required_entities": {
+          "items": {},
+          "title": "Required Entities",
+          "type": "array"
+        },
+        "required_predictions": {
+          "items": {},
+          "title": "Required Predictions",
+          "type": "array"
+        },
+        "scope_exclusions": {
+          "items": {},
+          "title": "Scope Exclusions",
+          "type": "array"
+        },
+        "success_criteria": {
+          "items": {},
+          "title": "Success Criteria",
+          "type": "array"
+        },
+        "supplied_literature": {
+          "items": {},
+          "title": "Supplied Literature",
+          "type": "array"
+        },
+        "system": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "System"
+        },
+        "timescale": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Timescale"
+        }
+      },
+      "title": "IntentRecord",
+      "type": "object"
+    },
+    "LedgerEvent": {
+      "additionalProperties": true,
+      "description": "One ledger row, verbatim. Extra keys are the row's payload.",
+      "properties": {
+        "elided": {
+          "description": "Fields removed from this record by a tiered copy (store.prune). Empty on a full record.",
+          "items": {
+            "type": "string"
+          },
+          "tier": "core",
+          "title": "Elided",
+          "type": "array"
+        },
+        "event": {
+          "title": "Event",
+          "type": "string"
+        },
+        "module": {
+          "default": "",
+          "title": "Module",
+          "type": "string"
+        },
+        "round": {
+          "default": 0,
+          "title": "Round",
+          "type": "integer"
+        },
+        "ts": {
+          "title": "Ts",
+          "type": "string"
+        }
+      },
+      "required": [
+        "ts",
+        "event"
+      ],
+      "title": "LedgerEvent",
+      "type": "object"
+    },
+    "ModelRecord": {
+      "additionalProperties": true,
+      "description": "The model slot \u2014 `\u2026/model` of a round or a candidate.\n\nAntimony and SBML are embedded as text: they are small, and a copy that\ncannot rebuild the model is not a result.",
+      "properties": {
+        "antimony": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Antimony source.",
+          "title": "Antimony"
+        },
+        "assembly_overlay": {
+          "anyOf": [
+            {
+              "items": {},
+              "type": "array"
+            },
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Observation-axis patches applied at assembly.",
+          "title": "Assembly Overlay"
+        },
+        "build_report": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Build decisions, sources, constants.",
+          "title": "Build Report"
+        },
+        "elided": {
+          "description": "Fields removed from this record by a tiered copy (store.prune). Empty on a full record.",
+          "items": {
+            "type": "string"
+          },
+          "tier": "core",
+          "title": "Elided",
+          "type": "array"
+        },
+        "encoding": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "The supermodel encoding.",
+          "title": "Encoding"
+        },
+        "files": {
+          "description": "FileRefs of source files, with sha (legacy).",
+          "items": {},
+          "title": "Files",
+          "type": "array"
+        },
+        "glossary": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Entity glossary.",
+          "title": "Glossary"
+        },
+        "mermaid": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Mermaid diagram.",
+          "title": "Mermaid"
+        },
+        "network": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Species, interactions.",
+          "title": "Network"
+        },
+        "parameters": {
+          "items": {
+            "$ref": "#/$defs/ParameterDecl"
+          },
+          "title": "Parameters",
+          "type": "array"
+        },
+        "producer": {
+          "default": "unknown",
+          "enum": [
+            "engine",
+            "agent:construction",
+            "agent:data_extraction",
+            "agent:assembly",
+            "agent:observation",
+            "agent:condition",
+            "agent:research",
+            "agent:construction_verification",
+            "agent:assembly_verification",
+            "agent:interpretation",
+            "agent:revision_proposal",
+            "agent:revision",
+            "human",
+            "policy",
+            "user-supplied",
+            "seeded-from-previous-round",
+            "unknown"
+          ],
+          "title": "Producer",
+          "type": "string"
+        },
+        "reaction_support": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Every reaction of the model annotated against the most recent round's reaction dossier (`dossier_round` names it): user-provided, database-supported, literature-supported or inferred, with the matched entry, its origin, its band and its counted sources; for a candidate, the floor what it adds was held to (`floor`: the variants' floor in a discrimination round, the round's in a model-space search).",
+          "title": "Reaction Support"
+        },
+        "sbml": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "SBML.",
+          "tier": "core",
+          "title": "Sbml"
+        },
+        "seed": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Where this round's model came from: a revision move, or the round seed that carried the chosen model forward.",
+          "title": "Seed"
+        }
+      },
+      "title": "ModelRecord",
+      "type": "object"
+    },
+    "ModelSpaceRecord": {
+      "additionalProperties": true,
+      "description": "The declared model space and what became of it.\n\n`rounds/<k>/space/{axes,declared,dropped,recommended_tier,candidates,floor}`.",
+      "properties": {
+        "axes": {
+          "description": "The axes in the agent's priority order.",
+          "items": {
+            "$ref": "#/$defs/AxisRecord"
+          },
+          "title": "Axes",
+          "type": "array"
+        },
+        "axis_support": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "With grounding on, each axis construction declared annotated against the reaction dossier and held to the variants' floor: {dossier_round, base, floor, axes: {axis id: {reactions, label}}}; an axis refused for that floor is in `dropped` (`refused_floor`) and in `declared`, from where an expansion round offers it again. In advisory mode nothing is refused: `mode` and `flagged` ({axis id: what it adds below the floor}) record what the card flags.",
+          "title": "Axis Support"
+        },
+        "candidates": {
+          "description": "Candidates: id, label, rationale, assembly_overlay.",
+          "items": {},
+          "title": "Candidates",
+          "type": "array"
+        },
+        "declared": {
+          "description": "Axes declared later, verbatim.",
+          "items": {},
+          "title": "Declared",
+          "type": "array"
+        },
+        "dropped": {
+          "description": "Dropped axes: id, reason, module.",
+          "items": {},
+          "title": "Dropped",
+          "type": "array"
+        },
+        "elided": {
+          "description": "Fields removed from this record by a tiered copy (store.prune). Empty on a full record.",
+          "items": {
+            "type": "string"
+          },
+          "tier": "core",
+          "title": "Elided",
+          "type": "array"
+        },
+        "floor": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "The round's support floor: {band, step, source} \u2014 the band an essential reaction's grade must reach to enter the base, and who set it (human, rule, schedule, lowered).",
+          "title": "Floor"
+        },
+        "recommended_tier": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Recommended Tier"
+        },
+        "search_mode": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "How the round searches its space: {mode, source}.",
+          "title": "Search Mode"
+        }
+      },
+      "title": "ModelSpaceRecord",
+      "type": "object"
+    },
+    "ParameterDecl": {
+      "additionalProperties": true,
+      "description": "One row of `model/parameters` \u2014 the construction agent's table.",
+      "properties": {
+        "elided": {
+          "description": "Fields removed from this record by a tiered copy (store.prune). Empty on a full record.",
+          "items": {
+            "type": "string"
+          },
+          "tier": "core",
+          "title": "Elided",
+          "type": "array"
+        },
+        "estimate": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Estimate"
+        },
+        "evidence_tier": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Evidence Tier"
+        },
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "lb": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Lb"
+        },
+        "nominal_value": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Nominal Value"
+        },
+        "source": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source"
+        },
+        "ub": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Ub"
+        },
+        "unit": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Unit"
+        }
+      },
+      "required": [
+        "id"
+      ],
+      "title": "ParameterDecl",
+      "type": "object"
+    },
+    "PetabRecord": {
+      "additionalProperties": true,
+      "description": "The PEtab problem as fitted \u2014 `petab/*`, tables embedded.",
+      "properties": {
+        "conditions": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Table"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "tier": "bulk"
+        },
+        "elided": {
+          "description": "Fields removed from this record by a tiered copy (store.prune). Empty on a full record.",
+          "items": {
+            "type": "string"
+          },
+          "tier": "core",
+          "title": "Elided",
+          "type": "array"
+        },
+        "holdout_measurements": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Table"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "tier": "bulk"
+        },
+        "measurements": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Table"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "tier": "bulk"
+        },
+        "n_estimated": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "N Estimated"
+        },
+        "n_holdout": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "N Holdout"
+        },
+        "n_train": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "N Train"
+        },
+        "observables": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Table"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "tier": "bulk"
+        },
+        "parameters": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Table"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "tier": "bulk"
+        },
+        "problem_yaml": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Problem Yaml"
+        },
+        "producer": {
+          "default": "unknown",
+          "enum": [
+            "engine",
+            "agent:construction",
+            "agent:data_extraction",
+            "agent:assembly",
+            "agent:observation",
+            "agent:condition",
+            "agent:research",
+            "agent:construction_verification",
+            "agent:assembly_verification",
+            "agent:interpretation",
+            "agent:revision_proposal",
+            "agent:revision",
+            "human",
+            "policy",
+            "user-supplied",
+            "seeded-from-previous-round",
+            "unknown"
+          ],
+          "title": "Producer",
+          "type": "string"
+        }
+      },
+      "title": "PetabRecord",
+      "type": "object"
+    },
+    "QuestionRecord": {
+      "additionalProperties": true,
+      "description": "A structural question an agent raised for the human (`questions`).",
+      "properties": {
+        "confidence": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Confidence"
+        },
+        "elided": {
+          "description": "Fields removed from this record by a tiered copy (store.prune). Empty on a full record.",
+          "items": {
+            "type": "string"
+          },
+          "tier": "core",
+          "title": "Elided",
+          "type": "array"
+        },
+        "human_answer": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Human Answer"
+        },
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "question": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Question"
+        },
+        "raised_by": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Raised By"
+        },
+        "raised_round": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Raised Round"
+        },
+        "status": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Status"
+        },
+        "topic": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Topic"
+        }
+      },
+      "required": [
+        "id"
+      ],
+      "title": "QuestionRecord",
+      "type": "object"
+    },
+    "RevisionRecord": {
+      "additionalProperties": true,
+      "description": "`rounds/<k>/revision` \u2014 the move the loop took out of this round, with the\nagent's reasoning, and the cycle hash the round was judged by.",
+      "properties": {
+        "best_fval": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Best Fval"
+        },
+        "config_hash": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Config Hash"
+        },
+        "elided": {
+          "description": "Fields removed from this record by a tiered copy (store.prune). Empty on a full record.",
+          "items": {
+            "type": "string"
+          },
+          "tier": "core",
+          "title": "Elided",
+          "type": "array"
+        },
+        "expected_effect": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Expected Effect"
+        },
+        "motivated_by": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Motivated By"
+        },
+        "move": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "{type, args}; None means stop.",
+          "title": "Move"
+        },
+        "why": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "When no move: the reason.",
+          "title": "Why"
+        }
+      },
+      "title": "RevisionRecord",
+      "type": "object"
+    },
+    "RoundRecord": {
+      "additionalProperties": true,
+      "description": "One round: everything under `rounds/round_<k>`.",
+      "properties": {
+        "agent_calls": {
+          "additionalProperties": {
+            "$ref": "#/$defs/AgentCallRecord"
+          },
+          "description": "By role.",
+          "title": "Agent Calls",
+          "type": "object"
+        },
+        "attribution": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "tier": "bulk",
+          "title": "Attribution"
+        },
+        "axis_refused": {
+          "anyOf": [
+            {
+              "items": {},
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "The axes this round's expansion offer refused for the floor of the round it seeds, as the answer left them: each with the axis id, the round it was offered for, the floor, the added reactions below it (each with the entry it matches and that entry's band, or none) and the card's line.",
+          "title": "Axis Refused"
+        },
+        "base_model": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ModelRecord"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "The tested BASE of a two-call discrimination round; candidates are declared differences from it."
+        },
+        "base_model_previous": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "The base before its last redraft, so the card can say what moved.",
+          "tier": "audit",
+          "title": "Base Model Previous"
+        },
+        "candidates": {
+          "additionalProperties": {
+            "$ref": "#/$defs/CandidateRecord"
+          },
+          "title": "Candidates",
+          "type": "object"
+        },
+        "compile_feedback": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "The engine's one redraft of the observation model this round: the compile or fit failure it sent back, the candidate that failed, the observable ids the failure named and the finding as worded.",
+          "title": "Compile Feedback"
+        },
+        "data": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/DataRecord"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "decisions": {
+          "additionalProperties": {
+            "$ref": "#/$defs/DecisionRecord"
+          },
+          "description": "By gate module: `\u2026/decisions/<module>`.",
+          "title": "Decisions",
+          "type": "object"
+        },
+        "decisions_md": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "The decision record, as rendered.",
+          "tier": "audit",
+          "title": "Decisions Md"
+        },
+        "directive": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "The human's directive for the round.",
+          "title": "Directive"
+        },
+        "elided": {
+          "description": "Fields removed from this record by a tiered copy (store.prune). Empty on a full record.",
+          "items": {
+            "type": "string"
+          },
+          "tier": "core",
+          "title": "Elided",
+          "type": "array"
+        },
+        "estimation_settings": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Round-level estimation settings shared by its candidates.",
+          "title": "Estimation Settings"
+        },
+        "evaluation": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/EvaluationRecord"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "evaluation_core": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "S7's computed core, written before the interpretation.",
+          "title": "Evaluation Core"
+        },
+        "evidence": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "The research role's filtered items.",
+          "title": "Evidence"
+        },
+        "evidence_sources": {
+          "anyOf": [
+            {
+              "additionalProperties": {
+                "format": "binary",
+                "type": "string"
+              },
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "The documents S1 cached for audit, by cached file name: opaque bytes (a PDF, a page), never text.",
+          "tier": "bulk",
+          "title": "Evidence Sources"
+        },
+        "expansion": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ExpansionRecord"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "expansion_diagnostics": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Diagnostics the agent asked for.",
+          "tier": "bulk",
+          "title": "Expansion Diagnostics"
+        },
+        "expansion_evidence": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "The research role's evidence snapshot taken before the expansion proposal (what that proposal could cite).",
+          "title": "Expansion Evidence"
+        },
+        "expansion_offer": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "The expansion offer the human answered.",
+          "title": "Expansion Offer"
+        },
+        "expansion_support": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "With grounding on, each axis of the expansion offer annotated against the reaction dossier: {dossier_round, base, axes: {axis id: {reactions, label}}} \u2014 the reactions its patch adds to the base, each labelled as a model reaction is, and the weakest label, 'no new reaction', or 'not annotated' with the error.",
+          "title": "Expansion Support"
+        },
+        "gates": {
+          "additionalProperties": {
+            "$ref": "#/$defs/GateRecord"
+          },
+          "description": "Round-level gates (s1 base, s2, s7).",
+          "title": "Gates",
+          "type": "object"
+        },
+        "index": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Filled from the key.",
+          "title": "Index"
+        },
+        "interpretation_diagnostics": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "tier": "bulk",
+          "title": "Interpretation Diagnostics"
+        },
+        "knowledge_admitted": {
+          "anyOf": [
+            {
+              "items": {},
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "The reactions a targeted search admitted in the round, in order: each with origin `search`, who asked (`requested_by`), the question it answers, the search that found it and the floor it was admitted at; those construction asked for join the base's essential set, the others are reactions the expansions or an expansion may add.",
+          "title": "Knowledge Admitted"
+        },
+        "knowledge_search": {
+          "additionalProperties": true,
+          "description": "By search number: each targeted search of the knowledge role the engine ran in the round \u2014 for a base that named what it lacks, for the expansions' `missing`, for an expansion, or on the person's `search:` at the expansion card (`requested_by`) \u2014 its questions, the graded reactions and facts it returned, its calls and cost, and what it admitted at which floor (`admission`).",
+          "title": "Knowledge Search",
+          "type": "object"
+        },
+        "model": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ModelRecord"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "reaction_evidence": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "The knowledge module's dossier as the run was started with it (copied into round 0 from the record's input): each reaction with its sources, its grade, whether it is required or essential, and its origin; the facts, the system summary, the mode.",
+          "title": "Reaction Evidence"
+        },
+        "report_md": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "tier": "audit",
+          "title": "Report Md"
+        },
+        "research_requests": {
+          "additionalProperties": true,
+          "description": "By request number: the frozen snapshot of each literature search the expansion agent asked for (items, dropped, questions, per_question, failed).",
+          "title": "Research Requests",
+          "type": "object"
+        },
+        "residual_forms": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "The residual shape per observable.",
+          "title": "Residual Forms"
+        },
+        "revision": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/RevisionRecord"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "selection": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/SelectionRecord"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "selection_files": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "petab_select's interchange files, by name, as text.",
+          "tier": "bulk",
+          "title": "Selection Files",
+          "type": "object"
+        },
+        "shape": {
+          "default": "single",
+          "enum": [
+            "single",
+            "candidate_set"
+          ],
+          "title": "Shape",
+          "type": "string"
+        },
+        "shared_assembly": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/AssemblyRecord"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "space": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ModelSpaceRecord"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "status": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/RoundStatusRecord"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "superseded": {
+          "additionalProperties": true,
+          "description": "Groups a re-entered module set aside, by `<what>_<stamp>`.",
+          "tier": "audit",
+          "title": "Superseded",
+          "type": "object"
+        },
+        "supplied_evidence": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "The human's staged literature.",
+          "title": "Supplied Evidence"
+        }
+      },
+      "title": "RoundRecord",
+      "type": "object"
+    },
+    "RoundStatusRecord": {
+      "additionalProperties": true,
+      "description": "Which slots the round has, validated by what \u2014 computed from the\nrecord and its markers (which carry the validated slot shas).",
+      "properties": {
+        "candidates": {
+          "additionalProperties": true,
+          "description": "The same, per candidate.",
+          "title": "Candidates",
+          "type": "object"
+        },
+        "elided": {
+          "description": "Fields removed from this record by a tiered copy (store.prune). Empty on a full record.",
+          "items": {
+            "type": "string"
+          },
+          "tier": "core",
+          "title": "Elided",
+          "type": "array"
+        },
+        "markers": {
+          "additionalProperties": true,
+          "description": "Marker name \u2192 its JSON payload (producer, validated_by, and the `files` shas stamped when the marker was set).",
+          "title": "Markers",
+          "type": "object"
+        },
+        "slots": {
+          "additionalProperties": true,
+          "description": "Per slot: key, files (part + sha16), present, producer, validated_by/at, drifted \u2014 computed from the record and the markers, so there is no separate index file.",
+          "title": "Slots",
+          "type": "object"
+        },
+        "updated_at": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Updated At"
+        },
+        "validations": {
+          "additionalProperties": true,
+          "description": "Per candidate (or `_round`) and slot: the battery that validated a supplied or seeded slot on entry.",
+          "title": "Validations",
+          "type": "object"
+        }
+      },
+      "title": "RoundStatusRecord",
+      "type": "object"
+    },
+    "RunMeta": {
+      "additionalProperties": true,
+      "description": "`run`: what ran, on what (written at run start).",
+      "properties": {
+        "auto": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Auto"
+        },
+        "backend": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Backend"
+        },
+        "elided": {
+          "description": "Fields removed from this record by a tiered copy (store.prune). Empty on a full record.",
+          "items": {
+            "type": "string"
+          },
+          "tier": "core",
+          "title": "Elided",
+          "type": "array"
+        },
+        "engine_version": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Engine Version"
+        },
+        "from_module": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "From Module"
+        },
+        "max_rounds": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Max Rounds"
+        },
+        "n_invocations": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Number of run_start rows \u2014 one per resume.",
+          "title": "N Invocations"
+        },
+        "policy": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Policy"
+        },
+        "policy_profile": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Policy Profile"
+        },
+        "policy_sha": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Policy Sha"
+        },
+        "provenance": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "git state, package versions, lockfile sha.",
+          "title": "Provenance"
+        },
+        "research_fence": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Research Fence"
+        },
+        "run_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Filled from the file name when absent.",
+          "title": "Run Id"
+        },
+        "spec_overlay": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Spec Overlay"
+        },
+        "started_at": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "ts of the first run_start.",
+          "title": "Started At"
+        },
+        "testcase": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Testcase"
+        },
+        "testcase_sha": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Testcase Sha"
+        },
+        "workflow": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Workflow"
+        },
+        "workflow_sha": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Workflow Sha"
+        }
+      },
+      "title": "RunMeta",
+      "type": "object"
+    },
+    "RunOutcome": {
+      "additionalProperties": true,
+      "description": "The `run_end` ledger row, or its absence.",
+      "properties": {
+        "at": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "At"
+        },
+        "decisive": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Decisive"
+        },
+        "elided": {
+          "description": "Fields removed from this record by a tiered copy (store.prune). Empty on a full record.",
+          "items": {
+            "type": "string"
+          },
+          "tier": "core",
+          "title": "Elided",
+          "type": "array"
+        },
+        "final_round": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Final Round"
+        },
+        "outcome": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "completed | completed_t2prime_unmet | stopped | interrupted; None while the run is still open.",
+          "title": "Outcome"
+        },
+        "reason": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Reason"
+        },
+        "winner": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Winner"
+        }
+      },
+      "title": "RunOutcome",
+      "type": "object"
+    },
+    "SelectionRecord": {
+      "additionalProperties": true,
+      "description": "The selection slot (`rounds/<k>/selection`): the criterion values and\nthe winner. petab_select's interchange files are the round's sibling\n`selection_files`.",
+      "properties": {
+        "criterion": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Criterion"
+        },
+        "decisive": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Decisive"
+        },
+        "elided": {
+          "description": "Fields removed from this record by a tiered copy (store.prune). Empty on a full record.",
+          "items": {
+            "type": "string"
+          },
+          "tier": "core",
+          "title": "Elided",
+          "type": "array"
+        },
+        "indistinguishable": {
+          "items": {},
+          "title": "Indistinguishable",
+          "type": "array"
+        },
+        "model_space_sha": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Model Space Sha"
+        },
+        "models": {
+          "description": "petab_select models.yaml.",
+          "items": {},
+          "tier": "bulk",
+          "title": "Models",
+          "type": "array"
+        },
+        "problem_yaml": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Problem Yaml"
+        },
+        "tool": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Tool"
+        },
+        "undecided_axes": {
+          "items": {},
+          "title": "Undecided Axes",
+          "type": "array"
+        },
+        "values": {
+          "additionalProperties": true,
+          "description": "Per model: the criterion values.",
+          "title": "Values",
+          "type": "object"
+        },
+        "version": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Version"
+        },
+        "weights": {
+          "additionalProperties": true,
+          "title": "Weights",
+          "type": "object"
+        },
+        "winner": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Winner"
+        }
+      },
+      "title": "SelectionRecord",
+      "type": "object"
+    },
+    "SolverSettings": {
+      "additionalProperties": true,
+      "description": "The integrator settings a gate verdict was reached under.",
+      "properties": {
+        "atol": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Atol"
+        },
+        "elided": {
+          "description": "Fields removed from this record by a tiered copy (store.prune). Empty on a full record.",
+          "items": {
+            "type": "string"
+          },
+          "tier": "core",
+          "title": "Elided",
+          "type": "array"
+        },
+        "maxsteps": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Maxsteps"
+        },
+        "rtol": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Rtol"
+        },
+        "solver": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Solver"
+        }
+      },
+      "title": "SolverSettings",
+      "type": "object"
+    },
+    "Table": {
+      "additionalProperties": true,
+      "description": "A columnar table: one dataset per column in HDF5, native for numbers.\n\nChosen over a list of row dicts because hdfdict stores a list of dicts as\none YAML string, which is neither native nor addressable. Column order is\nkept in `columns`; `data` holds the values by column name.",
+      "properties": {
+        "columns": {
+          "description": "Column names, in order.",
+          "items": {
+            "type": "string"
+          },
+          "title": "Columns",
+          "type": "array"
+        },
+        "data": {
+          "additionalProperties": {
+            "items": {},
+            "type": "array"
+          },
+          "description": "Values by column, one list per column, row-aligned.",
+          "tier": "core",
+          "title": "Data",
+          "type": "object"
+        },
+        "elided": {
+          "description": "Fields removed from this record by a tiered copy (store.prune). Empty on a full record.",
+          "items": {
+            "type": "string"
+          },
+          "tier": "core",
+          "title": "Elided",
+          "type": "array"
+        }
+      },
+      "required": [
+        "columns"
+      ],
+      "title": "Table",
+      "type": "object"
+    },
+    "TimingRecord": {
+      "additionalProperties": true,
+      "description": "Where the run's wall and CPU time went (`timing`).\n\nWritten at every pause and at run end by `octomod/orchestration/timing.py`; rebuilt\nby `derive` from the ledger's `span` rows when absent or stale. The\naccount closes by construction: `run_wall_s = \u03a3 sessions.wall_s +\nwaiting_for_human_s + unaccounted_s`, and every session is the self time\nof its spans (agent, compute, render, human, io, record) plus `engine_s`.\nWall time is one machine's; `cpu_s`, the per-unit costs under `compute`\nand `machine` are what compare across machines.",
+      "properties": {
+        "accounted_s": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Accounted S"
+        },
+        "agents": {
+          "additionalProperties": true,
+          "description": "Per role: n, wall_s, api_s (model), tools_s.",
+          "title": "Agents",
+          "type": "object"
+        },
+        "by_category": {
+          "additionalProperties": true,
+          "description": "agent (with api_s, tools_s), compute, render, human, io, record, engine, waiting_for_human, unaccounted \u2192 {wall_s, cpu_s, n, parallelism; compute also the work units and per-unit costs}.",
+          "title": "By Category",
+          "type": "object"
+        },
+        "by_module": {
+          "additionalProperties": true,
+          "title": "By Module",
+          "type": "object"
+        },
+        "by_round": {
+          "additionalProperties": true,
+          "title": "By Round",
+          "type": "object"
+        },
+        "compute": {
+          "additionalProperties": true,
+          "description": "Per block: wall_s, cpu_s, parallelism, the work units (n_starts, n_fval, n_grad, n_hess, n_points, n_profiles, n_procs) and cpu_s/wall_s per start, fval, point.",
+          "title": "Compute",
+          "type": "object"
+        },
+        "elided": {
+          "description": "Fields removed from this record by a tiered copy (store.prune). Empty on a full record.",
+          "items": {
+            "type": "string"
+          },
+          "tier": "core",
+          "title": "Elided",
+          "type": "array"
+        },
+        "machine": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "What it ran on: os, arch, python, cpu_model, cpu_count, memory_gb, load_avg_1m (no hostname: the record is shared).",
+          "title": "Machine"
+        },
+        "n_sessions": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "N Sessions"
+        },
+        "note": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Note"
+        },
+        "parallelism": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "run_cpu_s / run_wall_s.",
+          "title": "Parallelism"
+        },
+        "residual_s": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "run_wall_s \u2212 accounted_s: the gap after a killed session (= unaccounted_s), else zero.",
+          "title": "Residual S"
+        },
+        "run_cpu_s": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "CPU over every session (process + children): what the work cost, comparable across core counts and load.",
+          "title": "Run Cpu S"
+        },
+        "run_wall_s": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Run Wall S"
+        },
+        "sessions": {
+          "items": {
+            "$ref": "#/$defs/TimingSession"
+          },
+          "title": "Sessions",
+          "type": "array"
+        },
+        "spans": {
+          "description": "Every span: category, name, module, round, candidate, t0, t1, wall_s, cpu_s, depth, n_children, children_wall_s/cpu_s, self_wall_s/cpu_s, leaf, ok, late, and the block's detail (api_s, tools_s, n_starts, \u2026).",
+          "items": {},
+          "tier": "bulk",
+          "title": "Spans",
+          "type": "array"
+        },
+        "unaccounted_s": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Wall after a session that lost its end row, before the next process: nobody was asked anything, the process died.",
+          "title": "Unaccounted S"
+        },
+        "waiting_for_human_s": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Between sessions: a human (or the front end) at a file gate.",
+          "title": "Waiting For Human S"
+        },
+        "written_at": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Written At"
+        }
+      },
+      "title": "TimingRecord",
+      "type": "object"
+    },
+    "TimingSession": {
+      "additionalProperties": true,
+      "description": "One process of the run.\n\nFrom its `run_start` row to its `run_end` or `gate_pending` row, extended\nover the checkpoint and account written after that row.",
+      "properties": {
+        "cpu_overshoot_s": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "When the spans' CPU exceeds the process's: a child reaped inside a span that started before it.",
+          "title": "Cpu Overshoot S"
+        },
+        "cpu_s": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "The process's CPU (self + children, user + sys) at its end row.",
+          "title": "Cpu S"
+        },
+        "elided": {
+          "description": "Fields removed from this record by a tiered copy (store.prune). Empty on a full record.",
+          "items": {
+            "type": "string"
+          },
+          "tier": "core",
+          "title": "Elided",
+          "type": "array"
+        },
+        "ended": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Ended"
+        },
+        "ended_by": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "run_end:<outcome> | gate_pending | open | killed (no end row).",
+          "title": "Ended By"
+        },
+        "engine_cpu_s": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Engine Cpu S"
+        },
+        "engine_s": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "wall_s \u2212 timed_s: the engine between timed blocks.",
+          "title": "Engine S"
+        },
+        "index": {
+          "title": "Index",
+          "type": "integer"
+        },
+        "parallelism": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "cpu_s / wall_s.",
+          "title": "Parallelism"
+        },
+        "started": {
+          "description": "Epoch seconds: the process's start (its first row minus startup_s).",
+          "title": "Started",
+          "type": "number"
+        },
+        "started_iso": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Started Iso"
+        },
+        "startup_s": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Imports and set-up before the run_start row.",
+          "title": "Startup S"
+        },
+        "timed_cpu_s": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Timed Cpu S"
+        },
+        "timed_s": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "The leaf spans inside this session, summed.",
+          "title": "Timed S"
+        },
+        "wall_s": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Wall S"
+        }
+      },
+      "required": [
+        "index",
+        "started"
+      ],
+      "title": "TimingSession",
+      "type": "object"
+    }
+  },
+  "additionalProperties": true,
+  "description": "The whole run.",
+  "properties": {
+    "analysis": {
+      "anyOf": [
+        {
+          "additionalProperties": true,
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "The analysis report's summary, when written.",
+      "tier": "bulk",
+      "title": "Analysis"
+    },
+    "completeness": {
+      "anyOf": [
+        {
+          "additionalProperties": true,
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "What the record held at each checkpoint (`completeness.py`): per marker, decision, pause, run end and final write, what was looked for and what was missing, under `run/<checkpoint>`, `round_k/<module>/<unit>` and `round_k/decision_<module>/<unit>`; written before each checkpoint copy.",
+      "tier": "audit",
+      "title": "Completeness"
+    },
+    "elided": {
+      "description": "Fields removed from this record by a tiered copy (store.prune). Empty on a full record.",
+      "items": {
+        "type": "string"
+      },
+      "tier": "core",
+      "title": "Elided",
+      "type": "array"
+    },
+    "fit_index": {
+      "anyOf": [
+        {
+          "additionalProperties": true,
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Fits in this record by fit key, for re-use (reuse.py).",
+      "title": "Fit Index"
+    },
+    "history": {
+      "description": "The single-model loop's round history.",
+      "items": {},
+      "title": "History",
+      "type": "array"
+    },
+    "input": {
+      "anyOf": [
+        {
+          "additionalProperties": true,
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "What the run was started with: the case files the run reads, by relative path (text, or bytes), snapshotted before S0 \u2014 the lab note, the intent, the case file, the blocklist, data/, supplied/, stubs/ and the documents the supplied literature names; nothing else.",
+      "tier": "core",
+      "title": "Input"
+    },
+    "input_pending": {
+      "anyOf": [
+        {
+          "additionalProperties": true,
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Set while an `input` snapshot or copy is being written; left behind only by a kill, which makes the next start take the snapshot again.",
+      "title": "Input Pending"
+    },
+    "input_source": {
+      "anyOf": [
+        {
+          "additionalProperties": true,
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Where `input` came from: the testcase, a previous run (started_from).",
+      "title": "Input Source"
+    },
+    "intent": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/IntentRecord"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "ledger": {
+      "description": "Every ledger row, verbatim.",
+      "items": {
+        "$ref": "#/$defs/LedgerEvent"
+      },
+      "tier": "audit",
+      "title": "Ledger",
+      "type": "array"
+    },
+    "models_used": {
+      "anyOf": [
+        {
+          "additionalProperties": true,
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Which models the agent calls ran on, summed from the ledger at every pause and at run end (`provenance.models_used`): `by_model` (roles, calls, input/output tokens, cost) and `by_role` (models as resolved and as asked, effort). What they were SET UP with is `run.provenance.agents`.",
+      "title": "Models Used"
+    },
+    "outcome": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/RunOutcome"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "phenomenology_raw": {
+      "anyOf": [
+        {
+          "additionalProperties": true,
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "What the curves look like, read from the raw data files before any round ran, present when its acceptance rules all held; round 0's construction reads it, and the data module's own reading is checked against it.",
+      "title": "Phenomenology Raw"
+    },
+    "questions": {
+      "description": "The questions raised for the human.",
+      "items": {
+        "$ref": "#/$defs/QuestionRecord"
+      },
+      "title": "Questions",
+      "type": "array"
+    },
+    "rounds": {
+      "additionalProperties": {
+        "$ref": "#/$defs/RoundRecord"
+      },
+      "description": "\"round_0\", \"round_1\", \u2026",
+      "title": "Rounds",
+      "type": "object"
+    },
+    "run": {
+      "$ref": "#/$defs/RunMeta",
+      "description": "run_meta; empty when a record was built without one."
+    },
+    "schema_version": {
+      "default": 2,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "timing": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/TimingRecord"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Where the wall time went; derived from the ledger when absent."
+    }
+  },
+  "title": "RunResult",
+  "type": "object"
+}

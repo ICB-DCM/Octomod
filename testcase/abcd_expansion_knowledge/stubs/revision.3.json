@@ -1,0 +1,79 @@
+{
+  "diagnosis": "STUB call 3: the same three axes; the removal of the RegB route is kept because it is the direct test of the designed route.",
+  "axes": [
+    {
+      "id": "product_inactivates_regb",
+      "question": "Does ProD inactivate active RegB directly, without being consumed?",
+      "origin": "biology",
+      "default": "off",
+      "priority": 1,
+      "priority_reason": "described in a related module (rx_6.e1) and it acts where the RegB_p residuals sit",
+      "on_antimony_patch": {
+        "append": [
+          "J7: Ba + D -> D; k_pi * Ba * D;"
+        ]
+      },
+      "adds_parameters": [
+        {
+          "id": "k_pi",
+          "nominal_value": 0.01,
+          "unit": "1/(uM*min)",
+          "lb": 1e-06,
+          "ub": 1.0,
+          "evidence_tier": "to_be_estimated",
+          "source": "size unknown; the fit decides",
+          "estimate": true,
+          "neutral_value": 0.0,
+          "denotes": "rate of the product-driven inactivation of active RegB"
+        }
+      ],
+      "rationale": "A related module built from the same parts shows the product inactivating the active regulator directly (rx_6.e1); a product-driven loss of RegB_p would bend its late time course.",
+      "discriminating_evidence": "obs_RegB_p at u=4 without BX-11: the late relaxation after the peak"
+    },
+    {
+      "id": "product_inactivates_kina",
+      "question": "Does ProD inactivate active KinA directly, without being consumed?",
+      "origin": "residual",
+      "default": "off",
+      "priority": 2,
+      "priority_reason": "the KinA_p residuals at the top dose run negative late, where ProD is highest",
+      "on_antimony_patch": {
+        "append": [
+          "J8: Aa + D -> D; k_pk * Aa * D;"
+        ]
+      },
+      "adds_parameters": [
+        {
+          "id": "k_pk",
+          "nominal_value": 0.01,
+          "unit": "1/(uM*min)",
+          "lb": 1e-06,
+          "ub": 1.0,
+          "evidence_tier": "to_be_estimated",
+          "source": "size unknown; the fit decides",
+          "estimate": true,
+          "neutral_value": 0.0,
+          "denotes": "rate of the product-driven inactivation of active KinA"
+        }
+      ],
+      "rationale": "A late negative drift of KinA_p where ProD accumulates; nothing in prior_reactions describes the step, and the search asked for found one correlational remark.",
+      "discriminating_evidence": "obs_KinA_p at u=4 without BX-11, after 50 min"
+    },
+    {
+      "id": "no_regb_route",
+      "question": "Is the RegB-catalysed conversion needed at all, or does the product come from elsewhere?",
+      "origin": "residual",
+      "default": "off",
+      "priority": 3,
+      "priority_reason": "the ProD residuals under BX-11 question the designed route",
+      "on_antimony_patch": {
+        "replace_reaction": "J5",
+        "with": "  // J5 removed (axis no_regb_route on): ProD is made by another route only"
+      },
+      "adds_parameters": [],
+      "rationale": "ProD keeps rising where RegB activation is blocked; the model without the RegB route tests whether it carries the conversion at all.",
+      "discriminating_evidence": "obs_ProD in the untreated conditions"
+    }
+  ],
+  "stop_instead": false
+}

@@ -1,0 +1,58 @@
+# Frozen S0 intent for ctd_petab — the MODULAR-ENTRY case on real, published work.
+#
+# This case supplies a COMPLETE PEtab problem: the published neighbouring-effect
+# model of P-TEFb-mediated CTD phosphorylation, exactly as deposited by its authors
+# (258 species, 1024 reactions, 901 KB of SBML). Construction is never called; the
+# run enters at estimation.
+#
+# WHY IT EXISTS. `ctd_blind` asks whether the pipeline can BUILD this model. It
+# cannot, and the reason is measured rather than assumed: a neighbouring-effect
+# model of 8 binary repeats needs 256 species and 1024 reactions, which is ~85 KB
+# of literal Antimony in one JSON field, against a largest-ever agent reply of
+# ~18 KB. That is a limit of how models are REPRESENTED, not of the science.
+#
+# So this case tests the half that does not depend on that limit: given a real,
+# published, large problem, does the engine estimate it, profile it, judge its
+# identifiability and report it honestly? That is exactly the modularity question
+# that was asked — "if we approached with an already-made petab
+# problem would it just estimate it and get parameter estimates and get profiles
+# if requested?"
+#
+# The answer key is the published fit: nllh -89.9971 at k = 7.
+
+question: >-
+  Estimate the parameters of this supplied model of CTD phosphorylation from the
+  measurements, and report which of them the data determine and which they do not.
+
+system: >-
+  RNA polymerase II CTD (8 heptarepeats, in vitro) phosphorylated by P-TEFb;
+  supplied PEtab problem with 258 species and 1024 reactions
+
+required_entities:
+  - the CTD substrate in each of its phosphorylation configurations
+  - ATP
+
+required_predictions:
+  - point estimates for every estimated parameter, with confidence intervals
+  - a statement of which parameters the data determine and which they do not
+
+perturbations:
+  - none — a single in vitro condition, four time points
+
+timescale: minutes, horizon 960 min (16 h)
+
+scope_exclusions:
+  - the model structure itself, which is supplied and is not under revision here
+
+success_criteria:
+  - every estimated parameter is reported with an interval, and any parameter the
+    data do not bound is named as unbounded rather than given a point value alone
+  - the observation model's scaling parameters are reported alongside the kinetic
+    ones, since they are estimated from the same data
+  - convergence is evidenced, not asserted
+
+inference_target: parameter_values
+
+domain_packs:
+  - general-dynamics
+  - measurement-tech

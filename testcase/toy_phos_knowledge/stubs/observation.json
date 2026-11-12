@@ -1,0 +1,23 @@
+{
+  "observables": [
+    {
+      "observable_id": "obs_pR",
+      "maps_to_label": "pR_au",
+      "formula": "Rp",
+      "transformation": "lin",
+      "noise": {
+        "distribution": "normal",
+        "formula": "sigma_obs_pR",
+        "estimate_sigma": true
+      },
+      "scaling": {
+        "mode": "factor",
+        "scale_parameter": "sc_obs_pR",
+        "offset_parameter": null,
+        "shared_across_conditions": true
+      },
+      "rationale": "MAPPING: The phospho-specific antibody reports the phosphorylated species only, so the observable is Rp alone and not a sum over R and Rp. Linear transformation: the noise is additive in densitometry units and the data include values at and below zero, which a log transformation cannot represent. NOISE + TRANSFORMATION: Additive normal noise with a single constant sigma across doses and times. The replicate spread does not grow with signal level \u2014 the two lanes differ by a similar absolute amount at the plateau as at t=0 \u2014 which rules out a proportional or log-normal error model. Sigma is estimated because no error column was supplied; two replicates per point is too few to fix it empirically per condition. SCALING: The readout is uncalibrated densitometry in arbitrary units, so the simulated Rp and the measured column are not in the same units and a scale factor is mandatory \u2014 without it the magnitude-reconciliation gate has no way to pass. No offset: the description says the values are already background-subtracted and that t=0 lanes sit at or near zero, so a free additive term would be fitting the background twice. Shared across conditions because all three doses were blotted on the same lysate series with one antibody and one exposure; a per-dose scale would absorb the dose response itself and destroy the prediction being asked for."
+    }
+  ],
+  "_fixture_note": "one role, one observation function: the observable, its noise and its scaling"
+}

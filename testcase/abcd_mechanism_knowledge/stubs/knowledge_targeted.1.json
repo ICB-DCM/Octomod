@@ -1,0 +1,31 @@
+{
+  "reactions": [
+    {
+      "equation": "Ba + D -> BD",
+      "answers": "q_1",
+      "essential": false,
+      "type": "binding",
+      "description": "the product binds active RegB into a stable complex",
+      "evidence": [
+        {
+          "source": "Product binds the active regulator in a related synthetic module — a note (fixture, 2023)",
+          "title": "Product binds the active regulator in a related synthetic module",
+          "year": 2023,
+          "locator": "paragraph 2",
+          "supports": "in a related module from the same parts, the product bound the active regulator into a stable complex",
+          "quote": "the product bound the active regulator into a stable complex",
+          "url": "file:./sources/sequestration_experiment.txt",
+          "evidence_kind": "direct_experimental",
+          "context_match": "related_system",
+          "context_note": "a related synthetic module from the same parts library, not SynMod-4",
+          "stance": "supports"
+        }
+      ]
+    }
+  ],
+  "facts": [],
+  "queries_run": [
+    "product binds active regulator complex synthetic module (fixture)"
+  ],
+  "notes": "FIXTURE: one direct experiment in a related module shows the complex."
+}

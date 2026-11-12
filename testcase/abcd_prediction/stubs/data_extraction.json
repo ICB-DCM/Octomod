@@ -1,0 +1,62 @@
+{
+  "mappings": [
+    {
+      "file": "synmod4_ms.csv",
+      "observable_label": "KinA_p",
+      "time_column": "time_min",
+      "value_column": "KinA_p_uM",
+      "condition_columns": ["u", "bx11"],
+      "condition_label_template": "u={u},bx={bx11}",
+      "replicate_column": "replicate",
+      "units": "uM (calibrated)",
+      "error_type": "replicates"
+    },
+    {
+      "file": "synmod4_ms.csv",
+      "observable_label": "RegB_p",
+      "time_column": "time_min",
+      "value_column": "RegB_p_uM",
+      "condition_columns": ["u", "bx11"],
+      "condition_label_template": "u={u},bx={bx11}",
+      "replicate_column": "replicate",
+      "units": "uM (calibrated)",
+      "error_type": "replicates"
+    },
+    {
+      "file": "synmod4_ms.csv",
+      "observable_label": "ProD",
+      "time_column": "time_min",
+      "value_column": "ProD_uM",
+      "condition_columns": ["u", "bx11"],
+      "condition_label_template": "u={u},bx={bx11}",
+      "replicate_column": "replicate",
+      "units": "uM (calibrated)",
+      "error_type": "replicates"
+    }
+  ],
+  "observable_labels": [
+    {
+      "label": "KinA_p",
+      "description": "active (phosphorylated) KinA by targeted MS",
+      "units": "uM (calibrated)",
+      "error_type": "replicates",
+      "n": 2
+    },
+    {
+      "label": "RegB_p",
+      "description": "active (phosphorylated) RegB by targeted MS",
+      "units": "uM (calibrated)",
+      "error_type": "replicates",
+      "n": 2
+    },
+    {
+      "label": "ProD",
+      "description": "product ProD by targeted MS",
+      "units": "uM (calibrated)",
+      "error_type": "replicates",
+      "n": 2
+    }
+  ],
+  "flags": [],
+  "notes": "One wide table, three measured columns, so three mappings over the same file rather than three files. The experimental condition is the pair (u, bx11) — dose alone does not identify it, since u=1 and u=4 each appear both with and without the inhibitor — hence two condition columns and the template u={u},bx={bx11}; the engine renders numerics with %g, giving u=0.25,bx=0 / u=1,bx=0 / u=4,bx=0 / u=1,bx=1 / u=4,bx=1. The description states the MS is calibrated against heavy-labelled standards, so units are declared as concentration rather than arbitrary; that declaration is what tells the scaling step no scale factor is warranted. No error column is supplied and the two cultures per point are biological replicates from separate transformants, so error_type is 'replicates' and sigma must be estimated. The small negative early-time values are kept: the description explains them as standard-curve subtraction around a near-zero signal, they are consistent with the replicate spread elsewhere, and dropping or flooring them would censor the dataset while still claiming additive Gaussian noise. Nothing else in the table is anomalous — the design is complete (5 conditions x 8 times x 2 replicates = 80 rows, no missing cells)."
+}

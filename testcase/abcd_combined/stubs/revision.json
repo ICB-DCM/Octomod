@@ -1,0 +1,5 @@
+{
+  "diagnosis": "STUB: the canned selection round leaves misfit evidence open, but a stub cannot inspect residuals to say what is missing. Returning no expansion keeps the token-free path deterministic; the live agent is what this role exists for.",
+  "axes": [],
+  "stop_instead": true
+}

@@ -1,0 +1,207 @@
+{
+  "_fixture_note": "FIXTURE, first draft: the ligand is a species, so the model does not implement the required R -> Rp and carries L + R -> L + Rp, which the essential set lacks; the reply names that conversion in `missing`.",
+  "network": {
+    "species": [
+      {
+        "id": "R",
+        "name": "unphosphorylated receptor",
+        "compartment": "cell"
+      },
+      {
+        "id": "Rp",
+        "name": "phosphorylated receptor",
+        "compartment": "cell"
+      },
+      {
+        "id": "L",
+        "name": "ligand",
+        "compartment": "cell",
+        "set_per_condition": true
+      }
+    ],
+    "interactions": [
+      {
+        "id": "J1",
+        "type": "phosphorylation",
+        "participants": [
+          {
+            "species": "L",
+            "role": "substrate",
+            "stoichiometry": 1
+          },
+          {
+            "species": "R",
+            "role": "substrate",
+            "stoichiometry": 1
+          },
+          {
+            "species": "L",
+            "role": "product",
+            "stoichiometry": 1
+          },
+          {
+            "species": "Rp",
+            "role": "product",
+            "stoichiometry": 1
+          }
+        ],
+        "evidence_tier": "default",
+        "note": "The ligand L is a species, on both sides of the reaction: it drives the phosphorylation and is not consumed."
+      },
+      {
+        "id": "J2",
+        "type": "dephosphorylation",
+        "participants": [
+          {
+            "species": "Rp",
+            "role": "substrate",
+            "stoichiometry": 1
+          },
+          {
+            "species": "R",
+            "role": "product",
+            "stoichiometry": 1
+          }
+        ],
+        "evidence_tier": "default",
+        "note": "Constitutive phosphatase activity folded into the first-order rate constant k_dephos."
+      }
+    ]
+  },
+  "antimony": "model toy_phos\n  compartment cell = 1;\n  species R in cell = 10;\n  species Rp in cell = 0;\n  species L in cell = 1;\n  k_phos = 0.02;\n  k_dephos = 0.2;\n  J1: L + R -> L + Rp; k_phos * L * R;\n  J2: Rp -> R; k_dephos * Rp;\nend\n",
+  "parameters": [
+    {
+      "id": "k_phos",
+      "nominal_value": 0.02,
+      "unit": "1/(min*dose)",
+      "evidence_tier": "default",
+      "source": "no literature value exists for a synthetic module; order-of-magnitude placeholder consistent with a signalling response resolved over tens of minutes",
+      "estimate": true,
+      "lb": 0.0001,
+      "ub": 1.0
+    },
+    {
+      "id": "k_dephos",
+      "nominal_value": 0.2,
+      "unit": "1/min",
+      "evidence_tier": "default",
+      "source": "no literature value exists for a synthetic module; order-of-magnitude placeholder consistent with a signalling response resolved over tens of minutes",
+      "estimate": true,
+      "lb": 0.001,
+      "ub": 10
+    }
+  ],
+  "missing": [
+    {
+      "equation": "L + R -> L + Rp",
+      "why": "the ligand drives the phosphorylation of R: the essential set carries R -> Rp without the ligand that drives it, and the dose must reach Rp through it"
+    }
+  ],
+  "build_report": {
+    "decisions": [
+      {
+        "decision": "Mass-action kinetics for the forward and the reverse step: J1 first-order in R, J2 first-order in Rp, implementing the essential set's req_1 and rx_1.",
+        "alternatives_considered": [
+          "Michaelis-Menten kinetics for the dephosphorylation step",
+          "Hill-type cooperativity in the phosphorylation step"
+        ],
+        "evidence_tier": "default",
+        "confidence": "medium",
+        "user_decision_required": false,
+        "question": "",
+        "evidence": [
+          {
+            "source": "req_1.e1 \u2014 Receptor module phosphorylation kinetics \u2014 a note (fixture, 2024)",
+            "locator": "paragraph 2",
+            "supports": "ligand addition drives phosphorylation of R to Rp",
+            "origin": "literature-supported"
+          },
+          {
+            "source": "rx_1.e2 \u2014 A two-state model of receptor phosphorylation \u2014 a note (fixture, 2021)",
+            "locator": "paragraph 2",
+            "supports": "the dephosphorylation of Rp is first order in Rp",
+            "origin": "literature-supported"
+          }
+        ],
+        "rationale": "The essential set carries both conversions and a first-order dephosphorylation; mass action is the simplest law that transmits dose to Rp at the declared timescale."
+      },
+      {
+        "decision": "The ligand is a species L, a catalyst of the phosphorylation that the reaction does not consume (J1: L + R -> L + Rp); the essential set lacks that conversion, so it is named in `missing`.",
+        "alternatives_considered": [
+          "hold the ligand as a condition-owned dose parameter multiplying k_phos",
+          "explicit ligand-receptor binding with an LR complex"
+        ],
+        "evidence_tier": "default",
+        "confidence": "low",
+        "user_decision_required": false,
+        "question": "",
+        "rationale": "A ligand species lets the dose enter as its initial amount; the set's R -> Rp does not say what drives it."
+      },
+      {
+        "decision": "Total receptor fixed at 10 normalised units and conserved: R initialised to 10, Rp to 0, and no synthesis or degradation reactions added; the dossier's degradation (rx_2) is not in the essential set and stays out.",
+        "alternatives_considered": [
+          "estimate total receptor as a free parameter",
+          "add the degradation of Rp the dossier holds (rx_2)"
+        ],
+        "evidence_tier": "reported",
+        "confidence": "high",
+        "user_decision_required": false,
+        "question": "",
+        "evidence": [
+          {
+            "source": "fact_1 \u2014 total receptor stays near 10 normalised units over the first hour",
+            "locator": "knowledge module fact_1",
+            "supports": "total receptor near 10 normalised units",
+            "origin": "literature-supported"
+          }
+        ],
+        "rationale": "The lab note and fact_1 report total R flat over the hour, and the intent's scope excludes receptor synthesis and degradation."
+      },
+      {
+        "decision": "k_phos and k_dephos are left free for estimation rather than fixed to any prior value.",
+        "alternatives_considered": [
+          "fix k_dephos and estimate only k_phos"
+        ],
+        "evidence_tier": "default",
+        "confidence": "high",
+        "user_decision_required": false,
+        "question": ""
+      }
+    ]
+  },
+  "consulted_sources": [
+    "supplied experiment description",
+    "essential_reactions (the knowledge module)"
+  ],
+  "entity_glossary": {
+    "species": [
+      {
+        "id": "R",
+        "denotes": "unphosphorylated receptor R",
+        "unit_convention": "normalised amount; total R about 10 per the lab note",
+        "lump_membership": "R is the single inactive state"
+      },
+      {
+        "id": "Rp",
+        "denotes": "phospho-R, the quantity the pR_au densitometry column reports (in arbitrary units, so a scale factor is expected)",
+        "unit_convention": "same normalised amount scale as R; R + Rp conserved at 10",
+        "lump_membership": "Rp is the single phosphorylated state"
+      },
+      {
+        "id": "L",
+        "denotes": "the ligand, its amount the relative dose",
+        "unit_convention": "relative units (0.3, 1, 3) against the standard stock",
+        "lump_membership": "L is the single ligand pool"
+      }
+    ],
+    "parameters": []
+  },
+  "declared_constants": [
+    {
+      "expression": "R + Rp",
+      "tolerance": 0.05,
+      "locator": "Total R was blotted in parallel on the same lysates and was flat across all doses and timepoints at roughly 10 normalised units",
+      "why": "phosphorylation moves receptor between two forms; it does not create it"
+    }
+  ]
+}

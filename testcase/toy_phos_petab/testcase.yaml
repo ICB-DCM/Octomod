@@ -1,0 +1,33 @@
+name: toy_phos_petab
+
+# PEtab ENTRY fixture. The same toy_phos problem, but the
+# user arrives with a finished PEtab problem in supplied/petab/ — the SBML, the
+# four tables and the yaml — and wants it estimated and evaluated. No data/
+# folder, no construction, no assembly agents: the engine derives the model and
+# data slots from the PEtab problem, validates every slot with the same gate
+# batteries an assembled problem passes, and enters at estimation.
+#
+# The measurement table holds ALL conditions (training and held-out together, as
+# a user would ship it); the staged holdout below is what splits it. Written as
+# the PEtab condition id — a supplied problem has no data columns to name.
+t_end: 60
+
+holdout:
+  condition_labels:
+    - dose_3
+
+supplied:
+  petab: supplied/petab
+
+notes: >-
+  Built 2026-09-07 from a golden stub run of toy_phos (the tables an assembled
+  round produced, merged back into one measurement file). Passing this case
+  means the previously-broken supplied/petab entry works: construction is never
+  called, the batteries still run, and the report is produced from the user's
+  own problem. Fails loudly if the entry adapter or a slot validator regresses.
+
+# A token-free fixture: it runs without the knowledge module, on its
+# canned replies.
+grounding:
+  skip: true
+  why: fixture

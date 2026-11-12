@@ -1,0 +1,735 @@
+# Knowledge audit: re-classify each source from its own text
+
+Fresh context, documents only: the knowledge module classified the sources it cites, and you read each one again
+from the document's own text around the quote it gave. Your reading is advisory: where the two disagree, the
+engine keeps the lower grade and shows the person both.
+
+## What you receive
+`items` — each evidence item the grade would count: its `id`, `source`, `locator`, `supports`, `quote`, and the
+first classification (`evidence_kind`, `context_match`, `context_note`, `stance`) — and `excerpts`, keyed by item
+id: the cached document's text around the quote, bounded. No intent, no lab note and no data: you judge what the
+document shows, not the problem it is cited for.
+
+Where one exists for your role, a curated worked example (good and bad practice, labelled) follows this brief.
+
+## What you return
+`classifications` (required): one entry per item, `{id, evidence_kind, context_match, stance, note}`, in the
+knowledge role's vocabulary.
+
+## Rules that get your reply refused
+- Every item gets exactly one entry, by its `id`; every value is from the declared vocabulary.
+- The `note` names what in the excerpt decides the classification, or says the excerpt cannot.
+
+## How to judge
+- `evidence_kind`: does the excerpt show an experiment that demonstrates this conversion or measures this quantity
+  (`direct_experimental`), a model that contains it (`mechanistic_model`), a database entry (`curated_database`), a
+  review's statement (`review`), or only a correlation or a mention (`indirect`)? A sentence that mentions the
+  conversion in passing is `indirect`, whatever the paper as a whole is.
+- `context_match`: read the organism, cell type and conditions off the excerpt and compare them with the first
+  classification's `context_note`; where the excerpt names a different system, say so.
+- `stance`: does the excerpt support the claim in `supports`, or contradict it?
+- An item with no excerpt (a document that is not text, or a quote the engine did not find): classify from what
+  the item states, and say in the note that there was no excerpt.
+- You can be wrong in both directions: prefer the classification the text bears out to either agreeing or
+  disagreeing by habit.
+
+## Mistakes we have seen
+- Copying the first classification back without reading the excerpt.
+- Downgrading every item to look strict: a direct experiment stays a direct experiment.
+- Judging the source by the journal or the year instead of by what the excerpt shows.
+
+
+# Your tools
+TOOLS: none. No shell, no file system, no web, no code execution, and no way to inspect data beyond what this prompt contains — the inputs below are everything this role is given, by design. A command, a tool call, or 'let me look at …' written into the reply cannot run and fails the contract. Reply with the JSON object only.
+
+# Inputs
+
+## items
+```json
+[
+  {
+    "id": "rx_1.e1",
+    "source": "reactome:R-HSA-428127",
+    "locator": "Reactome reaction entry, pathway Sphingolipid de novo biosynthesis (R-HSA-1660661)",
+    "supports": "Curated human reaction in which serine palmitoyltransferase complexes condense an acyl-CoA (principally palmitoyl-CoA) with L-serine, the committed first step of de novo sphingolipid synthesis; this is the first of the two steps collapsed here.",
+    "evidence_kind": "curated_database",
+    "context_match": "related_system",
+    "context_note": "Reactome Homo sapiens generic annotation, not specific to SH-SY5Y neuroblastoma or to basal pulse-chase conditions.",
+    "stance": "supports"
+  },
+  {
+    "id": "rx_1.e2",
+    "source": "reactome:R-HSA-428123",
+    "locator": "Reactome reaction entry, pathway Sphingolipid de novo biosynthesis (R-HSA-1660661)",
+    "supports": "Curated human reaction in which 3-ketodihydrosphingosine reductase reduces the SPT product to sphinganine; this is the second step collapsed into the single de novo reaction.",
+    "evidence_kind": "curated_database",
+    "context_match": "related_system",
+    "context_note": "Reactome Homo sapiens generic annotation, not SH-SY5Y specific.",
+    "stance": "supports"
+  },
+  {
+    "id": "rx_2.e1",
+    "source": "reactome:R-HSA-428185",
+    "locator": "Reactome reaction entry, pathway Sphingolipid de novo biosynthesis (R-HSA-1660661)",
+    "supports": "Curated human reaction in which ceramide synthases N-acylate a sphingoid base with acyl-CoA; with sphinganine as the sphingoid base the product is dihydroceramide.",
+    "evidence_kind": "curated_database",
+    "context_match": "related_system",
+    "context_note": "Reactome Homo sapiens generic annotation, not SH-SY5Y specific.",
+    "stance": "supports"
+  },
+  {
+    "id": "rx_2.e2",
+    "source": "10.1021/acschembio.3c00554",
+    "locator": "Introduction / Results, metabolism of the sphinganine probe",
+    "supports": "A functionalised sphinganine probe is a ceramide synthase substrate and is incorporated into ceramide, sphingomyelin and, via the salvage pathway, phosphatidylcholine - i.e. an exogenously supplied clickable sphinganine does traverse this N-acylation step in living cells.",
+    "quote": "both molecules are substrates of ceramide synthase and may be expected to be incorporated into similar lipid classes, particularly ceramide (Cer), sphingomyelin (SM), and, via the salvage pathway, phosphatidylcholine (PC)",
+    "evidence_kind": "direct_experimental",
+    "context_match": "related_system",
+    "context_note": "Human Huh7 hepatoma cells, 60 min labelling with a trifunctional sphinganine probe; same pathway and same class of clickable sphingoid-base tracer as the intent, different human cell type.",
+    "stance": "supports"
+  },
+  {
+    "id": "rx_3.e1",
+    "source": "reactome:R-HSA-428259",
+    "locator": "Reactome reaction entry, pathway Sphingolipid de novo biosynthesis (R-HSA-1660661)",
+    "supports": "Curated human reaction in which DEGS1 desaturates dihydroceramide to ceramide.",
+    "evidence_kind": "curated_database",
+    "context_match": "related_system",
+    "context_note": "Reactome Homo sapiens generic annotation, not SH-SY5Y specific.",
+    "stance": "supports"
+  },
+  {
+    "id": "rx_4.e1",
+    "source": "reactome:R-HSA-429798",
+    "locator": "Reactome reaction entry, summation",
+    "supports": "Curated human reaction forming sphingomyelin from ceramide at the Golgi; Reactome states that studies of cultured cells indicate this reaction provides the primary source of cellular sphingomyelin.",
+    "quote": "catalyzes the reversible reaction of phosphatidylcholine and ceramide to form sphingomyelin and diacylglycerol",
+    "evidence_kind": "curated_database",
+    "context_match": "related_system",
+    "context_note": "Reactome Homo sapiens generic annotation; the quoted sentence also shows that writing the step as Cer -> SM omits the PC and DAG stoichiometry.",
+    "stance": "supports"
+  },
+  {
+    "id": "rx_4.e2",
+    "source": "reactome:R-HSA-429786",
+    "locator": "Reactome reaction entry",
+    "supports": "The second human sphingomyelin synthase isoform catalysing the same conversion at a different membrane; the two isoforms are collapsed into one reaction here.",
+    "evidence_kind": "curated_database",
+    "context_match": "related_system",
+    "context_note": "Reactome Homo sapiens generic annotation, not SH-SY5Y specific.",
+    "stance": "supports"
+  },
+  {
+    "id": "rx_5.e1",
+    "source": "reactome:R-HSA-429798",
+    "locator": "Reactome reaction entry, inputs/outputs and summation",
+    "supports": "Inputs are ceramide and phosphatidylcholine, outputs are sphingomyelin and diacylglycerol, catalysed by SGMS1 at the Golgi membrane; the summation names phosphatidylcholine as the identified source of the phosphocholine moiety donated to ceramide.",
+    "quote": "catalyzes the reversible reaction of phosphatidylcholine and ceramide to form sphingomyelin and diacylglycerol",
+    "evidence_kind": "curated_database",
+    "context_match": "related_system",
+    "context_note": "Reactome Homo sapiens generic annotation, not SH-SY5Y specific.",
+    "stance": "supports"
+  },
+  {
+    "id": "rx_6.e1",
+    "source": "reactome:R-HSA-1605797",
+    "locator": "Reactome reaction entry",
+    "supports": "Curated human reaction in which acid sphingomyelinase hydrolyses sphingomyelin to ceramide and phosphocholine in the lysosome.",
+    "evidence_kind": "curated_database",
+    "context_match": "related_system",
+    "context_note": "Reactome Homo sapiens generic annotation, not SH-SY5Y specific.",
+    "stance": "supports"
+  },
+  {
+    "id": "rx_6.e2",
+    "source": "reactome:R-HSA-1606273",
+    "locator": "Reactome reaction entry",
+    "supports": "Curated human reaction for the neutral sphingomyelinases acting at the plasma membrane, the second enzyme family collapsed into this single SM -> Cer step.",
+    "evidence_kind": "curated_database",
+    "context_match": "related_system",
+    "context_note": "Reactome Homo sapiens generic annotation, not SH-SY5Y specific.",
+    "stance": "supports"
+  },
+  {
+    "id": "rx_7.e1",
+    "source": "reactome:R-HSA-429798",
+    "locator": "Reactome reaction entry, summation",
+    "supports": "The summation states the SGMS1 reaction is reversible and that in the reverse direction phosphocholine is transferred from SM to DAG to form PC and ceramide, and that the direction depends on the ceramide and DAG levels in Golgi membranes.",
+    "quote": "catalyzes the reversible reaction of phosphatidylcholine and ceramide to form sphingomyelin and diacylglycerol",
+    "evidence_kind": "curated_database",
+    "context_match": "related_system",
+    "context_note": "Reactome Homo sapiens generic annotation, not SH-SY5Y specific.",
+    "stance": "supports"
+  },
+  {
+    "id": "rx_8.e1",
+    "source": "reactome:R-HSA-1638104",
+    "locator": "Reactome reaction entry",
+    "supports": "Curated human reaction transferring glucose from UDP-glucose to ceramide to form glucosylceramide, the first glycosylation step of glycosphingolipid biosynthesis, localised to the cytosolic face of the cis-Golgi.",
+    "evidence_kind": "curated_database",
+    "context_match": "related_system",
+    "context_note": "Reactome Homo sapiens generic annotation, not SH-SY5Y specific.",
+    "stance": "supports"
+  },
+  {
+    "id": "rx_9.e1",
+    "source": "10.1007/s11064-015-1763-2",
+    "locator": "Introduction, degradation of glucosylceramide",
+    "supports": "States that glucosylceramide degradation is catalysed by glucosylceramidases - lysosomal GBA1, non-lysosomal membrane-associated GBA2 and cytosolic GBA3 - which hydrolyse GlcCer into glucose and ceramide.",
+    "evidence_kind": "review",
+    "context_match": "related_system",
+    "context_note": "Review of mammalian glucosylceramidases, not restricted to or measured in SH-SY5Y.",
+    "stance": "supports"
+  },
+  {
+    "id": "rx_10.e1",
+    "source": "10.1002/1873-3468.13114",
+    "locator": "Section on ganglioside biosynthesis",
+    "supports": "Ganglioside synthesis starts from glucosylceramide made by UGCG, which is converted to lactosylceramide and then by up to six further glycosyltransferases into the a-, b- and c-series gangliosides; lactosylceramide is a branch point serving at least six glycosyltransferases and a sulfotransferase. This documents a continuing drain out of the hexosylceramide pool in neural cells.",
+    "evidence_kind": "review",
+    "context_match": "related_system",
+    "context_note": "Review of mammalian, largely neuronal, ganglioside metabolism; not measurements in SH-SY5Y under the intent's conditions.",
+    "stance": "supports"
+  },
+  {
+    "id": "rx_11.e1",
+    "source": "reactome:R-HSA-1606602",
+    "locator": "Reactome reaction entry, pathway Sphingolipid catabolism (R-HSA-9845614)",
+    "supports": "Curated human reaction in which acid ceramidase hydrolyses ceramide into sphingosine and a free fatty acid, stimulated by saposin D.",
+    "evidence_kind": "curated_database",
+    "context_match": "related_system",
+    "context_note": "Reactome Homo sapiens generic annotation, not SH-SY5Y specific.",
+    "stance": "supports"
+  },
+  {
+    "id": "rx_11.e2",
+    "source": "reactome:R-HSA-428205",
+    "locator": "Reactome reaction entry, pathway Sphingolipid catabolism (R-HSA-9845614)",
+    "supports": "A second curated human ceramidase reaction, at the Golgi, performing the same hydrolysis; one of the enzymes collapsed into this single step. ACER1 (R-HSA-428231) is the ER counterpart.",
+    "evidence_kind": "curated_database",
+    "context_match": "related_system",
+    "context_note": "Reactome Homo sapiens generic annotation, not SH-SY5Y specific.",
+    "stance": "supports"
+  },
+  {
+    "id": "rx_12.e1",
+    "source": "10.1016/j.cellsig.2007.12.006",
+    "locator": "Review, sections on ceramidases and on sphingoid base re-acylation",
+    "supports": "Reviews ceramidase-mediated deacylation of ceramides to free sphingoid bases and the re-acylation of those bases back to ceramide, the salvage cycle; the ceramidase family acts on N-acyl sphingoid bases generally, which includes dihydroceramide.",
+    "evidence_kind": "review",
+    "context_match": "related_system",
+    "context_note": "Review of mammalian sphingolipid metabolism; not measured in SH-SY5Y or with alkyne tracers.",
+    "stance": "supports"
+  },
+  {
+    "id": "rx_13.e1",
+    "source": "10.1016/j.cellsig.2007.12.006",
+    "locator": "Review, definition of the salvage pathway",
+    "supports": "States that sphingosine, the product of sphingolipid catabolism, is mostly salvaged by re-acylation to generate ceramide or its derivatives, and that this recycling is termed the salvage pathway.",
+    "evidence_kind": "review",
+    "context_match": "related_system",
+    "context_note": "Review of mammalian sphingolipid metabolism; no SH-SY5Y or alkyne-tracer measurement.",
+    "stance": "supports"
+  },
+  {
+    "id": "rx_14.e1",
+    "source": "reactome:R-HSA-428273",
+    "locator": "Reactome reaction entry, summation; inputs ATP + SPG, outputs ADP + S1P",
+    "supports": "Curated human reaction in which cytosolic sphingosine kinase 1 phosphorylates sphingoid bases to sphingoid 1-phosphates, with sphingosine 1-phosphate the main product.",
+    "quote": "The cytosolic enzyme sphingosine kinase 1 (SPHK1) catalyzes the phosphorylation of sphingoids (SPG) to sphingoid 1-phosphate (S1P).",
+    "evidence_kind": "curated_database",
+    "context_match": "related_system",
+    "context_note": "Reactome Homo sapiens generic annotation, not SH-SY5Y specific.",
+    "stance": "supports"
+  },
+  {
+    "id": "rx_15.e1",
+    "source": "reactome:R-HSA-428273",
+    "locator": "Reactome reaction entry, summation",
+    "supports": "The curated reaction is written for sphingoid bases generically (SPG), so sphinganine as well as sphingosine is a substrate of SPHK1; the product from sphinganine is sphinganine 1-phosphate.",
+    "quote": "The cytosolic enzyme sphingosine kinase 1 (SPHK1) catalyzes the phosphorylation of sphingoids (SPG) to sphingoid 1-phosphate (S1P).",
+    "evidence_kind": "curated_database",
+    "context_match": "related_system",
+    "context_note": "Reactome Homo sapiens generic annotation; the entry does not separate sphinganine from sphingosine kinetically.",
+    "stance": "supports"
+  },
+  {
+    "id": "rx_15.e2",
+    "source": "reactome:R-HSA-428681",
+    "locator": "Reactome reaction entry, pathway Sphingolipid catabolism (R-HSA-9845614)",
+    "supports": "The lyase entry treats sphinganine 1-phosphate as an explicit substrate yielding hexadecanal, which requires the prior existence of sphinganine 1-phosphate and therefore of the phosphorylation of sphinganine.",
+    "evidence_kind": "curated_database",
+    "context_match": "related_system",
+    "context_note": "Reactome Homo sapiens generic annotation, not SH-SY5Y specific.",
+    "stance": "supports"
+  },
+  {
+    "id": "rx_16.e1",
+    "source": "reactome:R-HSA-428664",
+    "locator": "Reactome reaction entry, pathway Sphingolipid catabolism (R-HSA-9845614)",
+    "supports": "Curated human reaction in which sphingosine-1-phosphate phosphatases 1 and 2 dephosphorylate sphingoid 1-phosphates back to the free sphingoid base.",
+    "evidence_kind": "curated_database",
+    "context_match": "related_system",
+    "context_note": "Reactome Homo sapiens generic annotation, not SH-SY5Y specific.",
+    "stance": "supports"
+  },
+  {
+    "id": "rx_17.e1",
+    "source": "reactome:R-HSA-428664",
+    "locator": "Reactome reaction entry",
+    "supports": "The curated reaction is written for sphingoid 1-phosphates generically, so sphinganine 1-phosphate is dephosphorylated to sphinganine by the same enzymes.",
+    "evidence_kind": "curated_database",
+    "context_match": "related_system",
+    "context_note": "Reactome Homo sapiens generic annotation, not SH-SY5Y specific.",
+    "stance": "supports"
+  },
+  {
+    "id": "rx_18.e1",
+    "source": "reactome:R-HSA-428681",
+    "locator": "Reactome reaction entry, pathway Sphingolipid catabolism (R-HSA-9845614)",
+    "supports": "Curated human reaction: SGPL1 at the ER membrane cleaves sphingosine 1-phosphate to phosphoethanolamine and hexadecenal; the entry states the reaction has no reverse counterpart and irreversibly removes sphingoids from the lipid pool.",
+    "evidence_kind": "curated_database",
+    "context_match": "related_system",
+    "context_note": "Reactome Homo sapiens generic annotation, not SH-SY5Y specific.",
+    "stance": "supports"
+  },
+  {
+    "id": "rx_18.e2",
+    "source": "10.1371/journal.pone.0153009",
+    "locator": "Abstract",
+    "supports": "States that degradation of sphingoid bases by S1P lyase occurs at C2-C3 of the sphingoid base and channels the resulting hexadecenal into glycerolipid biosynthesis - the experimental basis for this cleavage and for the downstream return of label to the fatty acid pool.",
+    "quote": "In normal cells, degradation of sphingoid bases via action of the checkpoint enzyme sphingosine-1-phosphate lyase occurs at position C2-C3 of the sphingoid base and channels the resulting hexadecenal into the glycerolipid biosynthesis pathway.",
+    "evidence_kind": "direct_experimental",
+    "context_match": "related_system",
+    "context_note": "Mouse embryonic fibroblasts, Sgpl1+/+ versus Sgpl1-/-, photoactivatable clickable sphingosine; same pathway and same tracer principle, different organism and cell type from SH-SY5Y.",
+    "stance": "supports"
+  },
+  {
+    "id": "rx_19.e1",
+    "source": "reactome:R-HSA-428681",
+    "locator": "Reactome reaction entry",
+    "supports": "The curated entry covers both sphingoid 1-phosphates: sphinganine 1-phosphate is cleaved to phosphoethanolamine and hexadecanal, sphingosine 1-phosphate to phosphoethanolamine and hexadecenal.",
+    "evidence_kind": "curated_database",
+    "context_match": "related_system",
+    "context_note": "Reactome Homo sapiens generic annotation, not SH-SY5Y specific.",
+    "stance": "supports"
+  },
+  {
+    "id": "rx_20.e1",
+    "source": "reactome:R-HSA-5692261",
+    "locator": "Reactome reaction entry, pathway Sphingolipid catabolism (R-HSA-9845614)",
+    "supports": "Curated human reaction oxidising hexadec-2-enal, the S1P lyase product, to palmitate; the annotated direction is aldehyde to fatty acid.",
+    "evidence_kind": "curated_database",
+    "context_match": "related_system",
+    "context_note": "Reactome Homo sapiens generic annotation, not SH-SY5Y specific.",
+    "stance": "supports"
+  },
+  {
+    "id": "rx_21.e1",
+    "source": "reactome:R-HSA-5696080",
+    "locator": "Reactome reaction entry, pathway Sphingolipid catabolism (R-HSA-9845614)",
+    "supports": "Curated human reaction oxidising hexadecanal to palmitate; ALDH3B2 catalyses the same conversion (R-HSA-6808464).",
+    "evidence_kind": "curated_database",
+    "context_match": "related_system",
+    "context_note": "Reactome Homo sapiens generic annotation, not SH-SY5Y specific.",
+    "stance": "supports"
+  },
+  {
+    "id": "rx_22.e1",
+    "source": "reactome:R-HSA-1606602",
+    "locator": "Reactome reaction entry",
+    "supports": "Supplies the first of the two collapsed half-steps: ceramide hydrolysis to sphingosine plus free fatty acid.",
+    "evidence_kind": "curated_database",
+    "context_match": "related_system",
+    "context_note": "Reactome Homo sapiens generic annotation; the collapsed form itself is not a curated reaction, only its two halves are.",
+    "stance": "supports"
+  },
+  {
+    "id": "rx_22.e2",
+    "source": "reactome:R-HSA-428273",
+    "locator": "Reactome reaction entry",
+    "supports": "Supplies the second collapsed half-step: phosphorylation of the released sphingoid base to S1P.",
+    "evidence_kind": "curated_database",
+    "context_match": "related_system",
+    "context_note": "Reactome Homo sapiens generic annotation, not SH-SY5Y specific.",
+    "stance": "supports"
+  },
+  {
+    "id": "rx_23.e1",
+    "source": "10.1021/acschembio.3c00554",
+    "locator": "Results, MS analysis of metabolites of the sphinganine probe",
+    "supports": "After labelling cells with a trifunctional sphinganine probe, both sphingomyelin and dihydrosphingomyelin species were detected, showing that a sphinganine-derived backbone reaches the sphingomyelin class without necessarily being desaturated first.",
+    "quote": "TF-Spa appeared in a wider variety of SM species: both the SM and dihydroSM (dhSM) species with a 16:0 fatty acid",
+    "evidence_kind": "direct_experimental",
+    "context_match": "related_system",
+    "context_note": "Human Huh7 hepatoma cells, 60 min labelling with a clickable sphinganine probe; same tracer principle and same pathway, different human cell type.",
+    "stance": "supports"
+  },
+  {
+    "id": "rx_24.e1",
+    "source": "reactome:R-HSA-1638104",
+    "locator": "Reactome reaction entry",
+    "supports": "Documents the glucosyltransferase step itself; the curated entry is written for ceramide, so the dihydroceramide variant is an extrapolation from the enzyme's acceptor specificity rather than a curated reaction.",
+    "evidence_kind": "curated_database",
+    "context_match": "related_system",
+    "context_note": "Reactome Homo sapiens generic annotation; it does not itself assert dihydroceramide as a UGCG substrate.",
+    "stance": "supports"
+  },
+  {
+    "id": "rx_25.e1",
+    "source": "16963225",
+    "locator": "Review, sections on cell-surface and extracellular sphingoid metabolism",
+    "supports": "Reviews that sphingosine and related sphingoid species are metabolised at the cell surface and in the extracellular space, i.e. that a free sphingoid base pool is not confined to the cell interior and can be lost from it.",
+    "evidence_kind": "review",
+    "context_match": "different_system",
+    "context_note": "General mammalian review of extracellular sphingolipid metabolism; no SH-SY5Y data and no pulse-chase washout measurement.",
+    "stance": "supports"
+  },
+  {
+    "id": "rx_26.e1",
+    "source": "16963225",
+    "locator": "Review, sections on extracellular S1P",
+    "supports": "Reviews the presence and metabolism of sphingosine 1-phosphate outside the cell, which requires export of S1P from cells.",
+    "evidence_kind": "review",
+    "context_match": "different_system",
+    "context_note": "General mammalian review; no measurement of S1P export in SH-SY5Y under the intent's conditions.",
+    "stance": "supports"
+  },
+  {
+    "id": "rx_27.e1",
+    "source": "10.3389/fmolb.2022.880559",
+    "locator": "Section 'Alkyne Fatty Acids as Tracers for Lipid Anabolism'",
+    "supports": "In alkyne fatty acid tracing experiments, the tracer is incorporated rapidly into phosphatidic acid and diacylglycerol as the early intermediates of glycerolipid synthesis, i.e. DG is an early, directly labelled product of the free fatty acid pool.",
+    "quote": "These experiments showed rapid incorporation of the long-chain FA tracers into early intermediates (PA and DG), and species carrying two copies of the tracers were frequently detected.",
+    "evidence_kind": "review",
+    "context_match": "related_system",
+    "context_note": "Review of the same alkyne-lipid click-MS tracing platform as the intent's assay, summarising experiments in hepatocytes and cultured cells rather than SH-SY5Y.",
+    "stance": "supports"
+  },
+  {
+    "id": "rx_28.e1",
+    "source": "10.3389/fmolb.2022.880559",
+    "locator": "Section 'Alkyne Fatty Acids as Tracers for Lipid Anabolism'",
+    "supports": "In alkyne fatty acid pulse-chase experiments labelled PC is formed from labelled DG rather than directly from the free fatty acid pool, which argues against a direct FFA -> PC step as the mechanistically faithful description.",
+    "quote": "Then, the rapid metabolism of labeled DG to produce TG and PC",
+    "evidence_kind": "review",
+    "context_match": "related_system",
+    "context_note": "Review of the same alkyne click-MS platform, experiments in hepatocytes and cultured cells, not SH-SY5Y.",
+    "stance": "contradicts"
+  },
+  {
+    "id": "rx_29.e1",
+    "source": "10.3389/fmolb.2022.880559",
+    "locator": "Section 'Alkyne Fatty Acids as Tracers for Lipid Anabolism'",
+    "supports": "Reports the tracer sequence PA and DG first, then TG and PC from DG, with PI increasing only slowly during the chase - direct support for DG as the precursor pool feeding labelled PC.",
+    "quote": "Then, the rapid metabolism of labeled DG to produce TG and PC",
+    "evidence_kind": "review",
+    "context_match": "related_system",
+    "context_note": "Review of the same alkyne click-MS platform; the underlying experiments are in hepatocytes and cultured cells, not SH-SY5Y.",
+    "stance": "supports"
+  },
+  {
+    "id": "rx_30.e1",
+    "source": "10.1021/cb300414v",
+    "locator": "Results, metabolic fates of alkyne fatty acid tracers",
+    "supports": "Establishes the alkyne fatty acid click-tracing approach and the set of cellular lipid classes into which an alkyne fatty acid tracer is incorporated, including neutral esters, which is the basis for treating CE as a direct product of the labelled FFA pool.",
+    "evidence_kind": "direct_experimental",
+    "context_match": "related_system",
+    "context_note": "Cultured mammalian cells labelled with alkyne fatty acids; same tracer chemistry as the intent, different cell type, and cholesteryl ester formation is not the paper's specific claim.",
+    "stance": "supports"
+  },
+  {
+    "id": "rx_31.e1",
+    "source": "10.3389/fmolb.2022.880559",
+    "locator": "Section 'Alkyne Fatty Acids as Tracers for Lipid Anabolism'",
+    "supports": "Labelled DG is rapidly metabolised to TG in alkyne fatty acid chase experiments; since TG is not a species of this model, that flux must appear as an outflux from DG.",
+    "quote": "Then, the rapid metabolism of labeled DG to produce TG and PC",
+    "evidence_kind": "review",
+    "context_match": "related_system",
+    "context_note": "Review of the same alkyne click-MS platform, experiments in hepatocytes and cultured cells, not SH-SY5Y.",
+    "stance": "supports"
+  },
+  {
+    "id": "rx_32.e1",
+    "source": "10.1038/s41592-019-0593-6",
+    "locator": "Results, time-resolved analysis of hepatocyte glycerolipid metabolism",
+    "supports": "Time-resolved click-MS tracing of an alkyne fatty acid follows the label simultaneously into roughly 120 labelled lipid species across many classes, showing that the labelled free fatty acid pool is drained into a much larger set of destinations than any single model carries.",
+    "evidence_kind": "direct_experimental",
+    "context_match": "related_system",
+    "context_note": "Mouse hepatocytes and single cells on the same click-MS reporter platform and Q Exactive instrument class as the intent; different organism and cell type.",
+    "stance": "supports"
+  },
+  {
+    "id": "rx_35.e1",
+    "source": "10.1038/s42255-023-00769-z",
+    "locator": "Results and abstract, turnover of stored triglyceride measured with alkyne fatty acid tracers",
+    "supports": "Using alkyne fatty acid tracers and mass spectrometry, stored triglyceride is shown to undergo continuous degradation and re-synthesis, with an estimated triglyceride half-life of 2-4 h in 3T3-L1 adipocytes; on a 180 min chase this returns previously stored tracer to the free fatty acid pool.",
+    "evidence_kind": "direct_experimental",
+    "context_match": "different_system",
+    "context_note": "3T3-L1 mouse adipocytes and hepatocytes, same alkyne tracer technology; a lipid-storing cell type, unlike SH-SY5Y neuroblastoma, so the magnitude is not transferable.",
+    "stance": "supports"
+  },
+  {
+    "id": "rx_36.e1",
+    "source": "10.1038/s42255-023-00769-z",
+    "locator": "Results, futile triglyceride substrate cycle",
+    "supports": "Demonstrates a continuous lipolysis and re-esterification cycle in which fatty acids are released from glycerolipid stores back into the cellular fatty acid pool and re-used, supporting a lipolytic rather than constant source term.",
+    "evidence_kind": "direct_experimental",
+    "context_match": "different_system",
+    "context_note": "3T3-L1 adipocytes and hepatocytes; lipid-storing cell types, not neuroblastoma.",
+    "stance": "supports"
+  },
+  {
+    "id": "fact_1.e1",
+    "source": "reactome:R-HSA-429798",
+    "locator": "Reactome reaction entry, inputs/outputs and summation",
+    "supports": "Inputs ceramide and phosphatidylcholine, outputs sphingomyelin and diacylglycerol; the summation states that phosphatidylcholine was identified as the source of the phosphocholine moiety donated to ceramide, and that in cultured cells this reaction provides the primary source of cellular sphingomyelin.",
+    "quote": "catalyzes the reversible reaction of phosphatidylcholine and ceramide to form sphingomyelin and diacylglycerol",
+    "evidence_kind": "curated_database",
+    "context_match": "related_system",
+    "context_note": "Reactome Homo sapiens generic annotation, not SH-SY5Y specific.",
+    "stance": "supports"
+  },
+  {
+    "id": "fact_2.e1",
+    "source": "reactome:R-HSA-428127",
+    "locator": "Reactome reaction entry",
+    "supports": "The curated SPT reaction takes acyl-CoA, not free fatty acid, and L-serine as inputs, establishing that an activation step precedes the condensation.",
+    "evidence_kind": "curated_database",
+    "context_match": "related_system",
+    "context_note": "Reactome Homo sapiens generic annotation, not SH-SY5Y specific.",
+    "stance": "supports"
+  },
+  {
+    "id": "fact_2.e2",
+    "source": "reactome:R-HSA-428123",
+    "locator": "Reactome reaction entry",
+    "supports": "The curated reduction of the 3-ketosphingoid intermediate to sphinganine is a separate annotated step, confirming that Pal + Ser -> Sph is a two-reaction collapse on top of the activation step.",
+    "evidence_kind": "curated_database",
+    "context_match": "related_system",
+    "context_note": "Reactome Homo sapiens generic annotation, not SH-SY5Y specific.",
+    "stance": "supports"
+  },
+  {
+    "id": "fact_3.e1",
+    "source": "reactome:R-HSA-428681",
+    "locator": "Reactome reaction entry, summation",
+    "supports": "SGPL1 at the ER membrane cleaves cytosolic sphinganine 1-phosphate or sphingosine 1-phosphate to phosphoethanolamine plus hexadecanal or hexadecenal respectively; the entry states the reaction has no reverse counterpart and irreversibly removes sphingoids from the lipid pool.",
+    "evidence_kind": "curated_database",
+    "context_match": "related_system",
+    "context_note": "Reactome Homo sapiens generic annotation, not SH-SY5Y specific.",
+    "stance": "supports"
+  },
+  {
+    "id": "fact_4.e1",
+    "source": "10.1371/journal.pone.0153009",
+    "locator": "Results & Discussion, 'Metabolism of pacSph in Sgpl1+/+ and Sgpl1-/- cells'",
+    "supports": "Direct demonstration that sphingoid-base label crosses into the glycerophospholipid pool via S1P lyase, and that removing the lyase abolishes the crossover; quantifies the extent as roughly half the probe at 4 h.",
+    "quote": "After 4 h of labeling about half of the pacSph was metabolized to the glycerophospholipid (GP) phosphatidylcholine (PC) in ",
+    "evidence_kind": "direct_experimental",
+    "context_match": "related_system",
+    "context_note": "Mouse embryonic fibroblasts with a photoactivatable clickable sphingosine, 4 h labelling; same pathway and tracer principle as the intent, different organism, cell type and time scale.",
+    "stance": "supports"
+  },
+  {
+    "id": "fact_5.e1",
+    "source": "10.3389/fmolb.2022.880559",
+    "locator": "Section 'Alkyne Fatty Acids as Tracers for Lipid Anabolism'",
+    "supports": "Gives the order in which alkyne fatty acid label fills the glycerolipid classes, which fixes DG as an intermediate between the FFA pool and PC rather than a parallel sink.",
+    "quote": "These experiments showed rapid incorporation of the long-chain FA tracers into early intermediates (PA and DG), and species carrying two copies of the tracers were frequently detected.",
+    "evidence_kind": "review",
+    "context_match": "related_system",
+    "context_note": "Review of the same alkyne click-MS tracing platform as the intent's assay; underlying experiments in hepatocytes and cultured cells, not SH-SY5Y.",
+    "stance": "supports"
+  },
+  {
+    "id": "fact_6.e1",
+    "source": "10.1038/s42255-023-00769-z",
+    "locator": "Abstract and Results, triglyceride turnover measurement",
+    "supports": "Reports rapid turnover and rearrangement of fatty acids in triglyceride stores with an estimated half-life of 2-4 h in 3T3-L1 adipocytes, measured with the same alkyne fatty acid tracing technology.",
+    "evidence_kind": "direct_experimental",
+    "context_match": "different_system",
+    "context_note": "3T3-L1 mouse adipocytes, a lipid-storing cell type; SH-SY5Y neuroblastoma stores far less neutral lipid, so the half-life should be treated as an order of magnitude only.",
+    "stance": "supports"
+  },
+  {
+    "id": "fact_7.e1",
+    "source": "10.1186/1752-0509-5-26",
+    "locator": "Model description and parameter tables (25-reaction network, estimated forward rate constants)",
+    "supports": "Builds a 25-reaction mass-action/linear-kinetics model of the C16 sphingolipid branch and reports estimated forward rate constants with standard errors, including the dihydroceramide desaturation and ceramide glucosylation constants quoted here; states that Michaelis-Menten kinetics were not used because substrate concentrations are much smaller than the corresponding Michaelis constants.",
+    "evidence_kind": "mechanistic_model",
+    "context_match": "different_system",
+    "context_note": "RAW264.7 mouse macrophages, control and Kdo2-Lipid A stimulated, steady-state/stimulus lipidomics rather than tracer pulse-chase; different organism, cell type and stimulus from basal human SH-SY5Y.",
+    "stance": "supports"
+  },
+  {
+    "id": "fact_8.e1",
+    "source": "10.1016/j.jlr.2025.100899",
+    "locator": "Methods, construction of the time-dependent metabolic network",
+    "supports": "Describes an ODE sphingolipid network of 12 metabolites, 28 enzymatic reactions catalysed by 15 key enzymes, plus 12 export processes, with literature-based enzyme activity parameters; establishes export terms as a normal component of such models.",
+    "evidence_kind": "mechanistic_model",
+    "context_match": "different_system",
+    "context_note": "RAW 264.7 mouse macrophages stimulated with Kdo2-Lipid A; different organism, cell type and condition from basal human SH-SY5Y.",
+    "stance": "supports"
+  },
+  {
+    "id": "fact_9.e1",
+    "source": "https://www.jlr.org/article/S0022-2275(20)43701-0/fulltext",
+    "locator": "Abstract and results of stable-isotope pulse labelling with deuterated free fatty acids",
+    "supports": "Stable-isotope pulse labelling shows VLC (C24:0, C24:1) ceramides turning over much more rapidly than LC (C16:0, C18:0) ceramides through faster conversion to VLC sphingomyelin and VLC hexosylceramide, while sphingoid base length does not influence ceramide flux. Summing all chain lengths into one ceramide pool therefore averages over species with different rate constants.",
+    "evidence_kind": "direct_experimental",
+    "context_match": "different_system",
+    "context_note": "Mammalian cultured cells with deuterated fatty acid pulse labelling; the full text was not retrievable (HTTP 403), so the cell line could not be confirmed and the claim is taken at abstract level.",
+    "stance": "supports"
+  },
+  {
+    "id": "fact_10.e1",
+    "source": "10.3389/fmolb.2022.880559",
+    "locator": "Section 'Alkyne Fatty Acids as Tracers for Lipid Anabolism'",
+    "supports": "States the limit of quantification achieved with the charged click reporter, the sensitivity that makes single-cell absolute quantification possible.",
+    "quote": "the limit of quantification was further reduced, down to 0.2 fmol labeled lipid in 20 \u03bcL sample volume",
+    "evidence_kind": "review",
+    "context_match": "related_system",
+    "context_note": "Review describing the same alkyne click-MS reporter platform used in the intent's assay; the number is the platform's LOQ, not a measurement in SH-SY5Y.",
+    "stance": "supports"
+  },
+  {
+    "id": "fact_11.e1",
+    "source": "10.1038/s41592-019-0593-6",
+    "locator": "Results and Methods, click reporter design and multiplexing",
+    "supports": "Describes the click-chemistry MS reporter strategy with a quaternary ammonium charged reporter and an azido group, sample multiplexing, and time-resolved parallel quantitative monitoring of about 120 labelled lipid species, with subfemtomole sensitivity permitting single-cell analysis.",
+    "evidence_kind": "direct_experimental",
+    "context_match": "related_system",
+    "context_note": "Method paper on the same click-MS platform and instrument class as the intent's assay; experiments in mouse hepatocytes and single cells, not SH-SY5Y.",
+    "stance": "supports"
+  },
+  {
+    "id": "fact_11.e2",
+    "source": "10.3389/fmolb.2022.880559",
+    "locator": "Section 'Alkyne Fatty Acids as Tracers for Lipid Anabolism'",
+    "supports": "Confirms the multiplexing scheme: a set of azide probes giving identical masses in MS1 but different fragments in MS2, reducing analysis time fourfold.",
+    "quote": "a set of azide probes, C175-7x",
+    "evidence_kind": "review",
+    "context_match": "related_system",
+    "context_note": "Review of the same platform; not a measurement in SH-SY5Y.",
+    "stance": "supports"
+  },
+  {
+    "id": "fact_12.e1",
+    "source": "10.1021/acschembio.3c00554",
+    "locator": "Results, MS analysis of metabolites after 60 min labelling",
+    "supports": "The trifunctional sphinganine probe was recovered in both SM and dihydroSM species, showing that sphinganine label populates both the desaturated and the saturated sphingomyelin species.",
+    "quote": "TF-Spa appeared in a wider variety of SM species: both the SM and dihydroSM (dhSM) species with a 16:0 fatty acid",
+    "evidence_kind": "direct_experimental",
+    "context_match": "related_system",
+    "context_note": "Human Huh7 hepatoma cells, 60 min labelling with a clickable sphinganine probe; same tracer principle and pathway, different human cell type and no chase.",
+    "stance": "supports"
+  },
+  {
+    "id": "fact_13.e1",
+    "source": "reactome:R-HSA-429798",
+    "locator": "Reactome reaction entry, compartment annotation of inputs, outputs and catalyst",
+    "supports": "The SM-forming reaction is annotated entirely in the Golgi membrane, whereas the de novo reactions (R-HSA-428127, R-HSA-428123, R-HSA-428185, R-HSA-428259) are annotated at the ER, establishing the compartment separation that the single-compartment model collapses.",
+    "evidence_kind": "curated_database",
+    "context_match": "related_system",
+    "context_note": "Reactome Homo sapiens generic annotation, not SH-SY5Y specific.",
+    "stance": "supports"
+  },
+  {
+    "id": "fact_13.e2",
+    "source": "10.1002/1873-3468.13511",
+    "locator": "Review, CERT-mediated ER-to-Golgi ceramide transfer",
+    "supports": "CERT transports ceramide from the ER to the trans-Golgi at membrane contact sites, a prerequisite step for conversion of ceramide into sphingomyelin; this transport step is absent from a single-compartment model and is a candidate explanation for any delay between ceramide labelling and SM labelling.",
+    "evidence_kind": "review",
+    "context_match": "related_system",
+    "context_note": "Review of mammalian CERT biology; no quantitative transfer half-time in SH-SY5Y was found in the accessible text.",
+    "stance": "supports"
+  },
+  {
+    "id": "fact_14.e1",
+    "source": "10.1002/1873-3468.13114",
+    "locator": "Review, ganglioside biosynthesis section",
+    "supports": "Describes the stepwise conversion of glucosylceramide to lactosylceramide and on to the ganglioside series by up to six further glycosyltransferases, with lactosylceramide as a major branch point.",
+    "evidence_kind": "review",
+    "context_match": "related_system",
+    "context_note": "Review of mammalian, largely neuronal, ganglioside metabolism; no SH-SY5Y flux measurement under the intent's conditions.",
+    "stance": "supports"
+  },
+  {
+    "id": "fact_15.e1",
+    "source": "reactome:R-HSA-1606602",
+    "locator": "Reactome reaction entry, outputs",
+    "supports": "The curated ceramidase reaction outputs sphingosine and a free fatty acid, not sphinganine, fixing the identity of the base produced by ceramide hydrolysis.",
+    "evidence_kind": "curated_database",
+    "context_match": "related_system",
+    "context_note": "Reactome Homo sapiens generic annotation, not SH-SY5Y specific.",
+    "stance": "supports"
+  },
+  {
+    "id": "fact_15.e2",
+    "source": "10.1016/j.cellsig.2007.12.006",
+    "locator": "Review, definition of the salvage pathway",
+    "supports": "States that sphingosine is the product of sphingolipid catabolism and is mostly salvaged by re-acylation, i.e. that a free sphingosine pool is an obligatory intermediate of the catabolic and salvage routes.",
+    "evidence_kind": "review",
+    "context_match": "related_system",
+    "context_note": "Review of mammalian sphingolipid metabolism, not SH-SY5Y measurements.",
+    "stance": "supports"
+  },
+  {
+    "id": "fact_16.e1",
+    "source": "reactome:R-HSA-5692261",
+    "locator": "Reactome reaction entry, direction of the annotated conversion",
+    "supports": "The curated reaction runs hexadec-2-enal to palmitate; the opposite direction, which would be needed for palmitate label to enter the aldehyde pools, is not annotated.",
+    "evidence_kind": "curated_database",
+    "context_match": "related_system",
+    "context_note": "Reactome Homo sapiens generic annotation; the conflict is with the intent's own lab note rather than with another publication.",
+    "stance": "contradicts"
+  },
+  {
+    "id": "fact_16.e2",
+    "source": "reactome:R-HSA-5696080",
+    "locator": "Reactome reaction entry, direction of the annotated conversion",
+    "supports": "Same direction for the saturated aldehyde: hexadecanal is oxidised to palmitate, not formed from it.",
+    "evidence_kind": "curated_database",
+    "context_match": "related_system",
+    "context_note": "Reactome Homo sapiens generic annotation, not SH-SY5Y specific.",
+    "stance": "contradicts"
+  }
+]
+```
+## excerpts
+```json
+{
+  "rx_2.e2": "luorescence. (A) Representative images of cells before, immediately after, and 1 min after uncaging. (B) Fluo-4 fluorescence intensity, normalized to the initial intensity reading for each cell, for 15 cells (TF-Sph), or 18 cells (TF-Spa), over two independent experiments. The error band is standard deviation; the measure of center for the error band is the mean. Metabolism of Novel Lipid Derivatives A further test of the biological fidelity of the trifunctional probes is whether they are recognized by the endogenous biosynthetic machinery. Sphinganine is nominally upstream of sphingosine in the sphingolipid metabolic pathway, but both molecules are substrates of ceramide synthase and may be expected to be incorporated into similar lipid classes, particularly ceramide (Cer), sphingomyelin (SM), and, via the salvage pathway, phosphatidylcholine (PC) 1 ( Figure 2 A). To investigate the metabolism of TF-Spa and TF-Sph, we treated Huh7 cells with the trifunctional lipid derivatives, extracted the lipids after 60 min, labeled the lipid extract fluorescently with Alexa555-azide via click chemistry, and performed TLC ( Figure 2 B). We turned to Huh7 cells because they are a frequently used model liver cell line for various diseases, including viral infections. 16 , 17 In addition, this added a data set that was broadly similar to the previously published metabolism of bifunctional Sph. 18 In line with what has previously been shown with radiolabeled sphingosine 19 and bifunctional S",
+  "rx_4.e1": " phosphatidylcholine + ceramide sphingomyelin + diacylglycerol [SGMS1] ReviewStatus 5/5 Locations in the PathwayBrowser Expand all Metabolism (Homo sapiens) Metabolism of lipids (Homo sapiens) Sphingolipid metabolism (Homo sapiens) Sphingolipid de novo biosynthesis (Homo sapiens) SGMS1 transfers phosphocholine onto ceramide (Homo sapiens) General SBML | BioPAX Level 2 Level 3 | PDF SVG | PNG Low Medium High | PPTX | SBGN Click the image above or here to open this reaction in the Pathway Browser The layout of this reaction may differ from that in the pathway view due to the constraints in pathway layout SGMS1 (sphingomyelin synthase 1) associated with the membrane of the Golgi apparatus catalyzes the reversible reaction of phosphatidylcholine and ceramide to form sphingomyelin and diacylglycerol. Phosphatidylcholine was identified as the source of the phosphocholine moiety donated to ceramide in this reaction in studies of the mouse enzyme in the 1970s (Diringer et al. 1972; Ullman and Radin 1974). SGMS1 is widely expressed in the body, and studies of cultured cells indicate that this reaction provides the primary source of cellular sphingomyelin (Yamaoka et al., 2004; Huitema et al., 2004; Tafesse et al., 2007; reviewed by Chen & Cao, 2017). Literature References PubMed ID Title Journal Year 28742512 The sphingomyelin synthase family: proteins, diseases, and inhibitors Chen, Y , Cao, Y Biol Chem 2017 4817756 The enzymatic formation of sphingomyelin from ceramide and lecithin ",
+  "rx_5.e1": " phosphatidylcholine + ceramide sphingomyelin + diacylglycerol [SGMS1] ReviewStatus 5/5 Locations in the PathwayBrowser Expand all Metabolism (Homo sapiens) Metabolism of lipids (Homo sapiens) Sphingolipid metabolism (Homo sapiens) Sphingolipid de novo biosynthesis (Homo sapiens) SGMS1 transfers phosphocholine onto ceramide (Homo sapiens) General SBML | BioPAX Level 2 Level 3 | PDF SVG | PNG Low Medium High | PPTX | SBGN Click the image above or here to open this reaction in the Pathway Browser The layout of this reaction may differ from that in the pathway view due to the constraints in pathway layout SGMS1 (sphingomyelin synthase 1) associated with the membrane of the Golgi apparatus catalyzes the reversible reaction of phosphatidylcholine and ceramide to form sphingomyelin and diacylglycerol. Phosphatidylcholine was identified as the source of the phosphocholine moiety donated to ceramide in this reaction in studies of the mouse enzyme in the 1970s (Diringer et al. 1972; Ullman and Radin 1974). SGMS1 is widely expressed in the body, and studies of cultured cells indicate that this reaction provides the primary source of cellular sphingomyelin (Yamaoka et al., 2004; Huitema et al., 2004; Tafesse et al., 2007; reviewed by Chen & Cao, 2017). Literature References PubMed ID Title Journal Year 28742512 The sphingomyelin synthase family: proteins, diseases, and inhibitors Chen, Y , Cao, Y Biol Chem 2017 4817756 The enzymatic formation of sphingomyelin from ceramide and lecithin ",
+  "rx_7.e1": " phosphatidylcholine + ceramide sphingomyelin + diacylglycerol [SGMS1] ReviewStatus 5/5 Locations in the PathwayBrowser Expand all Metabolism (Homo sapiens) Metabolism of lipids (Homo sapiens) Sphingolipid metabolism (Homo sapiens) Sphingolipid de novo biosynthesis (Homo sapiens) SGMS1 transfers phosphocholine onto ceramide (Homo sapiens) General SBML | BioPAX Level 2 Level 3 | PDF SVG | PNG Low Medium High | PPTX | SBGN Click the image above or here to open this reaction in the Pathway Browser The layout of this reaction may differ from that in the pathway view due to the constraints in pathway layout SGMS1 (sphingomyelin synthase 1) associated with the membrane of the Golgi apparatus catalyzes the reversible reaction of phosphatidylcholine and ceramide to form sphingomyelin and diacylglycerol. Phosphatidylcholine was identified as the source of the phosphocholine moiety donated to ceramide in this reaction in studies of the mouse enzyme in the 1970s (Diringer et al. 1972; Ullman and Radin 1974). SGMS1 is widely expressed in the body, and studies of cultured cells indicate that this reaction provides the primary source of cellular sphingomyelin (Yamaoka et al., 2004; Huitema et al., 2004; Tafesse et al., 2007; reviewed by Chen & Cao, 2017). Literature References PubMed ID Title Journal Year 28742512 The sphingomyelin synthase family: proteins, diseases, and inhibitors Chen, Y , Cao, Y Biol Chem 2017 4817756 The enzymatic formation of sphingomyelin from ceramide and lecithin ",
+  "rx_14.e1": "1 phosphorylates sphingoid Stable Identifier R-HSA-428273 Type Reaction [transition] Species Homo sapiens Compartment cytosol , endoplasmic reticulum membrane ReviewStatus 5/5 Locations in the PathwayBrowser Expand all Metabolism (Homo sapiens) Metabolism of lipids (Homo sapiens) Sphingolipid metabolism (Homo sapiens) Sphingolipid de novo biosynthesis (Homo sapiens) SPHK1 phosphorylates sphingoid (Homo sapiens) General SBML | BioPAX Level 2 Level 3 | PDF SVG | PNG Low Medium High | PPTX | SBGN Click the image above or here to open this reaction in the Pathway Browser The layout of this reaction may differ from that in the pathway view due to the constraints in pathway layout The cytosolic enzyme sphingosine kinase 1 (SPHK1) catalyzes the phosphorylation of sphingoids (SPG) to sphingoid 1-phosphate (S1P). The main product is sphingosine 1-phoshate, a bioactive lipid that acts extracellularly on G protein-coupled receptors of the S1P1/EDG-1 subfamily (Nava et al., 2000; Pitson et al., 2000; Wang et al., 2013; reviewed by Siow & Wattenberg, 2011). The isoforms SK1a, SK1b, and SK1c are produced through alternative splicing and show functional differences in their activity (reviewed by Hatoum et al., 2017). SPHK1 is regulated transcriptionally by transcription factors, cytokines, and micro-RNAs (reviewed by Bonica et al., 2020). Its activity is also modulated by posttranslational modifications and interactions with other proteins (reviewed by Pulkoski-Gross & Obeid, 2018). Through",
+  "rx_15.e1": "1 phosphorylates sphingoid Stable Identifier R-HSA-428273 Type Reaction [transition] Species Homo sapiens Compartment cytosol , endoplasmic reticulum membrane ReviewStatus 5/5 Locations in the PathwayBrowser Expand all Metabolism (Homo sapiens) Metabolism of lipids (Homo sapiens) Sphingolipid metabolism (Homo sapiens) Sphingolipid de novo biosynthesis (Homo sapiens) SPHK1 phosphorylates sphingoid (Homo sapiens) General SBML | BioPAX Level 2 Level 3 | PDF SVG | PNG Low Medium High | PPTX | SBGN Click the image above or here to open this reaction in the Pathway Browser The layout of this reaction may differ from that in the pathway view due to the constraints in pathway layout The cytosolic enzyme sphingosine kinase 1 (SPHK1) catalyzes the phosphorylation of sphingoids (SPG) to sphingoid 1-phosphate (S1P). The main product is sphingosine 1-phoshate, a bioactive lipid that acts extracellularly on G protein-coupled receptors of the S1P1/EDG-1 subfamily (Nava et al., 2000; Pitson et al., 2000; Wang et al., 2013; reviewed by Siow & Wattenberg, 2011). The isoforms SK1a, SK1b, and SK1c are produced through alternative splicing and show functional differences in their activity (reviewed by Hatoum et al., 2017). SPHK1 is regulated transcriptionally by transcription factors, cytokines, and micro-RNAs (reviewed by Bonica et al., 2020). Its activity is also modulated by posttranslational modifications and interactions with other proteins (reviewed by Pulkoski-Gross & Obeid, 2018). Through",
+  "rx_18.e2": "embranes contain hundreds to thousands of individual lipid species that are of structural importance but also specifically interact with proteins. Due to their highly controlled synthesis and role in signaling events sphingolipids are an intensely studied class of lipids. In order to investigate their metabolism and to study proteins interacting with sphingolipids, metabolic labeling based on photoactivatable sphingoid bases is the most straightforward approach. In order to monitor protein-lipid-crosslink products, sphingosine derivatives containing a reporter moiety, such as a radiolabel or a clickable group, are used. In normal cells, degradation of sphingoid bases via action of the checkpoint enzyme sphingosine-1-phosphate lyase occurs at position C2-C3 of the sphingoid base and channels the resulting hexadecenal into the glycerolipid biosynthesis pathway. In case the functionalized sphingosine looses the reporter moiety during its degradation, specificity towards sphingolipid labeling is maintained. In case degradation of a sphingosine derivative does not remove either the photoactivatable or reporter group from the resulting hexadecenal, specificity towards sphingolipid labeling can be achieved by blocking sphingosine-1-phosphate lyase activity and thus preventing sphingosine derivatives to be channeled into the sphingolipid-to-glycerolipid metabolic pathway. Here we report an approach using clustered, regularly interspaced, short palindromic repeats (CRISPR)-associated ",
+  "rx_23.e1": " with each sphingoid base, uncaged, and allowed to metabolize for 1 h prior to lipid extraction and injection into the LC-MS/MS. To further verify that both TF-Spa and TF-Sph were incorporated into SM, we performed targeted LC-MS/MS on lipid extracts prepared as described above, using precursor ion scanning to identify precursors of phosphocholine at the elution time for SM (LC-MS/MS methods are described in detail in the Supporting Information , including LC conditions in Table 1 ). We observed both expected endogenous precursors of phosphocholine: SM (d18:1/16:0 and d18:1/24:1) and PC (34:1 and 36:2). We also observed SM with masses for the diazirine/alkyne modified probe backbone. TF-Spa appeared in a wider variety of SM species: both the SM and dihydroSM (dhSM) species with a 16:0 fatty acid; both the SM and dhSM species with an 18:0 fatty acid; and the dhSM species with a 20:0 fatty acid. TF-Sph appeared in the SM species with an 18:0 fatty acid ( Figure 2 D). Table 1. HPLC Condition for the Separation of Lipid Extracts a . time (min) % A % B flow rate (mL/min) 0 99.9 0.1 0.3 6 94 6 0.3 10 75 25 0.3 13 0 100 0.3 13.5 0 100 0.5 18.6 99.9 0.1 0.5 18.7 99.9 0.1 0.5 23 99.9 0.1 0.5 23.5 99.9 0.1 0.7 24 stop Open in a new tab a System A is 5% water, 95% acetonitrile, 1 mM ammonium acetate, pH = 8.2; system B is 50% water, 50% acetonitrile, 1 mM ammonium acetate, pH = 8.2. Subcellular Localization of Novel Lipid Probes Next, we examined the subcellular localization of each sph",
+  "rx_28.e1": " side-chain length and double-bond counts over time. The TG and PI pools were also analyzed. (B,C) Compared to saturated long-chain FAs that were assimilated quite broadly into various lipid classes after 6 h (B) , medium-chain FAs labeled primarily the TG pool (C) , ref. ( Kuerschner et al., 2022 ). (D) Major part of medium-chain fatty acid TG (MCFA-TG) was synthesized by diacylglycerol acyltransferase 1 (DGAT1) whose activity can only be partially substituted by DGAT2, ref. ( Wunderling et al., 2021 ). These experiments showed rapid incorporation of the long-chain FA tracers into early intermediates (PA and DG), and species carrying two copies of the tracers were frequently detected ( Thiele et al., 2019 ). Then, the rapid metabolism of labeled DG to produce TG and PC (the latter via PE) occurred, while the labeled PI content increased only slowly during the chase. These later steps in lipid biosynthesis and remodeling varied for different tracers and certain patterns, which depended on the FA length or degree of saturation. Lipids containing the saturated long-chain FA 17:0;Y underwent a steady change toward pairing with longer and more unsaturated FAs. In contrast, most lipids comprising the double-unsaturated long-chain tracer FA 18:2;Y became, over time, more frequently associated with FAs of decreased length and double bond count. The combination of a saturated and an (poly)unsaturated long-chain FA within a lipid molecule is a common theme ( van Meer et al., 2008 ; Ha",
+  "rx_29.e1": " side-chain length and double-bond counts over time. The TG and PI pools were also analyzed. (B,C) Compared to saturated long-chain FAs that were assimilated quite broadly into various lipid classes after 6 h (B) , medium-chain FAs labeled primarily the TG pool (C) , ref. ( Kuerschner et al., 2022 ). (D) Major part of medium-chain fatty acid TG (MCFA-TG) was synthesized by diacylglycerol acyltransferase 1 (DGAT1) whose activity can only be partially substituted by DGAT2, ref. ( Wunderling et al., 2021 ). These experiments showed rapid incorporation of the long-chain FA tracers into early intermediates (PA and DG), and species carrying two copies of the tracers were frequently detected ( Thiele et al., 2019 ). Then, the rapid metabolism of labeled DG to produce TG and PC (the latter via PE) occurred, while the labeled PI content increased only slowly during the chase. These later steps in lipid biosynthesis and remodeling varied for different tracers and certain patterns, which depended on the FA length or degree of saturation. Lipids containing the saturated long-chain FA 17:0;Y underwent a steady change toward pairing with longer and more unsaturated FAs. In contrast, most lipids comprising the double-unsaturated long-chain tracer FA 18:2;Y became, over time, more frequently associated with FAs of decreased length and double bond count. The combination of a saturated and an (poly)unsaturated long-chain FA within a lipid molecule is a common theme ( van Meer et al., 2008 ; Ha",
+  "rx_31.e1": " side-chain length and double-bond counts over time. The TG and PI pools were also analyzed. (B,C) Compared to saturated long-chain FAs that were assimilated quite broadly into various lipid classes after 6 h (B) , medium-chain FAs labeled primarily the TG pool (C) , ref. ( Kuerschner et al., 2022 ). (D) Major part of medium-chain fatty acid TG (MCFA-TG) was synthesized by diacylglycerol acyltransferase 1 (DGAT1) whose activity can only be partially substituted by DGAT2, ref. ( Wunderling et al., 2021 ). These experiments showed rapid incorporation of the long-chain FA tracers into early intermediates (PA and DG), and species carrying two copies of the tracers were frequently detected ( Thiele et al., 2019 ). Then, the rapid metabolism of labeled DG to produce TG and PC (the latter via PE) occurred, while the labeled PI content increased only slowly during the chase. These later steps in lipid biosynthesis and remodeling varied for different tracers and certain patterns, which depended on the FA length or degree of saturation. Lipids containing the saturated long-chain FA 17:0;Y underwent a steady change toward pairing with longer and more unsaturated FAs. In contrast, most lipids comprising the double-unsaturated long-chain tracer FA 18:2;Y became, over time, more frequently associated with FAs of decreased length and double bond count. The combination of a saturated and an (poly)unsaturated long-chain FA within a lipid molecule is a common theme ( van Meer et al., 2008 ; Ha",
+  "fact_1.e1": " phosphatidylcholine + ceramide sphingomyelin + diacylglycerol [SGMS1] ReviewStatus 5/5 Locations in the PathwayBrowser Expand all Metabolism (Homo sapiens) Metabolism of lipids (Homo sapiens) Sphingolipid metabolism (Homo sapiens) Sphingolipid de novo biosynthesis (Homo sapiens) SGMS1 transfers phosphocholine onto ceramide (Homo sapiens) General SBML | BioPAX Level 2 Level 3 | PDF SVG | PNG Low Medium High | PPTX | SBGN Click the image above or here to open this reaction in the Pathway Browser The layout of this reaction may differ from that in the pathway view due to the constraints in pathway layout SGMS1 (sphingomyelin synthase 1) associated with the membrane of the Golgi apparatus catalyzes the reversible reaction of phosphatidylcholine and ceramide to form sphingomyelin and diacylglycerol. Phosphatidylcholine was identified as the source of the phosphocholine moiety donated to ceramide in this reaction in studies of the mouse enzyme in the 1970s (Diringer et al. 1972; Ullman and Radin 1974). SGMS1 is widely expressed in the body, and studies of cultured cells indicate that this reaction provides the primary source of cellular sphingomyelin (Yamaoka et al., 2004; Huitema et al., 2004; Tafesse et al., 2007; reviewed by Chen & Cao, 2017). Literature References PubMed ID Title Journal Year 28742512 The sphingomyelin synthase family: proteins, diseases, and inhibitors Chen, Y , Cao, Y Biol Chem 2017 4817756 The enzymatic formation of sphingomyelin from ceramide and lecithin ",
+  "fact_4.e1": "olipid-hub by targeting sphingosine phosphate lyase activity [ 15 ]. To ensure that knocking out SGPL1 activity does not cause significant alterations in the cell\u2019s metabolic state and its membrane lipid compositions we made use of mouse embryonic fibroblasts (MEFs) derived from either homozygous sphingosine-1-phosphate lyase 1 ( Sgpl1 )-null ( Sgpl1 \u2212/\u2212 ) or wild-type ( Sgpl1 +/+ ) mouse embryos [ 24 ]. To this end, cells were metabolically labeled with pacSph and, following extraction of cellular lipids, subjected to click reaction with fluorogenic coumarin azide [ 33 ] to allow for visualization of the fluorescent lipids separated by thin-layer chromatography (TLC) ( Fig 1A ). After 4 h of labeling about half of the pacSph was metabolized to the glycerophospholipid (GP) phosphatidylcholine (PC) in Sgpl1 +/+ cells ( Fig 1A and 1B ). The PC band was identified by lipid standards ( S3 Fig ) and its susceptibility to mild alkaline hydrolysis ( Fig 1C ). Other saponifiable lipids and sphingolipids were also labeled, but to a lesser degree. In the Sgpl1 deficient Sgpl1 \u2212/\u2212 cell line, on the other hand, only sphingolipids were labeled and PC or other saponifyable lipids were not observed. It is interesting to note that in Sgpl1 \u2212/\u2212 cells specifically the short-chain sphingolipids (C16-C18), i.e. the slower migrating, lower band within ceramide, hexosylceramide and sphingomyelin [ 53 ], are stronger labeled than in Sgpl1 +/+ cells. A preference for labeling of short-chain sphingol",
+  "fact_10.e1": "ked FA oxidation alters MCFA metabolism in the liver ( Wunderling et al., 2021 ). It was demonstrated that diacylglycerol acyltransferase 1 (DGAT1), and not DGAT2, is the major enzyme for hepatic MCFA-TG synthesis. Specific inhibition of FA oxidation shifted the metabolic flux and led to a compensatory increase in MCFA-TG synthesis. These studies on primary hepatocytes combined alkyne tracers with pulse-chase experiments and delivered data on FA metabolism at an unprecedented time resolution and sensitivity, reaching 0.2 pmol at the lipid species level ( Thiele et al., 2019 ; Wunderling et al., 2021 ). By some adaptations of experimental parameters such as a reduction in the sample volume, the limit of quantification was further reduced, down to 0.2 fmol labeled lipid in 20 \u03bcL sample volume (10 pM). Hence, the first metabolic tracing experiment with absolute quantification in single cells became possible ( Thiele et al., 2019 ). This single-cell analysis revealed that individual hepatocytes precisely control and quite uniformly maintain their patterns of lipid length and saturation. The apparent robustness in lipid homeostasis resulted in very similar single-cell lipid profiles. Alkyne Fatty Acids as Tracers for Lipid Catabolism FAs contain about one-third of the calories in normal nutrition. This energy is released by cells during FA oxidation. Catabolic \u03b2-oxidation is the major degradation pathway for FAs in mammals and co-occurs in cells at the mitochondria and peroxisomes",
+  "fact_11.e2": " class. MS2 fragmentation (D) yields a systematic neutral loss (NL, green) and generates a diagnostic fragment ion ( E , red), enabling the identification of the lipid analyte. For sample multiplexing, the related reporters C175-7x (F) are click-reacted to individual samples before sample pooling. The corresponding alkyne lipids from each sample generate a similarly mass-shifted product in MS1 scans (G) and are co-analyzed by MS2 but yield unique diagnostic fragment ions (H) . The uniform fragmentation pattern across all lipid classes in MS2 enabled the implementation of a modified strategy with sample multiplexing capabilities. Similar to the logic in TMT ( Thompson et al., 2003 ) or iTRAQ ( Ross et al., 2004 ) experiments, a set of azide probes, C175-7x ( Figure 2F ), with additional heavy isotopes distributed over the NL and linker moieties have been developed ( Thiele et al., 2019 ). Upon the click reaction with alkyne lipids of multiple biological extracts, the analogous metabolites from each extract provided identical masses in MS1 ( Figure 2G ) but different fragments in MS2 ( Figure 2H ), which allowed the unequivocal assignment of peaks to individual samples in a multiplex mixture. Multiplexing reduced the time needed for analysis by a factor of 4 and removed a major part of stochastic noise originating from liquid handling, spray instabilities, or fluctuations in fragmentation during the analysis. Using this procedure, a set of experiments was performed investigatin",
+  "fact_12.e1": " with each sphingoid base, uncaged, and allowed to metabolize for 1 h prior to lipid extraction and injection into the LC-MS/MS. To further verify that both TF-Spa and TF-Sph were incorporated into SM, we performed targeted LC-MS/MS on lipid extracts prepared as described above, using precursor ion scanning to identify precursors of phosphocholine at the elution time for SM (LC-MS/MS methods are described in detail in the Supporting Information , including LC conditions in Table 1 ). We observed both expected endogenous precursors of phosphocholine: SM (d18:1/16:0 and d18:1/24:1) and PC (34:1 and 36:2). We also observed SM with masses for the diazirine/alkyne modified probe backbone. TF-Spa appeared in a wider variety of SM species: both the SM and dihydroSM (dhSM) species with a 16:0 fatty acid; both the SM and dhSM species with an 18:0 fatty acid; and the dhSM species with a 20:0 fatty acid. TF-Sph appeared in the SM species with an 18:0 fatty acid ( Figure 2 D). Table 1. HPLC Condition for the Separation of Lipid Extracts a . time (min) % A % B flow rate (mL/min) 0 99.9 0.1 0.3 6 94 6 0.3 10 75 25 0.3 13 0 100 0.3 13.5 0 100 0.5 18.6 99.9 0.1 0.5 18.7 99.9 0.1 0.5 23 99.9 0.1 0.5 23.5 99.9 0.1 0.7 24 stop Open in a new tab a System A is 5% water, 95% acetonitrile, 1 mM ammonium acetate, pH = 8.2; system B is 50% water, 50% acetonitrile, 1 mM ammonium acetate, pH = 8.2. Subcellular Localization of Novel Lipid Probes Next, we examined the subcellular localization of each sph"
+}
+```
+
+# Output contract
+{"classifications": [{"id": "rx_1.e1",
+                      "evidence_kind": "direct_experimental|mechanistic_model|curated_database|review|indirect",
+                      "context_match": "same_system|related_system|different_system",
+                      "stance": "supports|contradicts",
+                      "note": "one line: what in the excerpt decides it, or why the excerpt cannot"}]}
+NOTE: one entry per item in `items`, by its `id`. Classify from the document's
+text in `excerpts` (keyed by item id), not from the item's own claims: the
+vocabulary is the knowledge role's (`direct_experimental` = the excerpt shows an
+experiment demonstrating this conversion or measuring this quantity, and so on).
+An item with no excerpt is classified from what it states, and its note says
+there was no excerpt. Where the excerpt does not bear the claim out, say so in
+the note; the engine keeps the lower of the two readings.
+Respond with ONLY a single JSON object matching the contract. No prose, no markdown fences.

@@ -1,0 +1,232 @@
+# Octomod workflow spec — the declared configuration the agent cannot edit.
+# Every threshold here is Rule 1 territory: an agent that picks its own pass
+# criteria has not been evaluated. All values are provisional until the toy
+# cases have tuned them; re-tune on the real test case and record why.
+
+name: test_redraft
+version: 1
+
+models:
+  # Opus across the board: a cheaper tier is not yet trusted for sub-agents.
+  # Per-role knobs kept so we can measure where a cheaper tier suffices;
+  # override_all: haiku gives a near-free plumbing test.
+  default: opus
+  override_all: null
+
+agents:
+  timeout_s: 600
+  # T0 cap on the bytes of EVERY agent prompt, checked before the call is
+  # made. Blocking: a prompt over the cap stops the run rather than being
+  # truncated, because a silently shortened payload is a wrong answer with
+  # no trace.
+  #
+  # Justified from both sides, measured on the full battery:
+  #   floor  the largest LEGITIMATE prompt is 128,171 B (the interpreter on
+  #          the search smoke: 73 kB of residual curves, 22 kB of ΔAIC
+  #          attribution — all of it payload the agent must reason about).
+  #          Both dominant terms scale with candidates x measurements, so a
+  #          real case bigger than the fixtures needs real headroom: this is
+  #          1.95x it.
+  #   ceiling it must catch what it exists for. The two regressions this gate
+  #          found were 426,717 B (interpretation) and 310,028 B
+  #          (revision_proposal, which an earlier review had not measured); 250,000
+  #          refuses both.
+  # null = no cap, as in default.yaml.
+  max_prompt_bytes: null
+  effort:
+    default: xhigh       # as in default.yaml (speckeys: a required key is in both)
+
+retry:
+  agent_json: 2        # malformed-JSON retries per call
+  module_draft: 1      # TEST: budget of two attempts, so the exhaustion gate fires
+  auto_grants: 2       # as in default.yaml (speckeys: a required key is in both)
+
+s1:
+  max_escalations: 5   # how many 'needs your decision' items the scope gate
+                       # lists. The KEY keeps the engine's word on purpose:
+                       # renaming it changes workflow_sha, which refuses every
+                       # paused run in flight. What a READER sees is worded on
+                       # the card, and no card or report prints this name.
+  # a discrimination round is built in two calls — the BASE by construction,
+  # tested as one model, then each candidate as a declared difference from it
+  # (role `expansion`), built by the engine, so no candidate can differ from
+  # the base in anything it does not declare.
+  # the optional human gate on the base, before any variation is written;
+  # per run: `s1: {base_gate: true}` in testcase.yaml
+  base_gate: false
+
+verification:
+  s1: true             # independent construction audit (citations, tiers,
+                       # rationale quality) — concerns surface at the scope gate
+  citation_check: true # deterministic source resolution (hallucination trap);
+                       # unresolvable-only evidence demotes the tier
+  s3: true             # the richest judgment surface gets the checker
+  assembly_overlay_delta: true  # observation-axis candidates: audit only the
+                       # overlay's changed entries, once per candidate
+
+gates:
+  sim_box:
+    n_samples: 16
+    min_frac_integrable: 0.8   # <1.0 on purpose: wide log bounds legitimately
+    nonneg_tol: -1.0e-6        # kill some corners; total failure is the signal
+  magnitude:
+    max_log10_ratio: 2.0       # decades apart with no scaling param -> fail
+  dof:
+    max_par_per_datapoint: 1.0
+  waterfall:
+    k: 3
+    eps: 0.5
+  grad_norm_tol: 10.0
+  max_frac_integration_failures: 0.3
+  ensemble_delta_nllh: 1.92    # chi2(0.95, df=1)/2 — the classic PL threshold
+  cannot_distinguish_log10_spread: 1.0
+  tight_prediction_rel_width: 0.5
+  holdout:
+    max_nrmse: 0.3             # T2' blocking threshold (prediction goal)
+  predictive_z: 1.96           # observation-noise width added to ensemble bands
+  noise_check_alpha: 0.01      # post-fit residuals-vs-assumed-distribution test
+  misfit:                      # model-free structural-misfit evidence (S7);
+    alpha: 0.01                # while OPEN, S11 may not propose 'stop'
+    max_sigma_over_floor: 1.3  # fitted sigma / replicate-derived noise SD
+    autocorr_alpha: 0.05       # residual-SHAPE screen, one-sided (positive
+                               # autocorrelation only); looser on purpose —
+                               # it corroborates, it does not fire alone
+    escalate_stop: true        # these are INDICATORS, never deciders: a stop
+                               # proposed against open indicators goes to the
+                               # HUMAN (who may spend another round or end it),
+                               # instead of the run ending on agent judgment
+  profiles_auto:
+    enabled: true              # prediction goal: profiles run WITHOUT a gate when
+    # Same resource asymmetry as n_starts_default: profiles are deterministic
+    # CPU, and a prediction verdict without uncertainty is half a verdict —
+    # a 60 s cap once silently produced exactly that on a live run.
+    # Profiles start unasked only when the HIGH projection (every parameter
+    # walking to both bounds) is under this cap; otherwise the profiling gate
+    # asks with the low and the high end. Once started, a batch is not begun
+    # when the time spent plus the LOW estimate for the rest would pass it.
+    max_projected_s: 600
+    # One profile point, in multistart starts, before this run has profiled
+    # anything: a point is a warm-started local optimisation, and what it costs
+    # beside a start is not a constant. On a stiff 32-parameter model one point
+    # cost 1.9 starts (1,479 points, median 35 per parameter, 9 workers).
+    # Measured profiling replaces this range.
+    point_cost_range: [1.0, 2.0]
+    # A per-point cost measured on an earlier round's model reaches this
+    # round's model as starts per point, times its own start, within this band.
+    carried_point_band: 0.25
+  discrimination:
+    delta_aic_indistinguishable: 2.0   # dAIC below this = same support (Burnham/Anderson)
+    decisive_weight: 0.7               # Akaike weight for a 'decisive' winner
+  structural_nulls:            # directions no output depends on at ANY
+    n_points: 2                # parameter value — flat at every one of n_points random points
+    rel_tol: 1.0e-5            # at once; an indicator, AIC charges every estimated parameter
+    # The points are drawn within ±spread (scaled units: half a decade for a
+    # log10 parameter) of the nominal values, clipped to the bounds: on a stiff
+    # model most of the box does not integrate, and a probe sampling the whole
+    # box measures nothing there. The directions found are re-checked at the fit.
+    spread: 0.5
+
+uncertainty:
+  profile_next_guess: adaptive_step_order_1   # required by the engine; = pyPESTO default
+  # prediction bands from the joint confidence region nllh <= best +
+  # chi2(alpha, df)/2: the profile points under that threshold plus rejection
+  # samples (n_box_samples proposals) from an ellipsoid fitted to them.
+  # df="n_free" uses chi2(alpha, n_estimated)/2 — the joint region; df=1 would
+  # under-contain it.
+  n_box_samples: 400
+  alphas: [0.95, 0.90]
+  joint_df: n_free
+  ellipsoid_inflate: 1.5       # proposal = skeleton-fitted ellipsoid, inflated;
+                               # too small a skeleton draws no samples: the band
+                               # is the skeleton alone, flagged as undersampled
+  min_acceptance_note: 0.05
+  mcmc_comparison: false       # pypesto.sample cross-check (later work):
+                               # band-overlap agreement as a convergence read
+
+research:
+  enabled: false               # dedicated ONLINE hole (web tools only) feeding
+  max_items: 12                # construction; OFF for synthetic benchmarks —
+  max_publication_year: 2025   # ON per-testcase (testcase.yaml research.enabled)
+                               # for literature cases. Blocklist:
+                               # testcase/blocklist.txt, engine-enforced.
+  at_expansion: true           # = default.yaml: research before each expansion
+                               # proposal, when research is on
+  max_requested_rounds: 1      # = default.yaml: searches the expansion agent
+                               # may ask for per expansion round
+
+assembly_defaults:
+  # bounds for parameters the assembly itself creates — workflow-owned
+  # exponents carry a SIGN: YAML 1.1 loads `1.0e3` as the string "1.0e3", and
+  # these three declared as text until tests/spec_keys_unit.py read them back
+  scaling_bounds: [1.0e-3, 1.0e+3]
+  offset_bounds: [-1.0e+3, 1.0e+3]
+  sigma_bounds: [1.0e-4, 1.0e+3]
+  max_noise_components: 3       # required by the engine; = default.yaml
+
+estimation:
+  optimizer: fides             # workflow-owned; scipy is the spec-level fallback
+  seed: 20260914
+  n_probe_starts: 5
+  # the budget gate is asked once per round, on
+  # the first candidate; a later candidate reuses that approval ONLY while its
+  # own probe looks like the approved one. A probe start that is non-finite
+  # refuses the reuse outright; a median start time more than this factor
+  # away from the approved candidate's (either way) refuses it too, and the
+  # gate is asked again for that candidate with the reasons on the card.
+  probe_reuse_max_ratio: 5
+  # Sized for convergence, not thrift: multistarts are deterministic CPU —
+  # the expensive resources are LLM tokens and human attention, and an
+  # unconverged fit wastes both. 20 is a probe, not an estimation; the budget
+  # gate shows measured projections and the human can still shrink for stiff
+  # models where a start costs minutes.
+  n_starts_default: 100
+  n_starts_bounds: [10, 1000]
+  md_max_candidates: 5         # mechanism discrimination: candidate-set ceiling
+
+# Model-space search. Construction declares the structural axes it is unsure
+# about; the human chooses which to buy at the scope gate; the engine fits the
+# bought axes (one at a time on the base unless the human asks for every
+# combination) and a criterion selects. Replaces guessing one structural move per
+# round — on a benchmark case the greedy loop found nothing while a plain
+# comparison of the same axes selected the truth at dAIC 45.
+search:
+  enabled: true
+  criterion: AIC              # petab_select's Criterion vocabulary
+  max_models: 8               # the ceiling on models per round; each costs one
+                              # calibration (k axes = k+1 models one at a time,
+                              # 2^k as a lattice)
+  method: brute_force         # forward/backward/famos land here when the space grows
+  expansion_redraft: 1        # re-ask the expansion agent once when axes were
+                              # dropped by the pre-gate validation tiers
+  expand_on_misfit: true      # after a selection round, if the model-free misfit
+                              # evidence is still open, the agent says what the
+                              # space was MISSING and the human decides whether to
+                              # buy another round. A space that did not contain the
+                              # truth is not a failure; not correcting it is.
+
+diagnostics:
+  rounds: 2                    # as in default.yaml
+  # null = no limit: requests are reads or quick simulations
+  max_requests: null
+  # what a payload carries by DEFAULT, and what waits to be asked
+  # for. per_candidate_residuals scales with candidates x observables x
+  # conditions x timepoints, and the prompt cap is blocking, so an unbounded
+  # payload stops a run on a realistic problem rather than costing extra.
+  # Measured on a case of 10 observables x 20 conditions x 4
+  # candidates (800 series): full curves for nobody at all was still 489,614
+  # bytes — twice the 250,000 cap — so BOTH tiers are needed, not just curves.
+  # With these two values that case lands at 131,148 bytes, 52% of the cap,
+  # and the fixtures (12 series per candidate) are untouched by either.
+  # null = no tier, as in default.yaml
+  full_curves_top_n: null      # series with the point-by-point curve, per
+                               # curve-carrying model, worst first
+  full_summaries_top_n: null   # series with the full shape summary; below this
+                               # rank a series carries its rank statistic only
+                               # and is fetched with residual_curve(...)
+  form_fit:
+    alpha: 0.05
+    n_bootstrap: 100
+
+loop:
+  max_rounds: 3
+  max_rounds_unattended: 3   # the stop for a run nobody answers the round gates in

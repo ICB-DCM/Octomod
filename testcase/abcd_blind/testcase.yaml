@@ -1,0 +1,67 @@
+name: abcd_blind
+
+# Simulation horizon for the S1 gate ladder; matches the last sampled time.
+t_end: 120
+
+# Holdout is fixed here at staging time, written as column=value pairs in the
+# DATA's own column vocabulary (synmod4_ms.csv: u, bx11), and matched
+# semantically against engine-derived condition keys (%g values, order and
+# separators free). Never against display labels — those are the agent's to
+# style, and live_abcd_1 stopped at S2 when this line said "bx=1" while the
+# agent labelled faithfully with the real column name. The agent still never
+# chooses what it is scored on.
+holdout:
+  condition_labels: []
+
+# No externally supplied model or network — construction is unconstrained and
+# must be derived from description.md alone. That is the point of the case.
+supplied: {}
+
+notes: >-
+  Blind-modelling benchmark on a fictional module with an invented, known ground
+  truth. truth/ holds the answer key (generating ODEs, true parameters, noise
+  SDs, and which condition reveals which feature) and MUST NEVER be staged into
+  agent context: the pipeline stages description.md and data/ only, and a run
+  whose agent I/O contains anything from truth/ is void. make_data.py is likewise
+  never seen by an agent.
+
+  The description hints at the hypothesis space without answering it. Two
+  features of the truth are not derivable from the description and must be
+  discovered from the data: a RegB-independent conversion of PreC catalysed
+  directly by KinA (visible because ProD keeps rising under BX-11, where the
+  RegB route is shut), and product feedback of ProD onto RegB activation
+  (visible as a RegB_p overshoot at u=4). The held-out condition u=4,bx11=1 is
+  chosen so that the first of those is exactly what the prediction needs — a
+  chain-only model can fit the four training conditions tolerably and still miss
+  the holdout badly.
+
+  The shipped stubs are a DELIBERATE NAIVE BASELINE, not the true model: a
+  linear chain with neither the direct route nor the feedback. Running this case
+  on the stub backend must produce a failed holdout, a misfit diagnosis naming
+  the missing route, and a revision proposal — that is what the case is for. A
+  stub run that reports success means the gates or the report are not doing
+  their job.
+
+  Readout is calibrated MS in uM, so the correct scaling decision is "none": an
+  observable scale factor here would trade off against the totals and the
+  precursor pool for no reason. Negative early-time values are honest noise
+  realisations around zero and must not be clipped or dropped.
+
+# WHY THIS CASE EXISTS
+# Byte-identical data and truth to abcd_prediction; the ONLY difference is that
+# description.md drops the "Open questions on our side" section, which named all
+# three of the structural axes the agent then "discovered" in live_abcd_4 — in
+# the same order. That run showed the system TRANSLATES stated uncertainties
+# into a testable model space, which is real but is not discovery. This case
+# asks the harder question: with the data and the design intent but no list of
+# the experimenters' own doubts, does the model space come from the biology and
+# the residuals, or only from prose that was handed over?
+# A base-model-only construction here is a legitimate and informative outcome:
+# it would say the discovery burden falls on the misfit diagnostics, which is
+# exactly where the greedy loop failed.
+
+# A token-free fixture: it runs without the knowledge module, on its
+# canned replies.
+grounding:
+  skip: true
+  why: fixture

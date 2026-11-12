@@ -1,0 +1,28 @@
+name: abcd_staged
+
+# Simulation horizon for the S1 gate ladder; matches the last sampled time.
+t_end: 120
+
+holdout:
+  condition_labels: []
+
+supplied: {}
+
+# The base gate is on for this case, so the smoke sees both gates
+s1:
+  base_gate: true
+
+notes: >-
+  Plumbing fixture for the staged discrimination round: the
+  construction stub returns the BASE only (abcd_mechanism's M1 chain), and the
+  expansions stub returns the three candidates as declared differences from it
+  (M1 = the base; M2 appends the direct KinA route J7 with k_cat2; M3 appends J7
+  and replaces J3 with the product-feedback form, adding K_fb). Data, lab note
+  and intent are copies of abcd_mechanism's; there is no truth/ here, because
+  this case asserts engine mechanics, not a recovered mechanism.
+
+# A token-free fixture: it runs without the knowledge module, on its
+# canned replies.
+grounding:
+  skip: true
+  why: fixture

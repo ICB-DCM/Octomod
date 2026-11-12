@@ -1,0 +1,3 @@
+# Sources the research agent must never use for this case, engine-enforced.
+# Fixture entry: a made-up preprint server whose name the third stub item carries.
+blocked-preprints.example
