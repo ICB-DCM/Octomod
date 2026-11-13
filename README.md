@@ -227,8 +227,8 @@ When using Octomod in your project, please cite
 * Dorešić, D., Liu, Y., Wieland, V., Jost, P. J., Huth, M., Merkt, S.,
   Alvarez-Garavito, C., Moore Dillems, P. R., Thiele, C., Seep, L., Pathirana, D.,
   & Hasenauer, J. Large language models complement established workflows for
-  mechanistic model construction and refinement in systems biology. bioRxiv, 2026
-  (the doi is added on posting).
+  mechanistic model construction and refinement in systems biology. bioRxiv, 2026,
+  [doi:10.64898/2026.11.11.766014](https://doi.org/10.64898/2026.11.11.766014).
 
 [`CITATION.cff`](CITATION.cff) has the citation in machine-readable form.
 
